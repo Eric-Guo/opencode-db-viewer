@@ -10,42 +10,104 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_08_03_034248) do
-  create_table "roles", force: :cascade do |t|
-    t.string "role_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+ActiveRecord::Schema[7.2].define(version: 0) do
+# Could not dump table "__drizzle_migrations" because of following StandardError
+#   Unknown type 'SERIAL' for column 'id'
+
+
+  create_table "control_account", primary_key: ["email", "url"], force: :cascade do |t|
+    t.text "email", null: false
+    t.text "url", null: false
+    t.text "access_token", null: false
+    t.text "refresh_token", null: false
+    t.integer "token_expiry"
+    t.integer "active", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
   end
 
-  create_table "user_roles", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "role_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["role_id"], name: "index_user_roles_on_role_id"
-    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  create_table "message", id: :text, force: :cascade do |t|
+    t.text "session_id", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "data", null: false
+    t.index ["session_id"], name: "message_session_idx"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "preferred_language"
-    t.integer "preferred_page_length", default: 10, null: false
-    t.boolean "sidebar_narrow", default: false, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  create_table "part", id: :text, force: :cascade do |t|
+    t.text "message_id", null: false
+    t.text "session_id", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "data", null: false
+    t.index ["message_id"], name: "part_message_idx"
+    t.index ["session_id"], name: "part_session_idx"
   end
 
-  add_foreign_key "user_roles", "roles"
-  add_foreign_key "user_roles", "users"
+  create_table "permission", primary_key: "project_id", id: :text, force: :cascade do |t|
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "data", null: false
+  end
+
+  create_table "project", id: :text, force: :cascade do |t|
+    t.text "worktree", null: false
+    t.text "vcs"
+    t.text "name"
+    t.text "icon_url"
+    t.text "icon_color"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.integer "time_initialized"
+    t.text "sandboxes", null: false
+    t.text "commands"
+  end
+
+  create_table "session", id: :text, force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "parent_id"
+    t.text "slug", null: false
+    t.text "directory", null: false
+    t.text "title", null: false
+    t.text "version", null: false
+    t.text "share_url"
+    t.integer "summary_additions"
+    t.integer "summary_deletions"
+    t.integer "summary_files"
+    t.text "summary_diffs"
+    t.text "revert"
+    t.text "permission"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.integer "time_compacting"
+    t.integer "time_archived"
+    t.index ["parent_id"], name: "session_parent_idx"
+    t.index ["project_id"], name: "session_project_idx"
+  end
+
+  create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
+    t.text "id", null: false
+    t.text "secret", null: false
+    t.text "url", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+  end
+
+  create_table "todo", primary_key: ["session_id", "position"], force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "content", null: false
+    t.text "status", null: false
+    t.text "priority", null: false
+    t.integer "position", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.index ["session_id"], name: "todo_session_idx"
+  end
+
+  add_foreign_key "message", "session", on_delete: :cascade
+  add_foreign_key "part", "message", on_delete: :cascade
+  add_foreign_key "permission", "project", on_delete: :cascade
+  add_foreign_key "session", "project", on_delete: :cascade
+  add_foreign_key "session_share", "session", on_delete: :cascade
+  add_foreign_key "todo", "session", on_delete: :cascade
 end
