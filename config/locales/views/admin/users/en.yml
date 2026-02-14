@@ -1,0 +1,18 @@
+---
+en:
+  admin:
+    users:
+      index:
+        title: "User management"
+        status: "Status"
+        new_user: "New user"
+        new_role: "New role"
+      new:
+        title: "New user"
+      edit:
+        title: "Edit user: %{email}"
+      impersonation:
+        title: "Impersonation"
+        description: "Sign in as user: %{email}"
+      sign_in_as:
+        not_allow: "Only allow administrators to become other users"

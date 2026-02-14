@@ -1,0 +1,18 @@
+---
+zh-CN:
+  admin:
+    users:
+      index:
+        title: "用户管理"
+        status: "状态"
+        new_user: "新建用户"
+        new_role: "新建角色"
+      new:
+        title: "新建用户"
+      edit:
+        title: "编辑用户: %{email}"
+      impersonation:
+        title: "模仿为用户"
+        description: "登录为: %{email}"
+      sign_in_as:
+        not_allow: "只允许管理员变成其他用户"

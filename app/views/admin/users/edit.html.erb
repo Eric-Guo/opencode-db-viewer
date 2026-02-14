@@ -1,0 +1,30 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <%= form_with model: @user, url: admin_user_path(id: @user.id), method: :put do |f| %>
+      <div class="modal-header">
+        <h5 class="modal-title"><%= t(".title", email: @user.email) -%></h5>
+        <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-3">
+            <%= f.label :preferred_language, t("user.preferred_language"), class: 'col-4 col-form-label' %>
+            <div class="col-8">
+              <%= f.select :preferred_language, language_options, {}, { class: "form-control" } %>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <%= f.label :roles, t("user.roles"), class: 'col-4 col-form-label' %>
+            <div class="col-8" data-controller="selectizes">
+              <%= f.select :role_ids, Role.pluck(:role_name, :id), {}, multiple: true, class: 'form-control', data: { 'selectizes-target': 'select' } -%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.submit t('form.update'), class: 'btn btn-primary', data: {'coreui-dismiss': :modal} %>
+        <button class="btn btn-secondary" type="button" data-coreui-dismiss="modal"><%= t("form.close") -%></button>
+      </div>
+    <% end %>
+  </div>
+</div>

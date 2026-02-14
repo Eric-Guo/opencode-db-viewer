@@ -1,0 +1,36 @@
+<div class="sidebar sidebar-dark sidebar-fixed bg-dark-gradient <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
+  <div class="sidebar-brand d-none d-md-flex">
+    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+      <svg alt="CoreUI Logo" class="sidebar-brand-full" height="46" width="118">
+        <use xlink:href="<%= asset_path('coreui.svg#full') %>"></use>
+      </svg>
+    <% end %>
+    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+      <svg alt="CoreUI Logo" class="sidebar-brand-narrow" height="46" width="46">
+        <use xlink:href="<%= asset_path('coreui.svg#signet') %>"></use>
+      </svg>
+    <% end %>
+    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable" data-action="click->sidebar#click"></button>
+  </div>
+  <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
+    <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>
+      <span class="badge bg-primary ms-auto">NEW</span>
+    <% end %>
+
+    <li class="nav-title"><%= t('user.account') -%></li>
+    <%= nav_item(t('user.users'), admin_users_path, 'free.svg#cil-user') %>
+    <li class="nav-group <%= %w[role_users roles].include?(controller_name) ? "show" : "" -%>" data-controller="expender"
+      data-expender-loaded-value=<%= %w[role_users roles].include?(controller_name) -%>
+      data-expender-url-value="<%= expender_admin_roles_path -%>">
+      <a class="nav-link nav-group-toggle" data-action="expender#click" href="#">
+        <%= svg_icon('free.svg#cil-functions', 'nav-icon rotate_180') -%>
+        <%= t('user.roles') -%>
+      </a>
+      <ul class="nav-group-items" data-expender-target="htc">
+        <% if %w[role_users roles].include?(controller_name) %>
+          <%= render partial: 'admin/roles/expender', locals: {roles: policy_scope(Role).all} -%>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+</div>

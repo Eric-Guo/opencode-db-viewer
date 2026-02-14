@@ -1,0 +1,66 @@
+{
+  "name": "rails-starter",
+  "private": true,
+  "scripts": {
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-runtime": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@babel/runtime": "^7.28.6",
+    "@coreui/chartjs": "^3.1.2",
+    "@coreui/coreui": "4.2.6",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/utils": "^2.0.2",
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@popperjs/core": "^2.11.8",
+    "@rails/request.js": "^0.0.9",
+    "@selectize/selectize": "^0.15.2",
+    "babel-loader": "^8.4.1",
+    "chart.js": "^3.9.1",
+    "compression-webpack-plugin": "^9.2.0",
+    "css-loader": "^6.11.0",
+    "css-minimizer-webpack-plugin": "^4.2.2",
+    "datatables.net": "^1.13.11",
+    "datatables.net-bs5": "^1.13.11",
+    "date-fns": "^2.30.0",
+    "jquery": "^3.7.1",
+    "mini-css-extract-plugin": "^2.10.0",
+    "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
+    "sass": "1.77.6",
+    "sass-loader": "^13.3.3",
+    "semver": "^7.7.4",
+    "shakapacker": "9.5.0",
+    "simplebar": "^6.3.3",
+    "style-loader": "^3.3.4",
+    "terser-webpack-plugin": "^5.3.16",
+    "webpack": "^5.105.2",
+    "webpack-assets-manifest": "^5.2.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^4.15.2",
+    "webpack-merge": "^5.10.0"
+  },
+  "version": "0.1.0",
+  "resolutions": {
+    "@types/retry": "^0.12.5",
+    "cookie": "~0.7.2",
+    "datatables.net": "^1.13.11",
+    "inherits": "~2.0.4",
+    "mdn-data": "~2.0.33",
+    "merge-descriptors": "~1.0.3",
+    "mime-db": "~1.54.0",
+    "semver": "^7.7.4"
+  },
+  "babel": {
+    "presets": [
+      "./node_modules/shakapacker/package/babel/preset.js"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "packageManager": "pnpm@10.29.3"
+}
