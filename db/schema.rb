@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 0) do
+ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
 # Could not dump table "__drizzle_migrations" because of following StandardError
 #   Unknown type 'SERIAL' for column 'id'
 
@@ -63,6 +63,12 @@ ActiveRecord::Schema[7.2].define(version: 0) do
     t.text "commands"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string "role_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "session", id: :text, force: :cascade do |t|
     t.text "project_id", null: false
     t.text "parent_id"
@@ -104,10 +110,41 @@ ActiveRecord::Schema[7.2].define(version: 0) do
     t.index ["session_id"], name: "todo_session_idx"
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "preferred_language"
+    t.integer "preferred_page_length", default: 10, null: false
+    t.boolean "sidebar_narrow", default: false, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "todo", "session", on_delete: :cascade
+  add_foreign_key "user_roles", "roles"
+  add_foreign_key "user_roles", "users"
 end
