@@ -11,10 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
-# Could not dump table "__drizzle_migrations" because of following StandardError
-#   Unknown type 'SERIAL' for column 'id'
-
-
   create_table "control_account", primary_key: ["email", "url"], force: :cascade do |t|
     t.text "email", null: false
     t.text "url", null: false
