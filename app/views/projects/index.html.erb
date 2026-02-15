@@ -18,7 +18,7 @@
             <% created_at_text = created_time&.strftime("%Y-%m-%d %H:%M:%S") || "-" %>
             <% updated_at_text = updated_time&.strftime("%Y-%m-%d %H:%M:%S") || "-" %>
             <tr>
-              <td><%= project.name.presence || project.id -%></td>
+              <td><%= link_to(project.name.presence || project.id, project_path(project)) -%></td>
               <td><%= project.worktree -%></td>
               <td><%= project.vcs -%></td>
               <td>

@@ -1,0 +1,40 @@
+---
+project_show_auth:
+  id: "project-show-auth"
+  name: "show-auth"
+  worktree: "/tmp/show-auth"
+  sandboxes: "[]"
+  time_created: 9000000000000
+  time_updated: 9000000000000
+
+project_show_with_sessions:
+  id: "project-show-with-sessions"
+  name: "show-project"
+  worktree: "/tmp/show-project"
+  sandboxes: "[]"
+  time_created: 9000000000000
+  time_updated: 9000000000000
+
+project_show_empty:
+  id: "project-show-empty"
+  name: "show-empty"
+  worktree: "/tmp/show-empty"
+  sandboxes: "[]"
+  time_created: 9000000000000
+  time_updated: 9000000000000
+
+project_order_old:
+  id: "project-order-old"
+  name: "old-project-fixture"
+  worktree: "/tmp/old-project-fixture"
+  sandboxes: "[]"
+  time_created: 9000000000000
+  time_updated: 9000000000000
+
+project_order_new:
+  id: "project-order-new"
+  name: "new-project-fixture"
+  worktree: "/tmp/new-project-fixture"
+  sandboxes: "[]"
+  time_created: 9100000000000
+  time_updated: 9100000000000

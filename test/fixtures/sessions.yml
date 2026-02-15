@@ -1,0 +1,26 @@
+---
+session_show_old:
+  id: "session-show-old"
+  project_id: "project-show-with-sessions"
+  slug: "slug-show-old"
+  directory: "/tmp/show-project"
+  title: "old-session-fixture"
+  version: "1.0.0"
+  summary_additions: 2
+  summary_deletions: 1
+  summary_files: 1
+  time_created: 9000000000000
+  time_updated: 9000000000000
+
+session_show_new:
+  id: "session-show-new"
+  project_id: "project-show-with-sessions"
+  slug: "slug-show-new"
+  directory: "/tmp/show-project"
+  title: "new-session-fixture"
+  version: "1.0.0"
+  summary_additions: 5
+  summary_deletions: 3
+  summary_files: 2
+  time_created: 9100000000000
+  time_updated: 9100000000000

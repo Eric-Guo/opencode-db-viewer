@@ -13,4 +13,26 @@ class Session < ApplicationRecord
     foreign_key: :session_id,
     inverse_of: :session,
     dependent: :destroy
+
+  def time_created_at
+    convert_unix_timestamp(time_created)
+  end
+
+  def time_updated_at
+    convert_unix_timestamp(time_updated)
+  end
+
+  def time_archived_at
+    convert_unix_timestamp(time_archived)
+  end
+
+  private
+
+  def convert_unix_timestamp(value)
+    return if value.blank?
+
+    timestamp = value.to_i
+    timestamp /= 1000.0 if timestamp > 99_999_999_999
+    Time.zone.at(timestamp)
+  end
 end

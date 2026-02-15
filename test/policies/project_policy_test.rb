@@ -12,6 +12,17 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     refute policy.index?
   end
 
+  def test_show_allows_logged_in_user
+    user = users(:user_fangzixue)
+    policy = ProjectPolicy.new(user, Project)
+    assert policy.show?
+  end
+
+  def test_show_denies_nil_user
+    policy = ProjectPolicy.new(nil, Project)
+    refute policy.show?
+  end
+
   def test_scope_resolves_all_for_logged_in_user
     user = users(:user_fangzixue)
     scope = ProjectPolicy::Scope.new(user, Project)
