@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   draw :admin
 
+  resources :projects, only: %i[index]
+
   namespace :ui do
     resource :avatar_area, only: %i[show]
     resources :nav_group_items, only: %i[] do

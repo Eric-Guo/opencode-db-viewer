@@ -16,6 +16,7 @@
     <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>
       <span class="badge bg-primary ms-auto">NEW</span>
     <% end %>
+    <%= nav_item(t('.projects'), projects_path, 'free.svg#cil-folder') %>
 
     <li class="nav-title"><%= t('user.account') -%></li>
     <li class="nav-group" data-controller='expender'

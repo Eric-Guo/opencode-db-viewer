@@ -1,0 +1,11 @@
+---
+zh-CN:
+  projects:
+    index:
+      title: "项目"
+      name: "名称"
+      worktree: "工作目录"
+      vcs: "版本控制"
+      time_created: "创建时间"
+      time_updated: "更新时间"
+      time_ago: "%{distance}前"

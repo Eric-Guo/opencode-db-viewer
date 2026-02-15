@@ -5,4 +5,5 @@ en:
       application:
         header: "Home"
         dashboard: "Dashboard"
+        projects: "Projects"
         account: "Account"

@@ -1,0 +1,11 @@
+---
+en:
+  projects:
+    index:
+      title: "Projects"
+      name: "Name"
+      worktree: "Worktree"
+      vcs: "VCS"
+      time_created: "Time Created"
+      time_updated: "Time Updated"
+      time_ago: "%{distance} ago"
