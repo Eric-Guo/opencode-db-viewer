@@ -38,3 +38,35 @@ project_order_new:
   sandboxes: "[]"
   time_created: 9100000000000
   time_updated: 9100000000000
+
+project_session_parent:
+  id: "project-session-parent"
+  name: "session-parent-project"
+  worktree: "/tmp/session-parent-project"
+  sandboxes: "[]"
+  time_created: 9200000000000
+  time_updated: 9200000000000
+
+project_session_file:
+  id: "project-session-file"
+  name: "session-file-project"
+  worktree: "/tmp/session-file-project"
+  sandboxes: "[]"
+  time_created: 9300000000000
+  time_updated: 9300000000000
+
+project_session_assistant_parent:
+  id: "project-session-assistant-parent"
+  name: "session-assistant-parent-project"
+  worktree: "/tmp/session-assistant-parent-project"
+  sandboxes: "[]"
+  time_created: 9400000000000
+  time_updated: 9400000000000
+
+project_session_orphan_assistant:
+  id: "project-session-orphan-assistant"
+  name: "session-orphan-assistant-project"
+  worktree: "/tmp/session-orphan-assistant-project"
+  sandboxes: "[]"
+  time_created: 9500000000000
+  time_updated: 9500000000000

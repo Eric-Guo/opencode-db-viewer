@@ -150,7 +150,7 @@
                     <% s_updated_text = s_updated&.strftime("%Y-%m-%d %H:%M:%S") || "-" %>
                     <tr>
                       <td>
-                        <div class="fw-semibold"><%= session.title.presence || session.slug %></div>
+                        <div class="fw-semibold"><%= link_to (session.title.presence || session.slug), project_session_path(@project, session), class: "text-decoration-none" %></div>
                         <% if session.time_archived_at %>
                           <span class="badge bg-secondary"><%= t(".archived") %></span>
                         <% end %>

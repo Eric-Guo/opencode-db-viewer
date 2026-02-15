@@ -1,0 +1,84 @@
+---
+msg_user_one_fixture:
+  id: "msg-user-one-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000001000
+  time_updated: 1700000001000
+  data: '{"role":"user","time":{"created":1700000001000}}'
+
+msg_user_two_fixture:
+  id: "msg-user-two-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000002000
+  time_updated: 1700000002000
+  data: '{"role":"user","time":{"created":1700000002000}}'
+
+msg_assistant_user_one_fixture:
+  id: "msg-assistant-user-one-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000003000
+  time_updated: 1700000003000
+  data: '{"role":"assistant","parentID":"msg-user-one-fixture","time":{"created":1700000003000}}'
+
+msg_user_file_fixture:
+  id: "msg-user-file-fixture"
+  session_id: "session-file-parts-fixture"
+  time_created: 1700000004000
+  time_updated: 1700000004000
+  data: '{"role":"user","time":{"created":1700000004000}}'
+
+msg_user_chain_one_fixture:
+  id: "msg-user-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005000
+  time_updated: 1700000005000
+  data: '{"role":"user","time":{"created":1700000005000}}'
+
+msg_assistant_chain_one_fixture:
+  id: "msg-assistant-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005100
+  time_updated: 1700000005100
+  data: '{"role":"assistant","parentID":"msg-user-chain-one-fixture","time":{"created":1700000005100}}'
+
+msg_assistant_chain_two_fixture:
+  id: "msg-assistant-chain-two-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005200
+  time_updated: 1700000005200
+  data: '{"role":"assistant","parentID":"msg-assistant-chain-one-fixture","time":{"created":1700000005200}}'
+
+msg_user_chain_two_fixture:
+  id: "msg-user-chain-two-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005300
+  time_updated: 1700000005300
+  data: '{"role":"user","time":{"created":1700000005300}}'
+
+msg_user_orphan_chain_anchor_fixture:
+  id: "msg-user-orphan-chain-anchor-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006000
+  time_updated: 1700000006000
+  data: '{"role":"user","time":{"created":1700000006000}}'
+
+msg_assistant_orphan_root_fixture:
+  id: "msg-assistant-orphan-root-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006100
+  time_updated: 1700000006100
+  data: '{"role":"assistant","parentID":"msg-not-in-session-fixture","time":{"created":1700000006100}}'
+
+msg_assistant_orphan_child_fixture:
+  id: "msg-assistant-orphan-child-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006200
+  time_updated: 1700000006200
+  data: '{"role":"assistant","parentID":"msg-assistant-orphan-root-fixture","time":{"created":1700000006200}}'
+
+msg_user_orphan_chain_after_fixture:
+  id: "msg-user-orphan-chain-after-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000007000
+  time_updated: 1700000007000
+  data: '{"role":"user","time":{"created":1700000007000}}'

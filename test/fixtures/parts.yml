@@ -1,0 +1,104 @@
+---
+part_msg_user_one_text_fixture:
+  id: "part-msg-user-one-text-fixture"
+  message_id: "msg-user-one-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000001000
+  time_updated: 1700000001000
+  data: '{"type":"text","text":"User one prompt"}'
+
+part_msg_user_two_text_fixture:
+  id: "part-msg-user-two-text-fixture"
+  message_id: "msg-user-two-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000002000
+  time_updated: 1700000002000
+  data: '{"type":"text","text":"User two prompt"}'
+
+part_msg_assistant_user_one_text_fixture:
+  id: "part-msg-assistant-user-one-text-fixture"
+  message_id: "msg-assistant-user-one-fixture"
+  session_id: "session-parent-grouping-fixture"
+  time_created: 1700000003000
+  time_updated: 1700000003000
+  data: '{"type":"text","text":"Assistant for user one"}'
+
+part_msg_user_file_text_fixture:
+  id: "part-msg-user-file-text-fixture"
+  message_id: "msg-user-file-fixture"
+  session_id: "session-file-parts-fixture"
+  time_created: 1700000004000
+  time_updated: 1700000004000
+  data: '{"type":"text","text":"Please review this file"}'
+
+part_msg_user_file_attachment_fixture:
+  id: "part-msg-user-file-attachment-fixture"
+  message_id: "msg-user-file-fixture"
+  session_id: "session-file-parts-fixture"
+  time_created: 1700000004100
+  time_updated: 1700000004100
+  data: '{"type":"file","filename":"demo.png","mime":"image/png","url":"https://example.com/demo.png"}'
+
+part_msg_user_chain_one_text_fixture:
+  id: "part-msg-user-chain-one-text-fixture"
+  message_id: "msg-user-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005000
+  time_updated: 1700000005000
+  data: '{"type":"text","text":"User chain prompt"}'
+
+part_msg_assistant_chain_one_text_fixture:
+  id: "part-msg-assistant-chain-one-text-fixture"
+  message_id: "msg-assistant-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005100
+  time_updated: 1700000005100
+  data: '{"type":"text","text":"Assistant first response"}'
+
+part_msg_assistant_chain_two_text_fixture:
+  id: "part-msg-assistant-chain-two-text-fixture"
+  message_id: "msg-assistant-chain-two-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005200
+  time_updated: 1700000005200
+  data: '{"type":"text","text":"Assistant follow-up response"}'
+
+part_msg_user_chain_two_text_fixture:
+  id: "part-msg-user-chain-two-text-fixture"
+  message_id: "msg-user-chain-two-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005300
+  time_updated: 1700000005300
+  data: '{"type":"text","text":"Second user prompt"}'
+
+part_msg_user_orphan_chain_anchor_text_fixture:
+  id: "part-msg-user-orphan-chain-anchor-text-fixture"
+  message_id: "msg-user-orphan-chain-anchor-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006000
+  time_updated: 1700000006000
+  data: '{"type":"text","text":"Orphan chain anchor prompt"}'
+
+part_msg_assistant_orphan_root_text_fixture:
+  id: "part-msg-assistant-orphan-root-text-fixture"
+  message_id: "msg-assistant-orphan-root-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006100
+  time_updated: 1700000006100
+  data: '{"type":"text","text":"Assistant orphan root response"}'
+
+part_msg_assistant_orphan_child_text_fixture:
+  id: "part-msg-assistant-orphan-child-text-fixture"
+  message_id: "msg-assistant-orphan-child-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000006200
+  time_updated: 1700000006200
+  data: '{"type":"text","text":"Assistant orphan child response"}'
+
+part_msg_user_orphan_chain_after_text_fixture:
+  id: "part-msg-user-orphan-chain-after-text-fixture"
+  message_id: "msg-user-orphan-chain-after-fixture"
+  session_id: "session-orphan-assistant-grouping-fixture"
+  time_created: 1700000007000
+  time_updated: 1700000007000
+  data: '{"type":"text","text":"Prompt after orphan chain"}'

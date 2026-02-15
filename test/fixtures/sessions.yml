@@ -24,3 +24,43 @@ session_show_new:
   summary_files: 2
   time_created: 9100000000000
   time_updated: 9100000000000
+
+session_parent_grouping_fixture:
+  id: "session-parent-grouping-fixture"
+  project_id: "project-session-parent"
+  slug: "slug-session-parent-grouping-fixture"
+  directory: "/tmp/session-parent-grouping-fixture"
+  title: "session-parent-grouping-fixture"
+  version: "1.0.0"
+  time_created: 9200000000000
+  time_updated: 9200000000000
+
+session_file_parts_fixture:
+  id: "session-file-parts-fixture"
+  project_id: "project-session-file"
+  slug: "slug-session-file-parts-fixture"
+  directory: "/tmp/session-file-parts-fixture"
+  title: "session-file-parts-fixture"
+  version: "1.0.0"
+  time_created: 9300000000000
+  time_updated: 9300000000000
+
+session_assistant_parent_grouping_fixture:
+  id: "session-assistant-parent-grouping-fixture"
+  project_id: "project-session-assistant-parent"
+  slug: "slug-session-assistant-parent-grouping-fixture"
+  directory: "/tmp/session-assistant-parent-grouping-fixture"
+  title: "session-assistant-parent-grouping-fixture"
+  version: "1.0.0"
+  time_created: 9400000000000
+  time_updated: 9400000000000
+
+session_orphan_assistant_grouping_fixture:
+  id: "session-orphan-assistant-grouping-fixture"
+  project_id: "project-session-orphan-assistant"
+  slug: "slug-session-orphan-assistant-grouping-fixture"
+  directory: "/tmp/session-orphan-assistant-grouping-fixture"
+  title: "session-orphan-assistant-grouping-fixture"
+  version: "1.0.0"
+  time_created: 9500000000000
+  time_updated: 9500000000000

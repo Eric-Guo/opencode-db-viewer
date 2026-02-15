@@ -16,7 +16,9 @@ Rails.application.routes.draw do
 
   draw :admin
 
-  resources :projects, only: %i[index show]
+  resources :projects, only: %i[index show] do
+    resources :sessions, only: %i[show]
+  end
 
   namespace :ui do
     resource :avatar_area, only: %i[show]
