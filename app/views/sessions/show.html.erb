@@ -89,12 +89,14 @@
 
       <%# === Message Timeline === %>
       <div class="card mb-4">
+        <% total_parts_count = @messages.sum { |message| message.parts.size } %>
         <div class="card-header d-flex align-items-center">
           <svg class="icon me-2">
             <use xlink:href="<%= asset_path('free.svg') %>#cil-history"></use>
           </svg>
           <strong><%= t(".message_timeline") %></strong>
           <span class="badge bg-primary ms-2"><%= @messages.size %> <%= t(".messages") %></span>
+          <span class="badge bg-info-gradient text-white ms-2"><%= total_parts_count %> <%= t(".parts") %></span>
         </div>
         <div class="card-body">
 
@@ -130,11 +132,16 @@
                       </div>
 
                       <% user_parts = user_msg.parts.sort_by { |p| [p.time_created || 0, p.id.to_s] } %>
-                      <% user_text_parts = user_parts.select(&:text?).reject { |p| p.text_content.to_s.start_with?("<system-") } %>
+                      <% user_text_parts = user_parts.select(&:text?) %>
                       <% user_text_parts.each do |part| %>
-                        <div class="card bg-light border-0 mb-2">
+                        <% system_part = part.text_content.to_s.start_with?("<system-") %>
+                        <div class="card <%= system_part ? "bg-body-secondary" : "bg-light" %> border-0 mb-2">
                           <div class="card-body py-2 px-3">
+                            <% if system_part %>
+                              <div class="small text-medium-emphasis mb-1">system</div>
+                            <% end %>
                             <div class="text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
+                            <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
                           </div>
                         </div>
                       <% end %>
@@ -199,77 +206,77 @@
                       </div>
 
                       <% ordered_parts = asst_msg.parts.sort_by { |p| [p.time_created || 0, p.id.to_s] } %>
-
-                      <%# Reasoning parts (collapsible) %>
-                      <% reasoning_parts = ordered_parts.select(&:reasoning?) %>
-                      <% if reasoning_parts.any? %>
-                        <div class="mb-2">
-                          <details>
-                            <summary class="text-medium-emphasis small cursor-pointer">
+                      <% ordered_parts.each do |part| %>
+                        <% case part.part_type %>
+                        <% when "step-start" %>
+                          <div class="mb-2">
+                            <span class="badge bg-light text-dark border d-inline-flex align-items-center">
                               <svg class="icon icon-sm me-1">
-                                <use xlink:href="<%= asset_path('free.svg') %>#cil-lightbulb"></use>
+                                <use xlink:href="<%= asset_path('free.svg') %>#cil-media-play"></use>
                               </svg>
-                              <%= t(".thinking") %> (<%= reasoning_parts.sum { |p| p.text_content&.length || 0 } %> <%= t(".chars") %>)
-                            </summary>
-                            <div class="card bg-light border-0 mt-1">
-                              <div class="card-body py-2 px-3">
-                                <% reasoning_parts.each do |part| %>
-                                  <div class="text-break small text-medium-emphasis" style="white-space: pre-wrap;"><%= part.text_content %></div>
-                                <% end %>
-                              </div>
-                            </div>
-                          </details>
-                        </div>
-                      <% end %>
-
-                      <%# Text parts %>
-                      <% text_parts = ordered_parts.select(&:text?) %>
-                      <% text_parts.each do |part| %>
-                        <div class="card border-start border-start-4 border-start-success mb-2">
-                          <div class="card-body py-2 px-3">
-                            <div class="text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
+                              <%= t(".step_started") %>
+                              <% if part.step_start_snapshot.present? %>
+                                <span class="ms-2 text-medium-emphasis"><%= t(".snapshot") %>: <code><%= part.step_start_snapshot.to_s.first(10) %></code></span>
+                              <% end %>
+                              <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
+                            </span>
                           </div>
-                        </div>
-                      <% end %>
-
-                      <%# Tool parts %>
-                      <% tool_parts = ordered_parts.select(&:tool?) %>
-                      <% tool_parts.each do |part| %>
-                        <div class="mb-2">
-                          <details>
-                            <summary class="d-inline-flex align-items-center">
-                              <span class="badge bg-dark me-2">
+                        <% when "reasoning" %>
+                          <div class="mb-2">
+                            <details>
+                              <summary class="text-medium-emphasis small cursor-pointer">
                                 <svg class="icon icon-sm me-1">
-                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-terminal"></use>
+                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-lightbulb"></use>
                                 </svg>
-                                <%= part.tool_name %>
-                              </span>
-                              <span class="badge bg-<%= part.tool_status == "completed" ? "success" : "warning" %>"><%= part.tool_status %></span>
-                            </summary>
-                            <div class="card bg-light border-0 mt-1">
-                              <div class="card-body py-2 px-3">
-                                <% if part.tool_input.present? %>
-                                  <div class="mb-2">
-                                    <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_input") %></div>
-                                    <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_input.is_a?(Hash) ? JSON.pretty_generate(part.tool_input) : part.tool_input.to_s %></code></pre>
-                                  </div>
-                                <% end %>
-                                <% if part.tool_output.present? %>
-                                  <div>
-                                    <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_output") %></div>
-                                    <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_output.is_a?(Hash) ? JSON.pretty_generate(part.tool_output) : part.tool_output.to_s.truncate(2000) %></code></pre>
-                                  </div>
-                                <% end %>
+                                <%= t(".thinking") %> (<%= part.text_content.to_s.length %> <%= t(".chars") %>)
+                              </summary>
+                              <div class="card bg-light border-0 mt-1">
+                                <div class="card-body py-2 px-3">
+                                  <div class="text-break small text-medium-emphasis" style="white-space: pre-wrap;"><%= part.text_content %></div>
+                                  <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
+                                </div>
                               </div>
+                            </details>
+                          </div>
+                        <% when "text" %>
+                          <div class="card border-start border-start-4 border-start-success mb-2">
+                            <div class="card-body py-2 px-3">
+                              <div class="text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
+                              <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
                             </div>
-                          </details>
-                        </div>
-                      <% end %>
-
-                      <%# Patch parts %>
-                      <% patch_parts = ordered_parts.select(&:patch?) %>
-                      <% patch_parts.each do |part| %>
-                        <% if part.patch_files.any? %>
+                          </div>
+                        <% when "tool" %>
+                          <div class="mb-2">
+                            <details>
+                              <summary class="d-inline-flex align-items-center">
+                                <span class="badge bg-dark me-2">
+                                  <svg class="icon icon-sm me-1">
+                                    <use xlink:href="<%= asset_path('free.svg') %>#cil-terminal"></use>
+                                  </svg>
+                                  <%= part.tool_name %>
+                                </span>
+                                <span class="badge bg-<%= part.tool_status == "completed" ? "success" : "warning" %>"><%= part.tool_status %></span>
+                                <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
+                              </summary>
+                              <div class="card bg-light border-0 mt-1">
+                                <div class="card-body py-2 px-3">
+                                  <% if part.tool_input.present? %>
+                                    <div class="mb-2">
+                                      <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_input") %></div>
+                                      <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_input.is_a?(Hash) ? JSON.pretty_generate(part.tool_input) : part.tool_input.to_s %></code></pre>
+                                    </div>
+                                  <% end %>
+                                  <% if part.tool_output.present? %>
+                                    <div>
+                                      <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_output") %></div>
+                                      <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_output.is_a?(Hash) ? JSON.pretty_generate(part.tool_output) : part.tool_output.to_s.truncate(2000) %></code></pre>
+                                    </div>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </details>
+                          </div>
+                        <% when "patch" %>
                           <div class="mb-2">
                             <details>
                               <summary class="d-inline-flex align-items-center">
@@ -280,6 +287,7 @@
                                   <%= t(".patch") %>
                                 </span>
                                 <small class="text-medium-emphasis"><%= part.patch_files.size %> <%= t(".files_affected") %></small>
+                                <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
                               </summary>
                               <div class="card bg-light border-0 mt-1">
                                 <div class="card-body py-2 px-3">
@@ -292,15 +300,19 @@
                               </div>
                             </details>
                           </div>
-                        <% end %>
-                      <% end %>
-
-                      <%# Step finish (token usage) %>
-                      <% step_finishes = ordered_parts.select(&:step_finish?) %>
-                      <% step_finishes.each do |part| %>
-                        <% if part.step_finish_tokens.present? %>
-                          <div class="d-flex flex-wrap gap-2 mt-1">
-                            <% tokens = part.step_finish_tokens %>
+                        <% when "step-finish" %>
+                          <% tokens = part.step_finish_tokens %>
+                          <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
+                            <span class="badge bg-light text-dark border d-inline-flex align-items-center">
+                              <svg class="icon icon-sm me-1">
+                                <use xlink:href="<%= asset_path('free.svg') %>#cil-check-circle"></use>
+                              </svg>
+                              <%= t(".step_finished") %>
+                              <% if part.step_finish_reason.present? %>
+                                <span class="ms-2 text-medium-emphasis"><%= part.step_finish_reason %></span>
+                              <% end %>
+                              <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
+                            </span>
                             <% if tokens["input"].to_i > 0 %>
                               <span class="badge bg-light text-dark border">
                                 <svg class="icon icon-sm me-1">
@@ -325,6 +337,14 @@
                                 <%= t(".cache_read") %>: <%= number_with_delimiter(tokens.dig("cache", "read")) %>
                               </span>
                             <% end %>
+                          </div>
+                        <% else %>
+                          <div class="card bg-light border-0 mb-2">
+                            <div class="card-body py-2 px-3">
+                              <div class="text-medium-emphasis small mb-1"><%= part.part_type %></div>
+                              <pre class="bg-white rounded p-2 small mb-0"><code><%= part.data.to_s.truncate(1000) %></code></pre>
+                              <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
+                            </div>
                           </div>
                         <% end %>
                       <% end %>

@@ -48,6 +48,20 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_operator response.body.index("Assistant follow-up response"), :<, response.body.index("Second user prompt")
   end
 
+  test "should render step lifecycle parts when signed in" do
+    project = projects(:project_session_assistant_parent)
+    session = sessions(:session_assistant_parent_grouping_fixture)
+
+    sign_in users(:user_fangzixue)
+    get project_session_url(project, session)
+
+    assert_response :success
+    assert_includes response.body, I18n.t("sessions.show.step_started")
+    assert_includes response.body, I18n.t("sessions.show.step_finished")
+    assert_includes response.body, "tool-calls"
+    assert_includes response.body, "1234567890"
+  end
+
   test "should keep orphan assistant chain in chronological order when signed in" do
     project = projects(:project_session_orphan_assistant)
     session = sessions(:session_orphan_assistant_grouping_fixture)

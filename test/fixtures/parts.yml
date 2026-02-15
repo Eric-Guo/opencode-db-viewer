@@ -55,6 +55,22 @@ part_msg_assistant_chain_one_text_fixture:
   time_updated: 1700000005100
   data: '{"type":"text","text":"Assistant first response"}'
 
+part_msg_assistant_chain_one_step_start_fixture:
+  id: "part-msg-assistant-chain-one-step-start-fixture"
+  message_id: "msg-assistant-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005101
+  time_updated: 1700000005101
+  data: '{"type":"step-start","snapshot":"1234567890abcdef"}'
+
+part_msg_assistant_chain_one_step_finish_fixture:
+  id: "part-msg-assistant-chain-one-step-finish-fixture"
+  message_id: "msg-assistant-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005102
+  time_updated: 1700000005102
+  data: '{"type":"step-finish","reason":"tool-calls","tokens":{"input":0,"output":0,"cache":{"read":0}}}'
+
 part_msg_assistant_chain_two_text_fixture:
   id: "part-msg-assistant-chain-two-text-fixture"
   message_id: "msg-assistant-chain-two-fixture"

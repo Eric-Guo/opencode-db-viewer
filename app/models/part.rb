@@ -79,6 +79,14 @@ class Part < ApplicationRecord
     value.is_a?(Hash) ? value : {}
   end
 
+  def step_start_snapshot
+    parsed_data["snapshot"]
+  end
+
+  def step_finish_reason
+    parsed_data["reason"]
+  end
+
   def step_finish_cost
     parsed_data["cost"]
   end
