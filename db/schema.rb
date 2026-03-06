@@ -83,8 +83,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
     t.integer "time_compacting"
     t.integer "time_archived"
+    t.text "workspace_id"
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
+    t.index ["workspace_id"], name: "session_workspace_idx"
   end
 
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
@@ -135,6 +137,15 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "workspace", id: :text, force: :cascade do |t|
+    t.text "branch"
+    t.text "project_id", null: false
+    t.text "type", null: false
+    t.text "name"
+    t.text "directory"
+    t.text "extra"
+  end
+
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
@@ -143,4 +154,5 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "todo", "session", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
+  add_foreign_key "workspace", "project", on_delete: :cascade
 end
