@@ -11,6 +11,21 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
+  create_table "account", id: :text, force: :cascade do |t|
+    t.text "email", null: false
+    t.text "url", null: false
+    t.text "access_token", null: false
+    t.text "refresh_token", null: false
+    t.integer "token_expiry"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+  end
+
+  create_table "account_state", force: :cascade do |t|
+    t.text "active_account_id"
+    t.text "active_org_id"
+  end
+
   create_table "control_account", primary_key: ["email", "url"], force: :cascade do |t|
     t.text "email", null: false
     t.text "url", null: false
@@ -27,7 +42,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
     t.text "data", null: false
-    t.index ["session_id"], name: "message_session_idx"
+    t.index ["session_id", "time_created", "id"], name: "message_session_time_created_id_idx"
   end
 
   create_table "part", id: :text, force: :cascade do |t|
@@ -36,7 +51,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
     t.text "data", null: false
-    t.index ["message_id"], name: "part_message_idx"
+    t.index ["message_id", "id"], name: "part_message_id_id_idx"
     t.index ["session_id"], name: "part_session_idx"
   end
 
@@ -146,6 +161,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "extra"
   end
 
+  add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
