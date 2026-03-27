@@ -7,8 +7,8 @@
   "dependencies": {
     "@babel/core": "^7.29.0",
     "@babel/plugin-transform-runtime": "^7.29.0",
-    "@babel/preset-env": "^7.29.0",
-    "@babel/runtime": "^7.28.6",
+    "@babel/preset-env": "^7.29.2",
+    "@babel/runtime": "^7.29.2",
     "@coreui/chartjs": "^3.1.2",
     "@coreui/coreui": "4.2.6",
     "@coreui/icons": "^3.0.1",
@@ -27,7 +27,7 @@
     "datatables.net-bs5": "^1.13.11",
     "date-fns": "^2.30.0",
     "jquery": "^3.7.1",
-    "mini-css-extract-plugin": "^2.10.0",
+    "mini-css-extract-plugin": "^2.10.2",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0",
     "sass": "1.77.6",
@@ -36,7 +36,7 @@
     "shakapacker": "9.6.1",
     "simplebar": "^6.3.3",
     "style-loader": "^3.3.4",
-    "terser-webpack-plugin": "^5.3.17",
+    "terser-webpack-plugin": "^5.4.0",
     "webpack": "^5.105.4",
     "webpack-assets-manifest": "^5.2.1",
     "webpack-cli": "^6.0.1",
@@ -62,5 +62,5 @@
   "browserslist": [
     "defaults"
   ],
-  "packageManager": "pnpm@10.29.3"
+  "packageManager": "pnpm@10.33.0"
 }
