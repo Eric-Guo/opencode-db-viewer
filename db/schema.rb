@@ -83,6 +83,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_initialized"
     t.text "sandboxes", null: false
     t.text "commands"
+    t.text "icon_url_override"
   end
 
   create_table "roles", force: :cascade do |t|
