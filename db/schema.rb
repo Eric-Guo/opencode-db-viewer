@@ -116,15 +116,15 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["workspace_id"], name: "session_workspace_idx"
   end
 
-  create_table "session_entry", id: :text, force: :cascade do |t|
+  create_table "session_message", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "type", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
     t.text "data", null: false
-    t.index ["session_id", "type"], name: "session_entry_session_type_idx"
-    t.index ["session_id"], name: "session_entry_session_idx"
-    t.index ["time_created"], name: "session_entry_time_created_idx"
+    t.index ["session_id", "type"], name: "session_message_session_type_idx"
+    t.index ["session_id"], name: "session_message_session_idx"
+    t.index ["time_created"], name: "session_message_time_created_idx"
   end
 
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
@@ -190,7 +190,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
-  add_foreign_key "session_entry", "session", on_delete: :cascade
+  add_foreign_key "session_message", "session", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "todo", "session", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
