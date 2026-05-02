@@ -112,6 +112,8 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_archived"
     t.text "workspace_id"
     t.text "path"
+    t.text "agent"
+    t.text "model"
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
     t.index ["workspace_id"], name: "session_workspace_idx"
