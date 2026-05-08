@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
 
   create_table "event_sequence", primary_key: "aggregate_id", id: :text, force: :cascade do |t|
     t.integer "seq", null: false
+    t.text "owner_id"
   end
 
   create_table "message", id: :text, force: :cascade do |t|
