@@ -37,6 +37,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
   end
 
+  create_table "data_migration", primary_key: "name", id: :text, force: :cascade do |t|
+    t.integer "time_completed", null: false
+  end
+
   create_table "event", id: :text, force: :cascade do |t|
     t.text "aggregate_id", null: false
     t.integer "seq", null: false
@@ -186,6 +190,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "directory"
     t.text "extra"
     t.text "project_id", null: false
+    t.integer "time_used", null: false
   end
 
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
