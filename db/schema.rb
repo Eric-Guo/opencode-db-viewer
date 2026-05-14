@@ -119,6 +119,12 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "path"
     t.text "agent"
     t.text "model"
+    t.float "cost", default: 0.0, null: false
+    t.integer "tokens_input", default: 0, null: false
+    t.integer "tokens_output", default: 0, null: false
+    t.integer "tokens_reasoning", default: 0, null: false
+    t.integer "tokens_cache_read", default: 0, null: false
+    t.integer "tokens_cache_write", default: 0, null: false
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
     t.index ["workspace_id"], name: "session_workspace_idx"
