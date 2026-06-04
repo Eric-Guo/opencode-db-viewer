@@ -46,6 +46,8 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "seq", null: false
     t.text "type", null: false
     t.text "data", null: false
+    t.index ["aggregate_id", "seq"], name: "event_aggregate_seq_idx"
+    t.index ["aggregate_id", "type", "seq"], name: "event_aggregate_type_seq_idx"
   end
 
   create_table "event_sequence", primary_key: "aggregate_id", id: :text, force: :cascade do |t|
@@ -98,6 +100,13 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "icon_url_override"
   end
 
+  create_table "project_directory", primary_key: ["project_id", "directory"], force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "directory", null: false
+    t.text "type", null: false
+    t.integer "time_created", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "role_name"
     t.datetime "created_at", null: false
@@ -138,14 +147,26 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["workspace_id"], name: "session_workspace_idx"
   end
 
+  create_table "session_input", primary_key: "seq", force: :cascade do |t|
+    t.text "id", null: false
+    t.text "session_id", null: false
+    t.text "prompt", null: false
+    t.text "delivery", null: false
+    t.integer "promoted_seq"
+    t.integer "time_created", null: false
+    t.index ["session_id", "promoted_seq", "delivery", "seq"], name: "session_input_session_pending_delivery_seq_idx"
+  end
+
   create_table "session_message", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "type", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
     t.text "data", null: false
-    t.index ["session_id", "type"], name: "session_message_session_type_idx"
-    t.index ["session_id"], name: "session_message_session_idx"
+    t.integer "seq", default: 0, null: false
+    t.index ["session_id", "seq"], name: "session_message_session_seq_idx"
+    t.index ["session_id", "time_created", "id"], name: "session_message_session_time_created_id_idx"
+    t.index ["session_id", "type", "seq"], name: "session_message_session_type_seq_idx"
     t.index ["time_created"], name: "session_message_time_created_idx"
   end
 
@@ -212,7 +233,9 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
+  add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
+  add_foreign_key "session_input", "session", on_delete: :cascade
   add_foreign_key "session_message", "session", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "todo", "session", on_delete: :cascade
