@@ -61,6 +61,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["session_id", "time_created", "id"], name: "message_session_time_created_id_idx"
   end
 
+  create_table "migration", id: :text, force: :cascade do |t|
+    t.integer "time_completed", null: false
+  end
+
   create_table "part", id: :text, force: :cascade do |t|
     t.text "message_id", null: false
     t.text "session_id", null: false
@@ -71,10 +75,13 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["session_id"], name: "part_session_idx"
   end
 
-  create_table "permission", primary_key: "project_id", id: :text, force: :cascade do |t|
+  create_table "permission", id: :text, force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "action", null: false
+    t.text "resource", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
-    t.text "data", null: false
+    t.index ["project_id", "action", "resource"], name: "permission_project_action_resource_idx", unique: true
   end
 
   create_table "project", id: :text, force: :cascade do |t|
@@ -125,6 +132,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "tokens_reasoning", default: 0, null: false
     t.integer "tokens_cache_read", default: 0, null: false
     t.integer "tokens_cache_write", default: 0, null: false
+    t.text "metadata"
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
     t.index ["workspace_id"], name: "session_workspace_idx"
