@@ -147,6 +147,14 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["workspace_id"], name: "session_workspace_idx"
   end
 
+  create_table "session_context_epoch", primary_key: "session_id", id: :text, force: :cascade do |t|
+    t.text "baseline", null: false
+    t.text "snapshot", null: false
+    t.integer "baseline_seq", null: false
+    t.integer "replacement_seq"
+    t.integer "revision", default: 0, null: false
+  end
+
   create_table "session_input", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "prompt", null: false
@@ -237,6 +245,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
+  add_foreign_key "session_context_epoch", "session", on_delete: :cascade
   add_foreign_key "session_input", "session", on_delete: :cascade
   add_foreign_key "session_message", "session", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
