@@ -153,6 +153,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "baseline_seq", null: false
     t.integer "replacement_seq"
     t.integer "revision", default: 0, null: false
+    t.text "agent", default: "build", null: false
   end
 
   create_table "session_input", id: :text, force: :cascade do |t|
