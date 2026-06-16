@@ -37,6 +37,17 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
   end
 
+  create_table "credential", id: :text, force: :cascade do |t|
+    t.text "integration_id"
+    t.text "label", null: false
+    t.text "value", null: false
+    t.text "connector_id"
+    t.text "method_id"
+    t.integer "active"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+  end
+
   create_table "data_migration", primary_key: "name", id: :text, force: :cascade do |t|
     t.integer "time_completed", null: false
   end
@@ -103,7 +114,8 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   create_table "project_directory", primary_key: ["project_id", "directory"], force: :cascade do |t|
     t.text "project_id", null: false
     t.text "directory", null: false
-    t.text "type", null: false
+    t.text "type"
+    t.text "strategy"
     t.integer "time_created", null: false
   end
 
