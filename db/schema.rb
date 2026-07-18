@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "seq", null: false
     t.text "type", null: false
     t.text "data", null: false
+    t.integer "created", null: false
     t.index ["aggregate_id", "seq"], name: "event_aggregate_seq_idx", unique: true
     t.index ["aggregate_id", "type", "seq"], name: "event_aggregate_type_seq_idx"
   end
@@ -64,6 +65,32 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   create_table "event_sequence", primary_key: "aggregate_id", id: :text, force: :cascade do |t|
     t.integer "seq", null: false
     t.text "owner_id"
+  end
+
+  create_table "instruction_blob", primary_key: "hash", id: :text, force: :cascade do |t|
+    t.text "value"
+  end
+
+  create_table "instruction_entry", primary_key: ["session_id", "key"], force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "key", null: false
+    t.text "value"
+    t.integer "removed", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+  end
+
+  create_table "instruction_state", primary_key: "session_id", id: :text, force: :cascade do |t|
+    t.integer "epoch_start", null: false
+    t.integer "through_seq", null: false
+    t.text "initial_values", null: false
+    t.text "current_values", null: false
+  end
+
+  create_table "kv", primary_key: "key", id: :text, force: :cascade do |t|
+    t.text "value", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
   end
 
   create_table "message", id: :text, force: :cascade do |t|
@@ -154,30 +181,14 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "tokens_cache_read", default: 0, null: false
     t.integer "tokens_cache_write", default: 0, null: false
     t.text "metadata"
+    t.text "fork_session_id"
+    t.text "fork_message_id"
+    t.integer "time_suspended"
+    t.integer "fork_seq"
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
+    t.index ["time_suspended"], name: "session_time_suspended_idx"
     t.index ["workspace_id"], name: "session_workspace_idx"
-  end
-
-  create_table "session_context_epoch", primary_key: "session_id", id: :text, force: :cascade do |t|
-    t.text "baseline", null: false
-    t.text "snapshot", null: false
-    t.integer "baseline_seq", null: false
-    t.integer "replacement_seq"
-    t.integer "revision", default: 0, null: false
-    t.text "agent", default: "build", null: false
-  end
-
-  create_table "session_input", id: :text, force: :cascade do |t|
-    t.text "session_id", null: false
-    t.text "prompt", null: false
-    t.text "delivery", null: false
-    t.integer "admitted_seq", null: false
-    t.integer "promoted_seq"
-    t.integer "time_created", null: false
-    t.index ["session_id", "admitted_seq"], name: "session_input_session_admitted_seq_idx", unique: true
-    t.index ["session_id", "promoted_seq", "delivery", "admitted_seq"], name: "session_input_session_pending_delivery_seq_idx"
-    t.index ["session_id", "promoted_seq"], name: "session_input_session_promoted_seq_idx", unique: true
   end
 
   create_table "session_message", id: :text, force: :cascade do |t|
@@ -193,23 +204,24 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["time_created"], name: "session_message_time_created_idx"
   end
 
+  create_table "session_pending", id: :text, force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "type", null: false
+    t.text "data", null: false
+    t.text "delivery"
+    t.integer "admitted_seq", null: false
+    t.integer "time_created", null: false
+    t.index ["session_id", "admitted_seq"], name: "session_pending_session_admitted_seq_idx", unique: true
+    t.index ["session_id", "delivery", "admitted_seq"], name: "session_pending_session_delivery_seq_idx"
+    t.index ["session_id"], name: "session_pending_session_compaction_idx", unique: true
+  end
+
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
     t.text "id", null: false
     t.text "secret", null: false
     t.text "url", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
-  end
-
-  create_table "todo", primary_key: ["session_id", "position"], force: :cascade do |t|
-    t.text "session_id", null: false
-    t.text "content", null: false
-    t.text "status", null: false
-    t.text "priority", null: false
-    t.integer "position", null: false
-    t.integer "time_created", null: false
-    t.integer "time_updated", null: false
-    t.index ["session_id"], name: "todo_session_idx"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -253,16 +265,16 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
 
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
   add_foreign_key "event", "event_sequence", column: "aggregate_id", primary_key: "aggregate_id", on_delete: :cascade
+  add_foreign_key "instruction_entry", "session", on_delete: :cascade
+  add_foreign_key "instruction_state", "session", on_delete: :cascade
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
-  add_foreign_key "session_context_epoch", "session", on_delete: :cascade
-  add_foreign_key "session_input", "session", on_delete: :cascade
   add_foreign_key "session_message", "session", on_delete: :cascade
+  add_foreign_key "session_pending", "session", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
-  add_foreign_key "todo", "session", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
   add_foreign_key "workspace", "project", on_delete: :cascade
