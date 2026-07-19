@@ -1,16 +1,13 @@
 class Part < ApplicationRecord
+  include OpenCodeRecord
+
   self.table_name = "part"
 
   belongs_to :message, class_name: "Message", foreign_key: :message_id, inverse_of: :parts
   belongs_to :session, class_name: "Session", foreign_key: :session_id, inverse_of: :parts
 
   def parsed_data
-    @parsed_data ||= begin
-      parsed = JSON.parse(data)
-      parsed.is_a?(Hash) ? parsed : {}
-    end
-  rescue JSON::ParserError, TypeError
-    {}
+    @parsed_data ||= parsed_json(data)
   end
 
   def part_type

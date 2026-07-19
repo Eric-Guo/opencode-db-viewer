@@ -1,11 +1,14 @@
-class ControlAccount < ApplicationRecord
+class Credential < ApplicationRecord
   include OpenCodeRecord
 
-  self.table_name = "control_account"
-  self.primary_key = %i[email url]
+  self.table_name = "credential"
 
   def active?
     self[:active].to_i == 1
+  end
+
+  def value_data
+    @value_data ||= parsed_json(value, fallback: nil)
   end
 
   def time_created_at

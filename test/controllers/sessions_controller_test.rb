@@ -9,7 +9,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
-  test "should group assistant messages by parent id when signed in" do
+  test "should render legacy messages and parts in storage order" do
     project = projects(:project_session_parent)
     session = sessions(:session_parent_grouping_fixture)
 
@@ -17,13 +17,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get project_session_url(project, session)
 
     assert_response :success
+    assert_includes response.body, "message / part"
     assert_includes response.body, "User one prompt"
     assert_includes response.body, "User two prompt"
     assert_includes response.body, "Assistant for user one"
-    assert_operator response.body.index("Assistant for user one"), :<, response.body.index("User two prompt")
+    assert_operator response.body.index("User one prompt"), :<, response.body.index("User two prompt")
+    assert_operator response.body.index("User two prompt"), :<, response.body.index("Assistant for user one")
   end
 
-  test "should render user file attachments" do
+  test "should render legacy file attachments" do
     project = projects(:project_session_file)
     session = sessions(:session_file_parts_fixture)
 
@@ -35,7 +37,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", "https://example.com/demo.png", text: I18n.t("sessions.show.open")
   end
 
-  test "should group assistant followups by assistant parent id when signed in" do
+  test "should render legacy part payloads no longer represented by the current schema" do
     project = projects(:project_session_assistant_parent)
     session = sessions(:session_assistant_parent_grouping_fixture)
 
@@ -43,37 +45,36 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get project_session_url(project, session)
 
     assert_response :success
-    assert_includes response.body, "Assistant first response"
-    assert_includes response.body, "Assistant follow-up response"
-    assert_operator response.body.index("Assistant follow-up response"), :<, response.body.index("Second user prompt")
-  end
-
-  test "should render step lifecycle parts when signed in" do
-    project = projects(:project_session_assistant_parent)
-    session = sessions(:session_assistant_parent_grouping_fixture)
-
-    sign_in users(:user_fangzixue)
-    get project_session_url(project, session)
-
-    assert_response :success
-    assert_includes response.body, I18n.t("sessions.show.step_started")
-    assert_includes response.body, I18n.t("sessions.show.step_finished")
+    assert_includes response.body, "step-start"
+    assert_includes response.body, "step-finish"
     assert_includes response.body, "tool-calls"
     assert_includes response.body, "1234567890"
+    assert_includes response.body, "mcp_debug"
+    assert_includes response.body, I18n.t("sessions.show.tool_output")
+    assert_includes response.body, "Legacy result fixture"
   end
 
-  test "should keep orphan assistant chain in chronological order when signed in" do
-    project = projects(:project_session_orphan_assistant)
-    session = sessions(:session_orphan_assistant_grouping_fixture)
+  test "should prefer and render current sequenced session messages" do
+    project = projects(:project_session_v2)
+    session = sessions(:session_v2_fixture)
 
     sign_in users(:user_fangzixue)
     get project_session_url(project, session)
 
     assert_response :success
-    assert_includes response.body, "Assistant orphan root response"
-    assert_includes response.body, "Assistant orphan child response"
-    assert_includes response.body, "Prompt after orphan chain"
-    assert_operator response.body.index("Assistant orphan root response"), :<, response.body.index("Prompt after orphan chain")
-    assert_operator response.body.index("Assistant orphan child response"), :<, response.body.index("Prompt after orphan chain")
+    assert_includes response.body, "session_message"
+    assert_includes response.body, "Current schema user prompt"
+    assert_includes response.body, "Current schema reasoning"
+    assert_includes response.body, "Current schema assistant response"
+    assert_includes response.body, I18n.t("sessions.show.tool_content")
+    assert_includes response.body, I18n.t("sessions.show.tool_structured")
+    assert_includes response.body, I18n.t("sessions.show.tool_result")
+    assert_includes response.body, "Content result fixture"
+    assert_includes response.body, "Structured result fixture"
+    assert_includes response.body, "Raw result fixture"
+    assert_includes response.body, "request-fixture"
+    assert_includes response.body, "response-fixture"
+    assert_includes response.body, "test-provider/test-model"
+    assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
 end

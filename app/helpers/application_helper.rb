@@ -8,6 +8,30 @@ module ApplicationHelper
     end
   end
 
+  def pretty_json(value)
+    JSON.pretty_generate(value)
+  rescue JSON::GeneratorError, TypeError
+    value.to_s
+  end
+
+  def formatted_debug_value(value)
+    parsed = if value.is_a?(String)
+      JSON.parse(value)
+    else
+      value
+    end
+
+    parsed.is_a?(String) ? parsed : pretty_json(parsed)
+  rescue JSON::ParserError, TypeError
+    value.to_s
+  end
+
+  def opencode_time(value)
+    return "-" unless value
+
+    value.strftime("%Y-%m-%d %H:%M:%S.%L")
+  end
+
   def footer
     content_tag :footer, nil, class: "footer" do
       left_part = content_tag :div, nil do

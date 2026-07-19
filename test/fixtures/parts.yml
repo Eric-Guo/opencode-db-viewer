@@ -71,6 +71,14 @@ part_msg_assistant_chain_one_step_finish_fixture:
   time_updated: 1700000005102
   data: '{"type":"step-finish","reason":"tool-calls","tokens":{"input":0,"output":0,"cache":{"read":0}}}'
 
+part_msg_assistant_chain_one_tool_fixture:
+  id: "part-msg-assistant-chain-one-tool-fixture"
+  message_id: "msg-assistant-chain-one-fixture"
+  session_id: "session-assistant-parent-grouping-fixture"
+  time_created: 1700000005103
+  time_updated: 1700000005103
+  data: '{"type":"tool","tool":"mcp_debug","callID":"call-legacy-fixture","state":{"status":"completed","input":{"query":"fixture"},"output":"{\"items\":[{\"id\":42,\"name\":\"Legacy result fixture\"}]}","metadata":{"truncated":false},"title":"MCP debug","time":{"start":1700000005103,"end":1700000005104}}}'
+
 part_msg_assistant_chain_two_text_fixture:
   id: "part-msg-assistant-chain-two-text-fixture"
   message_id: "msg-assistant-chain-two-fixture"

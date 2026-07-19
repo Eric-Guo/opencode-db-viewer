@@ -1,13 +1,44 @@
 class Session < ApplicationRecord
+  include OpenCodeRecord
+
   self.table_name = "session"
 
   belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :sessions
   belongs_to :parent, class_name: "Session", foreign_key: :parent_id, inverse_of: :children, optional: true
+  belongs_to :fork_session, class_name: "Session", foreign_key: :fork_session_id, inverse_of: :forks, optional: true
+  belongs_to :fork_message, class_name: "SessionMessage", foreign_key: :fork_message_id, optional: true
+  belongs_to :workspace, class_name: "Workspace", foreign_key: :workspace_id, inverse_of: :sessions, optional: true
 
   has_many :messages, class_name: "Message", foreign_key: :session_id, inverse_of: :session, dependent: :destroy
   has_many :parts, class_name: "Part", foreign_key: :session_id, inverse_of: :session
+  has_many :session_messages,
+    class_name: "SessionMessage",
+    foreign_key: :session_id,
+    inverse_of: :session,
+    dependent: :destroy
+  has_many :session_pendings,
+    class_name: "SessionPending",
+    foreign_key: :session_id,
+    inverse_of: :session,
+    dependent: :destroy
+  has_many :instruction_entries,
+    class_name: "InstructionEntry",
+    foreign_key: :session_id,
+    inverse_of: :session,
+    dependent: :destroy
   has_many :children, class_name: "Session", foreign_key: :parent_id, inverse_of: :parent
-  has_many :todos, class_name: "Todo", foreign_key: :session_id, inverse_of: :session, dependent: :destroy
+  has_many :forks, class_name: "Session", foreign_key: :fork_session_id, inverse_of: :fork_session
+  has_one :event_sequence,
+    class_name: "EventSequence",
+    foreign_key: :aggregate_id,
+    primary_key: :id,
+    dependent: :destroy
+  has_many :events, through: :event_sequence, source: :events
+  has_one :instruction_state,
+    class_name: "InstructionState",
+    foreign_key: :session_id,
+    inverse_of: :session,
+    dependent: :destroy
   has_one :session_share,
     class_name: "SessionShare",
     foreign_key: :session_id,
@@ -15,24 +46,38 @@ class Session < ApplicationRecord
     dependent: :destroy
 
   def time_created_at
-    convert_unix_timestamp(time_created)
+    epoch_time(time_created)
   end
 
   def time_updated_at
-    convert_unix_timestamp(time_updated)
+    epoch_time(time_updated)
   end
 
   def time_archived_at
-    convert_unix_timestamp(time_archived)
+    epoch_time(time_archived)
   end
 
-  private
+  def time_compacting_at
+    epoch_time(time_compacting)
+  end
 
-  def convert_unix_timestamp(value)
-    return if value.blank?
+  def time_suspended_at
+    epoch_time(time_suspended)
+  end
 
-    timestamp = value.to_i
-    timestamp /= 1000.0 if timestamp > 99_999_999_999
-    Time.zone.at(timestamp)
+  def model_data
+    @model_data ||= parsed_json(model)
+  end
+
+  def metadata_data
+    @metadata_data ||= parsed_json(metadata)
+  end
+
+  def summary_diffs_data
+    @summary_diffs_data ||= parsed_json(summary_diffs, fallback: [])
+  end
+
+  def total_tokens
+    tokens_input.to_i + tokens_output.to_i + tokens_reasoning.to_i + tokens_cache_read.to_i + tokens_cache_write.to_i
   end
 end

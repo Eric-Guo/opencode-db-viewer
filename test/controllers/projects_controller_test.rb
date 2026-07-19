@@ -13,7 +13,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:user_fangzixue)
     get projects_url
     assert_response :success
-    assert_select "th", text: I18n.t("projects.index.time_created")
+    assert_select "th", text: I18n.t("projects.index.directories")
+    assert_select "th", text: I18n.t("projects.index.sessions")
     assert_select "th", text: I18n.t("projects.index.time_updated")
   end
 
@@ -50,8 +51,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "th", text: I18n.t("projects.show.session_title")
     assert_select "div", text: I18n.t("projects.show.total_sessions")
-    assert_select "div", text: I18n.t("projects.show.total_additions")
-    assert_select "div", text: I18n.t("projects.show.total_deletions")
+    assert_select "div", text: I18n.t("projects.show.total_tokens")
+    assert_select "div", text: I18n.t("projects.show.total_cost")
     assert_select "tbody tr", count: 2
     assert_includes response.body, old_title
     assert_includes response.body, new_title

@@ -64,3 +64,23 @@ session_orphan_assistant_grouping_fixture:
   version: "1.0.0"
   time_created: 9500000000000
   time_updated: 9500000000000
+
+session_v2_fixture:
+  id: "session-v2-fixture"
+  project_id: "project-session-v2"
+  slug: "slug-session-v2-fixture"
+  directory: "/tmp/session-v2-project"
+  path: "src/example.rb"
+  title: "session-v2-fixture"
+  version: "1.17.11"
+  agent: "build"
+  model: '{"id":"test-model","providerID":"test-provider","variant":"high"}'
+  cost: 0.012345
+  tokens_input: 100
+  tokens_output: 50
+  tokens_reasoning: 25
+  tokens_cache_read: 500
+  tokens_cache_write: 10
+  metadata: '{"source":"test"}'
+  time_created: 1700000010000
+  time_updated: 1700000020000

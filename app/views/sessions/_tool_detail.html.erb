@@ -1,0 +1,64 @@
+<div class="card bg-light border-0 mt-2">
+  <div class="card-body p-3">
+    <% if state.key?("input") %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_input") %></div>
+        <pre class="bg-white border rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(state["input"]) %></code></pre>
+      </section>
+    <% end %>
+
+    <% if state.key?("output") %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_output") %></div>
+        <pre class="bg-white border rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(state["output"]) %></code></pre>
+      </section>
+    <% end %>
+
+    <% if state.key?("result") %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_result") %></div>
+        <pre class="bg-white border rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(state["result"]) %></code></pre>
+      </section>
+    <% end %>
+
+    <% if state.key?("structured") %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_structured") %></div>
+        <pre class="bg-white border rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(state["structured"]) %></code></pre>
+      </section>
+    <% end %>
+
+    <% if state["content"].is_a?(Array) %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_content") %></div>
+        <% state["content"].each_with_index do |item, index| %>
+          <% value = item.is_a?(Hash) && item["type"] == "text" ? item["text"] : item %>
+          <div class="small text-medium-emphasis mb-1"><%= item.is_a?(Hash) ? item["type"].presence || "item" : "item" %> #<%= index + 1 %></div>
+          <pre class="bg-white border rounded p-3 mb-2 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(value) %></code></pre>
+        <% end %>
+      </section>
+    <% end %>
+
+    <% if state["error"].present? %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-danger mb-1"><%= t("sessions.show.tool_error") %></div>
+        <pre class="bg-white border border-danger rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(state["error"]) %></code></pre>
+      </section>
+    <% end %>
+
+    <% debug_metadata = {
+      metadata: state["metadata"],
+      title: state["title"],
+      time: state["time"],
+      executed: tool["executed"],
+      providerState: tool["providerState"],
+      providerResultState: tool["providerResultState"]
+    }.compact %>
+    <% if debug_metadata.any? %>
+      <section>
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_debug_metadata") %></div>
+        <pre class="bg-white border rounded p-3 mb-0 small" style="max-height: 40rem; overflow: auto;"><code><%= pretty_json(debug_metadata) %></code></pre>
+      </section>
+    <% end %>
+  </div>
+</div>

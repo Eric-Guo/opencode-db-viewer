@@ -9,6 +9,9 @@ class ProjectsController < ApplicationController
     authorize Project
     add_to_breadcrumbs t("projects.index.title")
     @pagy, @projects = pagy(policy_scope(Project).order(time_updated: :desc), items: current_user.preferred_page_length)
+    project_ids = @projects.map(&:id)
+    @session_counts = Session.where(project_id: project_ids).group(:project_id).count
+    @directory_counts = ProjectDirectory.where(project_id: project_ids).group(:project_id).count
   end
 
   def show
@@ -22,7 +25,17 @@ class ProjectsController < ApplicationController
       Arel.sql("COALESCE(SUM(summary_additions), 0)"),
       Arel.sql("COALESCE(SUM(summary_deletions), 0)")
     ).map(&:to_i)
+    @total_cost = sessions_scope.sum(:cost).to_f
+    @total_tokens = sessions_scope.sum(
+      Arel.sql("tokens_input + tokens_output + tokens_reasoning + tokens_cache_read + tokens_cache_write")
+    ).to_i
+    @project_directories = @project.project_directories.order(:directory)
+    @workspaces = @project.workspaces.order(time_used: :desc)
+    @permissions = @project.permissions.order(:action, :resource)
     @pagy, @sessions = pagy(sessions_scope.order(time_updated: :desc), items: current_user.preferred_page_length)
+    session_ids = @sessions.map(&:id)
+    @session_message_counts = SessionMessage.where(session_id: session_ids).group(:session_id).count
+    @legacy_message_counts = Message.where(session_id: session_ids).group(:session_id).count
   end
 
   private

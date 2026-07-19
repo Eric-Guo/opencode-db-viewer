@@ -1,371 +1,79 @@
-<div class="row justify-content-center">
-  <div class="col-lg-12">
-    <div class="container">
-
-      <%# === Session Info Card === %>
-      <div class="card mb-4">
-        <div class="card-header bg-primary text-white d-flex align-items-center">
-          <svg class="icon me-2">
-            <use xlink:href="<%= asset_path('free.svg') %>#cil-chat-bubble"></use>
-          </svg>
-          <strong><%= t(".session_info") %></strong>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-
-            <%# Title %>
-            <div class="col-md-6">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".session_title") %></div>
-                <div class="fs-5 fw-semibold"><%= @session.title.presence || @session.slug %></div>
-              </div>
-            </div>
-
-            <%# Version %>
-            <div class="col-md-3">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".version") %></div>
-                <span class="badge bg-info-gradient text-white"><%= @session.version %></span>
-              </div>
-            </div>
-
-            <%# Directory %>
-            <div class="col-md-3">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".directory") %></div>
-                <code class="small"><%= @session.directory %></code>
-              </div>
-            </div>
-
-            <%# Stats %>
-            <div class="col-md-4">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".files_changed") %></div>
-                <div class="fs-5 fw-semibold"><%= @session.summary_files || 0 %></div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".additions") %></div>
-                <div class="fs-5 fw-semibold text-success">+<%= @session.summary_additions || 0 %></div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".deletions") %></div>
-                <div class="fs-5 fw-semibold text-danger">-<%= @session.summary_deletions || 0 %></div>
-              </div>
-            </div>
-
-            <%# Timestamps %>
-            <% s_created = @session.time_created_at %>
-            <% s_updated = @session.time_updated_at %>
-            <div class="col-md-6">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".time_created") %></div>
-                <% if s_created %>
-                  <div><%= time_tag(s_created, t(".time_ago", distance: time_ago_in_words(s_created)), title: s_created.strftime("%Y-%m-%d %H:%M:%S")) %></div>
-                  <div class="small text-medium-emphasis"><%= s_created.strftime("%Y-%m-%d %H:%M:%S") %></div>
-                <% else %>
-                  <span class="text-medium-emphasis">-</span>
-                <% end %>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="border rounded p-3 h-100">
-                <div class="text-medium-emphasis small text-uppercase fw-semibold mb-1"><%= t(".time_updated") %></div>
-                <% if s_updated %>
-                  <div><%= time_tag(s_updated, t(".time_ago", distance: time_ago_in_words(s_updated)), title: s_updated.strftime("%Y-%m-%d %H:%M:%S")) %></div>
-                  <div class="small text-medium-emphasis"><%= s_updated.strftime("%Y-%m-%d %H:%M:%S") %></div>
-                <% else %>
-                  <span class="text-medium-emphasis">-</span>
-                <% end %>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <%# === Message Timeline === %>
-      <div class="card mb-4">
-        <% total_parts_count = @messages.sum { |message| message.parts.size } %>
-        <div class="card-header d-flex align-items-center">
-          <svg class="icon me-2">
-            <use xlink:href="<%= asset_path('free.svg') %>#cil-history"></use>
-          </svg>
-          <strong><%= t(".message_timeline") %></strong>
-          <span class="badge bg-primary ms-2"><%= @messages.size %> <%= t(".messages") %></span>
-          <span class="badge bg-info-gradient text-white ms-2"><%= total_parts_count %> <%= t(".parts") %></span>
-        </div>
-        <div class="card-body">
-
-          <% if @turns.empty? %>
-            <div class="text-center text-medium-emphasis py-4"><%= t(".no_messages") %></div>
-          <% else %>
-            <% @turns.each_with_index do |turn, turn_idx| %>
-              <div class="mb-4">
-
-                <%# === User Message === %>
-                <% if turn[:user] %>
-                  <% user_msg = turn[:user] %>
-                  <div class="d-flex mb-3">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="avatar avatar-md bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-                        <svg class="icon">
-                          <use xlink:href="<%= asset_path('free.svg') %>#cil-user"></use>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="flex-grow-1">
-                      <div class="d-flex align-items-center mb-1">
-                        <strong class="me-2"><%= t(".user") %></strong>
-                        <% if user_msg.agent.present? %>
-                          <span class="badge bg-light text-dark me-2"><%= user_msg.agent %></span>
-                        <% end %>
-                        <% if user_msg.model_id.present? %>
-                          <span class="badge bg-info-gradient text-white me-2"><%= user_msg.model_id %></span>
-                        <% end %>
-                        <% if user_msg.time_created_at %>
-                          <small class="text-medium-emphasis"><%= user_msg.time_created_at.strftime("%H:%M:%S") %></small>
-                        <% end %>
-                      </div>
-
-                      <% user_parts = user_msg.parts.sort_by { |p| [p.time_created || 0, p.id.to_s] } %>
-                      <% user_text_parts = user_parts.select(&:text?) %>
-                      <% user_text_parts.each do |part| %>
-                        <% system_part = part.text_content.to_s.start_with?("<system-") %>
-                        <div class="card <%= system_part ? "bg-body-secondary" : "bg-light" %> border-0 mb-2">
-                          <div class="card-body py-2 px-3">
-                            <% if system_part %>
-                              <div class="small text-medium-emphasis mb-1">system</div>
-                            <% end %>
-                            <div class="text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
-                            <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
-                          </div>
-                        </div>
-                      <% end %>
-
-                      <% user_file_parts = user_parts.select(&:file?) %>
-                      <% if user_file_parts.any? %>
-                        <div class="d-flex flex-wrap gap-2 mt-2">
-                          <% user_file_parts.each do |part| %>
-                            <span class="badge bg-light text-dark border d-inline-flex align-items-center">
-                              <svg class="icon icon-sm me-1">
-                                <use xlink:href="<%= asset_path('free.svg') %>#cil-file"></use>
-                              </svg>
-                              <%= t(".file") %>: <%= part.file_name.presence || "-" %>
-                              <% if part.file_url.present? %>
-                                <%= link_to t(".open"), part.file_url, class: "ms-2 text-decoration-none", target: "_blank", rel: "noopener noreferrer" %>
-                              <% end %>
-                            </span>
-                          <% end %>
-                        </div>
-                      <% end %>
-
-                      <% if user_msg.summary_title.present? %>
-                        <div class="small text-medium-emphasis fst-italic mt-1">
-                          <svg class="icon icon-sm me-1">
-                            <use xlink:href="<%= asset_path('free.svg') %>#cil-bookmark"></use>
-                          </svg>
-                          <%= user_msg.summary_title %>
-                        </div>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-
-                <%# === Assistant Messages === %>
-                <% turn[:assistants].each do |asst_msg| %>
-                  <div class="d-flex mb-3">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="avatar avatar-md bg-success text-white rounded-circle d-flex align-items-center justify-content-center">
-                        <svg class="icon">
-                          <use xlink:href="<%= asset_path('free.svg') %>#cil-bot"></use>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="flex-grow-1 min-width-0">
-                      <div class="d-flex align-items-center flex-wrap mb-1">
-                        <strong class="me-2"><%= t(".assistant") %></strong>
-                        <% if asst_msg.agent.present? %>
-                          <span class="badge bg-light text-dark me-1"><%= asst_msg.agent %></span>
-                        <% end %>
-                        <% if asst_msg.mode.present? %>
-                          <span class="badge bg-warning-gradient text-dark me-1"><%= asst_msg.mode %></span>
-                        <% end %>
-                        <% if asst_msg.model_id.present? %>
-                          <span class="badge bg-info-gradient text-white me-1"><%= asst_msg.model_id %></span>
-                        <% end %>
-                        <% if asst_msg.time_created_at %>
-                          <small class="text-medium-emphasis me-2"><%= asst_msg.time_created_at.strftime("%H:%M:%S") %></small>
-                        <% end %>
-                        <% if asst_msg.finish_reason.present? %>
-                          <span class="badge bg-<%= asst_msg.finish_reason == "stop" ? "success" : "secondary" %>"><%= asst_msg.finish_reason %></span>
-                        <% end %>
-                      </div>
-
-                      <% ordered_parts = asst_msg.parts.sort_by { |p| [p.time_created || 0, p.id.to_s] } %>
-                      <% ordered_parts.each do |part| %>
-                        <% case part.part_type %>
-                        <% when "step-start" %>
-                          <div class="mb-2">
-                            <span class="badge bg-light text-dark border d-inline-flex align-items-center">
-                              <svg class="icon icon-sm me-1">
-                                <use xlink:href="<%= asset_path('free.svg') %>#cil-media-play"></use>
-                              </svg>
-                              <%= t(".step_started") %>
-                              <% if part.step_start_snapshot.present? %>
-                                <span class="ms-2 text-medium-emphasis"><%= t(".snapshot") %>: <code><%= part.step_start_snapshot.to_s.first(10) %></code></span>
-                              <% end %>
-                              <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
-                            </span>
-                          </div>
-                        <% when "reasoning" %>
-                          <div class="mb-2">
-                            <details>
-                              <summary class="text-medium-emphasis small cursor-pointer">
-                                <svg class="icon icon-sm me-1">
-                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-lightbulb"></use>
-                                </svg>
-                                <%= t(".thinking") %> (<%= part.text_content.to_s.length %> <%= t(".chars") %>)
-                              </summary>
-                              <div class="card bg-light border-0 mt-1">
-                                <div class="card-body py-2 px-3">
-                                  <div class="text-break small text-medium-emphasis" style="white-space: pre-wrap;"><%= part.text_content %></div>
-                                  <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
-                                </div>
-                              </div>
-                            </details>
-                          </div>
-                        <% when "text" %>
-                          <div class="card border-start border-start-4 border-start-success mb-2">
-                            <div class="card-body py-2 px-3">
-                              <div class="text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
-                              <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
-                            </div>
-                          </div>
-                        <% when "tool" %>
-                          <div class="mb-2">
-                            <details>
-                              <summary class="d-inline-flex align-items-center">
-                                <span class="badge bg-dark me-2">
-                                  <svg class="icon icon-sm me-1">
-                                    <use xlink:href="<%= asset_path('free.svg') %>#cil-terminal"></use>
-                                  </svg>
-                                  <%= part.tool_name %>
-                                </span>
-                                <span class="badge bg-<%= part.tool_status == "completed" ? "success" : "warning" %>"><%= part.tool_status %></span>
-                                <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
-                              </summary>
-                              <div class="card bg-light border-0 mt-1">
-                                <div class="card-body py-2 px-3">
-                                  <% if part.tool_input.present? %>
-                                    <div class="mb-2">
-                                      <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_input") %></div>
-                                      <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_input.is_a?(Hash) ? JSON.pretty_generate(part.tool_input) : part.tool_input.to_s %></code></pre>
-                                    </div>
-                                  <% end %>
-                                  <% if part.tool_output.present? %>
-                                    <div>
-                                      <div class="text-medium-emphasis small fw-semibold mb-1"><%= t(".tool_output") %></div>
-                                      <pre class="bg-white rounded p-2 small mb-0" style="max-height: 300px; overflow-y: auto;"><code><%= part.tool_output.is_a?(Hash) ? JSON.pretty_generate(part.tool_output) : part.tool_output.to_s.truncate(2000) %></code></pre>
-                                    </div>
-                                  <% end %>
-                                </div>
-                              </div>
-                            </details>
-                          </div>
-                        <% when "patch" %>
-                          <div class="mb-2">
-                            <details>
-                              <summary class="d-inline-flex align-items-center">
-                                <span class="badge bg-secondary me-2">
-                                  <svg class="icon icon-sm me-1">
-                                    <use xlink:href="<%= asset_path('free.svg') %>#cil-code"></use>
-                                  </svg>
-                                  <%= t(".patch") %>
-                                </span>
-                                <small class="text-medium-emphasis"><%= part.patch_files.size %> <%= t(".files_affected") %></small>
-                                <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
-                              </summary>
-                              <div class="card bg-light border-0 mt-1">
-                                <div class="card-body py-2 px-3">
-                                  <ul class="list-unstyled mb-0">
-                                    <% part.patch_files.each do |file| %>
-                                      <li class="small"><code><%= file %></code></li>
-                                    <% end %>
-                                  </ul>
-                                </div>
-                              </div>
-                            </details>
-                          </div>
-                        <% when "step-finish" %>
-                          <% tokens = part.step_finish_tokens %>
-                          <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
-                            <span class="badge bg-light text-dark border d-inline-flex align-items-center">
-                              <svg class="icon icon-sm me-1">
-                                <use xlink:href="<%= asset_path('free.svg') %>#cil-check-circle"></use>
-                              </svg>
-                              <%= t(".step_finished") %>
-                              <% if part.step_finish_reason.present? %>
-                                <span class="ms-2 text-medium-emphasis"><%= part.step_finish_reason %></span>
-                              <% end %>
-                              <span class="ms-2 text-medium-emphasis"><code><%= part.id %></code></span>
-                            </span>
-                            <% if tokens["input"].to_i > 0 %>
-                              <span class="badge bg-light text-dark border">
-                                <svg class="icon icon-sm me-1">
-                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-arrow-circle-right"></use>
-                                </svg>
-                                <%= t(".tokens_in") %>: <%= number_with_delimiter(tokens["input"]) %>
-                              </span>
-                            <% end %>
-                            <% if tokens["output"].to_i > 0 %>
-                              <span class="badge bg-light text-dark border">
-                                <svg class="icon icon-sm me-1">
-                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-arrow-circle-left"></use>
-                                </svg>
-                                <%= t(".tokens_out") %>: <%= number_with_delimiter(tokens["output"]) %>
-                              </span>
-                            <% end %>
-                            <% if tokens.dig("cache", "read").to_i > 0 %>
-                              <span class="badge bg-light text-dark border">
-                                <svg class="icon icon-sm me-1">
-                                  <use xlink:href="<%= asset_path('free.svg') %>#cil-layers"></use>
-                                </svg>
-                                <%= t(".cache_read") %>: <%= number_with_delimiter(tokens.dig("cache", "read")) %>
-                              </span>
-                            <% end %>
-                          </div>
-                        <% else %>
-                          <div class="card bg-light border-0 mb-2">
-                            <div class="card-body py-2 px-3">
-                              <div class="text-medium-emphasis small mb-1"><%= part.part_type %></div>
-                              <pre class="bg-white rounded p-2 small mb-0"><code><%= part.data.to_s.truncate(1000) %></code></pre>
-                              <div class="small text-medium-emphasis mt-1"><code><%= part.id %></code></div>
-                            </div>
-                          </div>
-                        <% end %>
-                      <% end %>
-
-                    </div>
-                  </div>
-                <% end %>
-
-              </div>
-
-              <%# Turn separator %>
-              <% if turn_idx < @turns.size - 1 %>
-                <hr class="my-3">
-              <% end %>
-
-            <% end %>
-          <% end %>
-
-        </div>
-      </div>
-
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white d-flex align-items-center">
+    <%= svg_icon("free.svg#cil-chat-bubble", "icon me-2") %>
+    <strong><%= @session.title.presence || @session.slug %></strong>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-lg-8"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".session_id") %></div><code class="text-break"><%= @session.id %></code></div>
+      <div class="col-lg-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".version") %></div><%= @session.version %></div>
+      <div class="col-lg-8"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".directory") %></div><code class="text-break"><%= @session.directory %></code><% if @session.path.present? %><div class="small text-medium-emphasis"><%= t(".path") %>: <code><%= @session.path %></code></div><% end %></div>
+      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".agent_model") %></div><%= @session.agent.presence || "-" %><div class="small text-medium-emphasis"><%= [@session.model_data["providerID"], @session.model_data["id"], @session.model_data["variant"]].compact.join("/").presence || "-" %></div></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".cost") %></div><%= number_to_currency(@session.cost.to_f, precision: 8) %></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_input") %></div><%= number_with_delimiter(@session.tokens_input) %></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_output") %></div><%= number_with_delimiter(@session.tokens_output) %></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_other") %></div><%= number_with_delimiter(@session.tokens_reasoning.to_i + @session.tokens_cache_read.to_i + @session.tokens_cache_write.to_i) %></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".files_changed") %></div><%= @session.summary_files || 0 %></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".additions") %></div><span class="text-success">+<%= @session.summary_additions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".deletions") %></div><span class="text-danger">-<%= @session.summary_deletions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".state") %></div><% if @session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% elsif @session.time_suspended_at %><span class="badge bg-warning text-dark"><%= t(".suspended") %></span><% elsif @session.time_compacting_at %><span class="badge bg-info"><%= t(".compacting") %></span><% else %><span class="badge bg-success"><%= t(".active") %></span><% end %></div>
+      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_created") %></div><%= opencode_time(@session.time_created_at) %></div>
+      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_updated") %></div><%= opencode_time(@session.time_updated_at) %></div>
+      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".workspace") %></div><%= @session.workspace&.name.presence || @session.workspace_id.presence || "-" %></div>
+      <% if @session.parent_id.present? || @session.fork_session_id.present? %>
+        <div class="col-12"><div class="alert alert-light border mb-0"><% if @session.parent_id.present? %><div><%= t(".parent_session") %>: <code><%= @session.parent_id %></code></div><% end %><% if @session.fork_session_id.present? %><div><%= t(".forked_from") %>: <code><%= @session.fork_session_id %></code> · <%= t(".sequence") %> <%= @session.fork_seq || "-" %> · <%= t(".message") %> <code><%= @session.fork_message_id || "-" %></code></div><% end %></div></div>
+      <% end %>
+      <% if @session.metadata_data.present? || @session.summary_diffs_data.present? %>
+        <div class="col-12"><details><summary class="fw-semibold"><%= t(".metadata_and_diffs") %></summary><pre class="bg-light rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({metadata: @session.metadata_data, summary_diffs: @session.summary_diffs_data}) %></code></pre></details></div>
+      <% end %>
     </div>
   </div>
 </div>
+
+<div class="card mb-4">
+  <div class="card-header d-flex align-items-center flex-wrap gap-2">
+    <%= svg_icon("free.svg#cil-history", "icon") %>
+    <strong><%= t(".message_timeline") %></strong>
+    <span class="badge bg-primary"><%= @messages.size %> <%= t(".messages") %></span>
+    <span class="badge bg-light text-dark border"><%= @message_storage == :session_message ? "session_message" : "message / part" %></span>
+  </div>
+  <div class="card-body">
+    <% if @messages.empty? %>
+      <div class="text-center text-medium-emphasis py-4"><%= t(".no_messages") %></div>
+    <% elsif @message_storage == :session_message %>
+      <%= render partial: "sessions/session_message", collection: @session_messages, as: :message %>
+    <% else %>
+      <%= render partial: "sessions/legacy_message", collection: @legacy_messages, as: :message %>
+    <% end %>
+  </div>
+</div>
+
+<% if @pending_messages.any? %>
+  <div class="card mb-4">
+    <div class="card-header"><strong><%= t(".pending_inputs") %></strong><span class="badge bg-warning text-dark ms-2"><%= @pending_messages.size %></span></div>
+    <div class="card-body">
+      <% @pending_messages.each do |pending| %>
+        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= pending.pending_type %></span> <code><%= pending.id %></code> · #<%= pending.admitted_seq %> · <%= pending.delivery.presence || "-" %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(pending.parsed_data) %></code></pre></details>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @instruction_entries.any? || @session.instruction_state.present? %>
+  <div class="card mb-4">
+    <div class="card-header"><strong><%= t(".instruction_context") %></strong><span class="badge bg-info ms-2"><%= @instruction_entries.size %></span></div>
+    <div class="card-body">
+      <% if @session.instruction_state %><div class="small text-medium-emphasis mb-3"><%= t(".epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t(".through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
+      <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t(".removed") %></span><% end %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @events.any? %>
+  <div class="card mb-4">
+    <div class="card-header"><strong><%= t(".durable_events") %></strong><span class="badge bg-dark ms-2"><%= @event_count %></span><% if @event_count > @events.size %><small class="text-medium-emphasis ms-2"><%= t(".latest_events", count: @events.size) %></small><% end %></div>
+    <div class="card-body">
+      <% @events.each do |event| %><details class="mb-2"><summary><span class="badge bg-dark">#<%= event.seq %></span> <%= event.event_type %> <small class="text-medium-emphasis"><%= opencode_time(event.created_at_time) %> · <code><%= event.id %></code></small></summary><pre class="bg-light rounded p-3 mt-2 small" style="max-height: 30rem; overflow: auto;"><code><%= pretty_json(event.parsed_data).truncate(30_000) %></code></pre></details><% end %>
+    </div>
+  </div>
+<% end %>

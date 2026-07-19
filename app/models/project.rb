@@ -1,25 +1,34 @@
 class Project < ApplicationRecord
+  include OpenCodeRecord
+
   self.table_name = "project"
 
   has_many :sessions, class_name: "Session", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
-  has_one :permission, class_name: "Permission", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
+  has_many :permissions, class_name: "Permission", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
+  has_many :project_directories,
+    class_name: "ProjectDirectory",
+    foreign_key: :project_id,
+    inverse_of: :project,
+    dependent: :destroy
+  has_many :workspaces, class_name: "Workspace", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
+
+  def sandboxes_data
+    @sandboxes_data ||= parsed_json(sandboxes, fallback: [])
+  end
+
+  def commands_data
+    @commands_data ||= parsed_json(commands)
+  end
 
   def time_created_at
-    convert_unix_timestamp(time_created)
+    epoch_time(time_created)
   end
 
   def time_updated_at
-    convert_unix_timestamp(time_updated)
+    epoch_time(time_updated)
   end
 
-  private
-
-  def convert_unix_timestamp(value)
-    return if value.blank?
-
-    timestamp = value.to_i
-    # Drizzle-backed integer timestamps may be stored in milliseconds.
-    timestamp /= 1000.0 if timestamp > 99_999_999_999
-    Time.zone.at(timestamp)
+  def time_initialized_at
+    epoch_time(time_initialized)
   end
 end

@@ -1,0 +1,27 @@
+---
+session_message_v2_user:
+  id: "msg-v2-user-fixture"
+  session_id: "session-v2-fixture"
+  type: "user"
+  seq: 10
+  time_created: 1700000010000
+  time_updated: 1700000010000
+  data: '{"time":{"created":1700000010000},"text":"Current schema user prompt","files":[]}'
+
+session_message_v2_agent_switch:
+  id: "msg-v2-agent-switch-fixture"
+  session_id: "session-v2-fixture"
+  type: "agent-switched"
+  seq: 11
+  time_created: 1700000010100
+  time_updated: 1700000010100
+  data: '{"time":{"created":1700000010100},"agent":"build"}'
+
+session_message_v2_assistant:
+  id: "msg-v2-assistant-fixture"
+  session_id: "session-v2-fixture"
+  type: "assistant"
+  seq: 20
+  time_created: 1700000010200
+  time_updated: 1700000010300
+  data: '{"time":{"created":1700000010200,"completed":1700000010300},"agent":"build","model":{"id":"test-model","providerID":"test-provider","variant":"high"},"content":[{"type":"reasoning","text":"Current schema reasoning"},{"type":"text","text":"Current schema assistant response"},{"type":"tool","id":"call_fixture","name":"read","executed":true,"providerState":{"requestID":"request-fixture"},"providerResultState":{"responseID":"response-fixture"},"state":{"status":"completed","input":{"path":"README.md"},"content":[{"type":"text","text":"{\"items\":[{\"name\":\"Content result fixture\"}]}"}],"structured":{"items":[{"name":"Structured result fixture"}]},"result":{"items":[{"name":"Raw result fixture"}]}}}],"finish":"stop","cost":0.001,"tokens":{"input":100,"output":50,"reasoning":25,"cache":{"read":500,"write":10}}}'

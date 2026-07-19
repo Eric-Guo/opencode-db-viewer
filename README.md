@@ -1,6 +1,17 @@
-# The CoreUI 4 Rails Starter Template
+# OpenCode DB Viewer
 
-[![Build Status](https://github.com/Eric-Guo/coreui4-rails-starter/actions/workflows/rubyonrails.yml/badge.svg)](https://github.com/Eric-Guo/coreui4-rails-starter/actions)
+A read-only Rails/CoreUI browser for an OpenCode SQLite database. The project and session pages support both OpenCode storage generations:
+
+- current sequenced messages in `session_message`, including assistant content, tool calls, usage, pending inputs, instruction context, and durable events;
+- legacy conversations in `message` and `part` for databases that still contain older sessions.
+
+Account and credential tables have matching models for schema completeness, but secret values are intentionally not exposed by the views.
+
+Set the development database path in `config/database.yml`, then run:
+
+```bash
+bin/rails server
+```
 
 ## Development notes
 

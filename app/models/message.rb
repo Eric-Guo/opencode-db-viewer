@@ -1,16 +1,13 @@
 class Message < ApplicationRecord
+  include OpenCodeRecord
+
   self.table_name = "message"
 
   belongs_to :session, class_name: "Session", foreign_key: :session_id, inverse_of: :messages
   has_many :parts, class_name: "Part", foreign_key: :message_id, inverse_of: :message, dependent: :destroy
 
   def parsed_data
-    @parsed_data ||= begin
-      parsed = JSON.parse(data)
-      parsed.is_a?(Hash) ? parsed : {}
-    end
-  rescue JSON::ParserError, TypeError
-    {}
+    @parsed_data ||= parsed_json(data)
   end
 
   def role
@@ -58,19 +55,11 @@ class Message < ApplicationRecord
   end
 
   def time_created_at
-    ts = time_data["created"]
-    return if ts.blank?
-    ts = ts.to_i
-    ts /= 1000.0 if ts > 99_999_999_999
-    Time.zone.at(ts)
+    epoch_time(time_data["created"] || time_created)
   end
 
   def time_completed_at
-    ts = time_data["completed"]
-    return if ts.blank?
-    ts = ts.to_i
-    ts /= 1000.0 if ts > 99_999_999_999
-    Time.zone.at(ts)
+    epoch_time(time_data["completed"])
   end
 
   def summary_title

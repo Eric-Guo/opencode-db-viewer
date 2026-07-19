@@ -70,3 +70,13 @@ project_session_orphan_assistant:
   sandboxes: "[]"
   time_created: 9500000000000
   time_updated: 9500000000000
+
+project_session_v2:
+  id: "project-session-v2"
+  name: "session-v2-project"
+  worktree: "/tmp/session-v2-project"
+  vcs: "git"
+  sandboxes: "[]"
+  commands: '{"start":"bin/dev"}'
+  time_created: 9600000000000
+  time_updated: 9600000000000
