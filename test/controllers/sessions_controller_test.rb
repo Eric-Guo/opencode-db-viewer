@@ -77,4 +77,19 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "test-provider/test-model"
     assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
+
+  test "should collapse consecutive part update events of the same part into one row" do
+    project = projects(:project_session_v2)
+    session = sessions(:session_v2_fixture)
+
+    sign_in users(:user_fangzixue)
+    get project_session_url(project, session)
+
+    assert_response :success
+    assert_includes response.body, "×3"
+    assert_equal 1, response.body.scan("prt-collapse-aaa-fixture").size
+    assert_equal 1, response.body.scan("prt-collapse-bbb-fixture").size
+    assert_includes response.body, "Collapse chunk final"
+    assert_operator response.body.index("Collapse chunk final"), :<, response.body.index("session.updated")
+  end
 end

@@ -1,0 +1,13 @@
+<div class="text-center mb-2">
+  <details class="d-inline-block text-start" style="max-width: 90%;">
+    <summary class="text-medium-emphasis small">
+      <span class="badge bg-dark">#<%= event.seq %></span>
+      <% if collapsed_count.to_i > 1 %><span class="badge bg-secondary">×<%= collapsed_count %></span><% end %>
+      <span class="badge bg-light text-dark border fw-normal"><%= durable_event_type(event) %></span>
+      <% summary = durable_event_summary(event) %>
+      <% if summary.present? %><span class="text-break"><%= summary %></span><% end %>
+    </summary>
+    <div class="text-medium-emphasis mt-1" style="font-size: .72rem;"><%= opencode_time(event.created_at_time) %> · <code><%= event.id %></code></div>
+    <pre class="bg-light rounded p-3 mt-1 mb-0 small" style="max-height: 30rem; overflow: auto;"><code><%= pretty_json(event.parsed_data).truncate(30_000) %></code></pre>
+  </details>
+</div>

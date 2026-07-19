@@ -1,0 +1,4 @@
+---
+event_sequence_v2:
+  aggregate_id: "session-v2-fixture"
+  seq: 5

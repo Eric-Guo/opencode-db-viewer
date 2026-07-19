@@ -1,16 +1,24 @@
-<article class="border rounded p-3 mb-3 <%= message.user? ? "border-primary" : "border-success" %>">
-  <header class="d-flex align-items-center flex-wrap gap-2 mb-2">
-    <span class="badge bg-<%= message.user? ? "primary" : "success" %>"><%= message.role.presence || "unknown" %></span>
-    <% if message.agent.present? %><span class="badge bg-light text-dark border"><%= message.agent %></span><% end %>
-    <% if message.model_id.present? %><span class="badge bg-info"><%= [message.provider_id, message.model_id].compact.join("/") %></span><% end %>
-    <small class="text-medium-emphasis ms-auto"><%= opencode_time(message.time_created_at) %> · <code><%= message.id %></code></small>
-  </header>
-  <% message.parts.sort_by { |part| [part.time_created.to_i, part.id.to_s] }.each do |part| %>
-    <% case part.part_type; when "text" %><div class="mb-2 text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
-    <% when "reasoning" %><details class="mb-2"><summary class="text-medium-emphasis"><%= t("sessions.show.thinking") %></summary><div class="bg-light rounded p-3 mt-2 small" style="white-space: pre-wrap;"><%= part.text_content %></div></details>
-    <% when "tool" %><details class="mb-2"><summary><span class="badge bg-dark"><%= part.tool_name %></span> <span class="badge bg-light text-dark border"><%= part.tool_status %></span> <code class="small"><%= part.tool_call_id %></code></summary><%= render "sessions/tool_detail", tool: part.parsed_data, state: part.tool_state %></details>
-    <% when "file" %><div class="mb-2"><span class="badge bg-light text-dark border"><%= part.file_name.presence || t("sessions.show.file") %> · <%= part.file_mime %></span><% if part.file_url.to_s.match?(/\Ahttps?:\/\//) %> <%= link_to t("sessions.show.open"), part.file_url, target: "_blank", rel: "noopener noreferrer" %><% end %></div>
-    <% else %><details class="mb-2"><summary><span class="badge bg-secondary"><%= part.part_type %></span> <code class="small"><%= part.id %></code></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(part.parsed_data).truncate(30_000) %></code></pre></details>
+<div class="d-flex mb-3 <%= message.user? ? "justify-content-end" : (message.assistant? ? "justify-content-start" : "justify-content-center") %>">
+  <div class="p-3 rounded <%= message.user? ? "bg-primary text-white" : "border" %>" style="max-width: 85%; min-width: 0;">
+    <% unless message.user? %>
+      <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+        <span class="badge bg-<%= message.assistant? ? "success" : "secondary" %>"><%= message.role.presence || "unknown" %></span>
+        <% if message.agent.present? %><span class="badge bg-light text-dark border"><%= message.agent %></span><% end %>
+        <% if message.model_id.present? %><span class="badge bg-info"><%= [message.provider_id, message.model_id].compact.join("/") %></span><% end %>
+      </div>
     <% end %>
-  <% end %>
-</article>
+    <% message.parts.sort_by { |part| [part.time_created.to_i, part.id.to_s] }.each do |part| %>
+      <% case part.part_type; when "text" %><div class="mb-2 text-break" style="white-space: pre-wrap;"><%= part.text_content %></div>
+      <% when "reasoning" %><details class="mb-2"><summary class="text-medium-emphasis"><%= t("sessions.show.thinking") %></summary><div class="bg-light rounded p-3 mt-2 small" style="white-space: pre-wrap;"><%= part.text_content %></div></details>
+      <% when "tool" %><details class="mb-2"><summary><span class="badge bg-dark"><%= part.tool_name %></span> <span class="badge bg-light text-dark border"><%= part.tool_status %></span> <code class="small"><%= part.tool_call_id %></code></summary><%= render "sessions/tool_detail", tool: part.parsed_data, state: part.tool_state %></details>
+      <% when "file" %><div class="mb-2"><span class="badge bg-light text-dark border"><%= part.file_name.presence || t("sessions.show.file") %> · <%= part.file_mime %></span><% if part.file_url.to_s.match?(/\Ahttps?:\/\//) %> <%= link_to t("sessions.show.open"), part.file_url, target: "_blank", rel: "noopener noreferrer" %><% end %></div>
+      <% else %><details class="mb-2"><summary><span class="badge bg-secondary"><%= part.part_type %></span> <code class="small"><%= part.id %></code></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(part.parsed_data).truncate(30_000) %></code></pre></details>
+      <% end %>
+    <% end %>
+    <% if message.user? %>
+      <div class="text-end mt-1" style="font-size: .72rem; opacity: .6;"><%= opencode_time(message.time_created_at) %> · <code style="color: inherit;"><%= message.id %></code></div>
+    <% else %>
+      <div class="text-end text-medium-emphasis mt-1" style="font-size: .72rem;"><%= opencode_time(message.time_created_at) %> · <code><%= message.id %></code></div>
+    <% end %>
+  </div>
+</div>

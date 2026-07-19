@@ -1,42 +1,67 @@
-<article class="border rounded p-3 mb-3 <%= message.user? ? "border-primary" : (message.assistant? ? "border-success" : "border-secondary") %>">
-  <header class="d-flex align-items-center flex-wrap gap-2 mb-2">
-    <span class="badge bg-<%= message.user? ? "primary" : (message.assistant? ? "success" : "secondary") %>"><%= message.message_type %></span>
-    <span class="badge bg-light text-dark border">#<%= message.seq %></span>
-    <% if message.agent.present? %><span class="badge bg-light text-dark border"><%= message.agent %></span><% end %>
-    <% if message.model_id.present? %><span class="badge bg-info"><%= [message.provider_id, message.model_id].compact.join("/") %></span><% end %>
-    <% if message.finish_reason.present? %><span class="badge bg-dark"><%= message.finish_reason %></span><% end %>
-    <small class="text-medium-emphasis ms-auto"><%= opencode_time(message.time_created_at) %> · <code><%= message.id %></code></small>
-  </header>
+<% if message.user? %>
+  <div class="d-flex justify-content-end mb-3">
+    <div class="p-2 px-3 rounded bg-primary text-white" style="max-width: 80%;">
+      <div class="text-break" style="white-space: pre-wrap;"><%= message.text_content %></div>
+      <% if message.files.any? %><div class="d-flex flex-wrap gap-2 mt-2"><% message.files.each do |file| %><span class="badge bg-light text-dark border"><%= file["name"].presence || t("sessions.show.file") %> · <%= file["mime"] %> · <%= file.dig("source", "type") %></span><% end %></div><% end %>
+      <div class="text-end mt-1" style="font-size: .72rem; opacity: .6;">#<%= message.seq %> · <%= opencode_time(message.time_created_at) %> · <code style="color: inherit;"><%= message.id %></code></div>
+    </div>
+  </div>
+<% elsif %w[synthetic system skill].include?(message.message_type) %>
+  <div class="d-flex justify-content-end mb-3">
+    <div class="p-2 px-3 rounded border bg-light" style="max-width: 80%;">
+      <span class="badge bg-secondary mb-1"><%= message.message_type %></span>
+      <div class="text-break" style="white-space: pre-wrap;"><%= message.text_content %></div>
+      <% if message.files.any? %><div class="d-flex flex-wrap gap-2 mt-2"><% message.files.each do |file| %><span class="badge bg-light text-dark border"><%= file["name"].presence || t("sessions.show.file") %> · <%= file["mime"] %> · <%= file.dig("source", "type") %></span><% end %></div><% end %>
+      <div class="text-end text-medium-emphasis mt-1" style="font-size: .72rem;">#<%= message.seq %> · <%= opencode_time(message.time_created_at) %> · <code><%= message.id %></code></div>
+    </div>
+  </div>
+<% elsif message.assistant? %>
+  <div class="d-flex justify-content-start mb-3">
+    <div class="p-3 rounded border" style="max-width: 85%; min-width: 0;">
+      <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+        <span class="badge bg-success"><%= message.message_type %></span>
+        <% if message.agent.present? %><span class="badge bg-light text-dark border"><%= message.agent %></span><% end %>
+        <% if message.model_id.present? %><span class="badge bg-info"><%= [message.provider_id, message.model_id].compact.join("/") %></span><% end %>
+        <% if message.finish_reason.present? %><span class="badge bg-dark"><%= message.finish_reason %></span><% end %>
+      </div>
 
-  <% case message.message_type; when "user", "synthetic", "system", "skill" %>
-    <div class="text-break" style="white-space: pre-wrap;"><%= message.text_content %></div>
-    <% if message.files.any? %><div class="d-flex flex-wrap gap-2 mt-2"><% message.files.each do |file| %><span class="badge bg-light text-dark border"><%= file["name"].presence || t("sessions.show.file") %> · <%= file["mime"] %> · <%= file.dig("source", "type") %></span><% end %></div><% end %>
-  <% when "assistant" %>
-    <% message.content.each do |content| %>
-      <% case content["type"]; when "text" %>
-        <div class="border-start border-success border-4 ps-3 mb-3 text-break" style="white-space: pre-wrap;"><%= content["text"] %></div>
-      <% when "reasoning" %>
-        <details class="mb-3"><summary class="text-medium-emphasis"><%= t("sessions.show.thinking") %> (<%= content["text"].to_s.length %> <%= t("sessions.show.chars") %>)</summary><div class="bg-light rounded p-3 mt-2 text-break small" style="white-space: pre-wrap;"><%= content["text"] %></div></details>
-      <% when "tool" %>
-        <% state = content["state"].is_a?(Hash) ? content["state"] : {} %>
-        <details class="mb-3">
-          <summary><span class="badge bg-dark"><%= content["name"] %></span> <span class="badge bg-<%= state["status"] == "completed" ? "success" : (state["status"] == "error" ? "danger" : "warning") %>"><%= state["status"] %></span> <code class="small"><%= content["id"] %></code></summary>
-          <%= render "sessions/tool_detail", tool: content, state: state %>
-        </details>
-      <% else %>
-        <pre class="bg-light rounded p-3 small"><code><%= pretty_json(content) %></code></pre>
+      <% message.content.each do |content| %>
+        <% case content["type"]; when "text" %>
+          <div class="border-start border-success border-4 ps-3 mb-3 text-break" style="white-space: pre-wrap;"><%= content["text"] %></div>
+        <% when "reasoning" %>
+          <details class="mb-3"><summary class="text-medium-emphasis"><%= t("sessions.show.thinking") %> (<%= content["text"].to_s.length %> <%= t("sessions.show.chars") %>)</summary><div class="bg-light rounded p-3 mt-2 text-break small" style="white-space: pre-wrap;"><%= content["text"] %></div></details>
+        <% when "tool" %>
+          <% state = content["state"].is_a?(Hash) ? content["state"] : {} %>
+          <details class="mb-3">
+            <summary><span class="badge bg-dark"><%= content["name"] %></span> <span class="badge bg-<%= state["status"] == "completed" ? "success" : (state["status"] == "error" ? "danger" : "warning") %>"><%= state["status"] %></span> <code class="small"><%= content["id"] %></code></summary>
+            <%= render "sessions/tool_detail", tool: content, state: state %>
+          </details>
+        <% else %>
+          <pre class="bg-light rounded p-3 small"><code><%= pretty_json(content) %></code></pre>
+        <% end %>
       <% end %>
-    <% end %>
-    <% if message.tokens.present? || message.cost.present? %><div class="small text-medium-emphasis"><%= t("sessions.show.cost") %>: <%= number_to_currency(message.cost.to_f, precision: 8) %> · <%= t("sessions.show.tokens") %>: <%= pretty_json(message.tokens).squish %></div><% end %>
-  <% when "agent-switched" %>
-    <%= t("sessions.show.agent_switched", agent: message.parsed_data["agent"]) %>
-  <% when "model-switched" %>
-    <%= t("sessions.show.model_switched", model: [message.provider_id, message.model_id].compact.join("/")) %>
-  <% when "shell" %>
-    <div><span class="badge bg-dark"><%= message.parsed_data["status"] %></span> <code><%= message.parsed_data["command"] %></code></div><% if message.parsed_data["output"].present? %><pre class="bg-dark text-white rounded p-3 mt-2 small"><code><%= message.parsed_data["output"].to_s.truncate(30_000) %></code></pre><% end %>
-  <% when "compaction" %>
-    <div><span class="badge bg-info"><%= message.parsed_data["status"] %></span> <%= message.parsed_data["reason"] %></div><% if message.parsed_data["summary"].present? %><div class="mt-2 text-break" style="white-space: pre-wrap;"><%= message.parsed_data["summary"] %></div><% end %>
-  <% else %>
-    <pre class="bg-light rounded p-3 small"><code><%= pretty_json(message.parsed_data).truncate(30_000) %></code></pre>
-  <% end %>
-</article>
+      <% if message.tokens.present? || message.cost.present? %><div class="small text-medium-emphasis"><%= t("sessions.show.cost") %>: <%= number_to_currency(message.cost.to_f, precision: 8) %> · <%= t("sessions.show.tokens") %>: <%= pretty_json(message.tokens).squish %></div><% end %>
+      <div class="text-end text-medium-emphasis mt-1" style="font-size: .72rem;">#<%= message.seq %> · <%= opencode_time(message.time_created_at) %> · <code><%= message.id %></code></div>
+    </div>
+  </div>
+<% elsif %w[agent-switched model-switched].include?(message.message_type) %>
+  <div class="text-center mb-3">
+    <span class="badge rounded-pill bg-light text-secondary border fw-normal"><%= message.message_type == "agent-switched" ? t("sessions.show.agent_switched", agent: message.parsed_data["agent"]) : t("sessions.show.model_switched", model: [message.provider_id, message.model_id].compact.join("/")) %></span>
+  </div>
+<% else %>
+  <div class="text-center mb-3">
+    <details class="d-inline-block text-start" style="max-width: 90%;">
+      <summary class="text-medium-emphasis small"><span class="badge bg-secondary"><%= message.message_type %></span> <span style="opacity: .75;">#<%= message.seq %> · <%= opencode_time(message.time_created_at) %></span></summary>
+      <div class="mt-2">
+        <% case message.message_type; when "shell" %>
+          <div><span class="badge bg-dark"><%= message.parsed_data["status"] %></span> <code><%= message.parsed_data["command"] %></code></div><% if message.parsed_data["output"].present? %><pre class="bg-dark text-white rounded p-3 mt-2 small"><code><%= message.parsed_data["output"].to_s.truncate(30_000) %></code></pre><% end %>
+        <% when "compaction" %>
+          <div><span class="badge bg-info"><%= message.parsed_data["status"] %></span> <%= message.parsed_data["reason"] %></div><% if message.parsed_data["summary"].present? %><div class="mt-2 text-break" style="white-space: pre-wrap;"><%= message.parsed_data["summary"] %></div><% end %>
+        <% else %>
+          <pre class="bg-light rounded p-3 small"><code><%= pretty_json(message.parsed_data).truncate(30_000) %></code></pre>
+        <% end %>
+        <div class="text-medium-emphasis mt-1" style="font-size: .72rem;"><code><%= message.id %></code></div>
+      </div>
+    </details>
+  </div>
+<% end %>

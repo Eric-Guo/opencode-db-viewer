@@ -35,15 +35,22 @@
     <%= svg_icon("free.svg#cil-history", "icon") %>
     <strong><%= t(".message_timeline") %></strong>
     <span class="badge bg-primary"><%= @messages.size %> <%= t(".messages") %></span>
+    <span class="badge bg-dark"><%= t(".durable_events") %> <%= @event_count %></span>
     <span class="badge bg-light text-dark border"><%= @message_storage == :session_message ? "session_message" : "message / part" %></span>
+    <% if @event_count > @events.size %><small class="text-medium-emphasis"><%= t(".latest_events", count: @events.size) %></small><% end %>
   </div>
   <div class="card-body">
-    <% if @messages.empty? %>
+    <% if @timeline.empty? %>
       <div class="text-center text-medium-emphasis py-4"><%= t(".no_messages") %></div>
-    <% elsif @message_storage == :session_message %>
-      <%= render partial: "sessions/session_message", collection: @session_messages, as: :message %>
     <% else %>
-      <%= render partial: "sessions/legacy_message", collection: @legacy_messages, as: :message %>
+      <% message_partial = @message_storage == :session_message ? "sessions/session_message" : "sessions/legacy_message" %>
+      <% @timeline.each do |(_time, kind, record, collapsed_count)| %>
+        <% if kind.zero? %>
+          <%= render partial: message_partial, locals: {message: record} %>
+        <% else %>
+          <%= render "sessions/event_marker", event: record, collapsed_count: collapsed_count %>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -65,15 +72,6 @@
     <div class="card-body">
       <% if @session.instruction_state %><div class="small text-medium-emphasis mb-3"><%= t(".epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t(".through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
       <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t(".removed") %></span><% end %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
-    </div>
-  </div>
-<% end %>
-
-<% if @events.any? %>
-  <div class="card mb-4">
-    <div class="card-header"><strong><%= t(".durable_events") %></strong><span class="badge bg-dark ms-2"><%= @event_count %></span><% if @event_count > @events.size %><small class="text-medium-emphasis ms-2"><%= t(".latest_events", count: @events.size) %></small><% end %></div>
-    <div class="card-body">
-      <% @events.each do |event| %><details class="mb-2"><summary><span class="badge bg-dark">#<%= event.seq %></span> <%= event.event_type %> <small class="text-medium-emphasis"><%= opencode_time(event.created_at_time) %> · <code><%= event.id %></code></small></summary><pre class="bg-light rounded p-3 mt-2 small" style="max-height: 30rem; overflow: auto;"><code><%= pretty_json(event.parsed_data).truncate(30_000) %></code></pre></details><% end %>
     </div>
   </div>
 <% end %>

@@ -1,0 +1,48 @@
+---
+event_v2_created:
+  id: "evt-v2-created-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 0
+  type: "session.created.1"
+  created: 1700000000000
+  data: '{"sessionID":"session-v2-fixture","info":{"id":"session-v2-fixture","directory":"/tmp/session-v2-project"}}'
+
+event_v2_part_aaa_one:
+  id: "evt-v2-part-aaa-1-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 1
+  type: "message.part.updated.1"
+  created: 1700000009000
+  data: '{"sessionID":"session-v2-fixture","part":{"id":"prt-collapse-aaa-fixture","messageID":"msg-v2-user-fixture","type":"text","text":"Collapse chunk one"},"time":1700000009000}'
+
+event_v2_part_aaa_two:
+  id: "evt-v2-part-aaa-2-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 2
+  type: "message.part.updated.1"
+  created: 1700000009100
+  data: '{"sessionID":"session-v2-fixture","part":{"id":"prt-collapse-aaa-fixture","messageID":"msg-v2-user-fixture","type":"text","text":"Collapse chunk two"},"time":1700000009100}'
+
+event_v2_part_bbb:
+  id: "evt-v2-part-bbb-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 3
+  type: "message.part.updated.1"
+  created: 1700000009200
+  data: '{"sessionID":"session-v2-fixture","part":{"id":"prt-collapse-bbb-fixture","messageID":"msg-v2-user-fixture","type":"text","text":"Other part update"},"time":1700000009200}'
+
+event_v2_part_aaa_three:
+  id: "evt-v2-part-aaa-3-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 4
+  type: "message.part.updated.1"
+  created: 1700000009300
+  data: '{"sessionID":"session-v2-fixture","part":{"id":"prt-collapse-aaa-fixture","messageID":"msg-v2-user-fixture","type":"text","text":"Collapse chunk final"},"time":1700000009300}'
+
+event_v2_session_updated:
+  id: "evt-v2-session-updated-fixture"
+  aggregate_id: "session-v2-fixture"
+  seq: 5
+  type: "session.updated.1"
+  created: 1700000009400
+  data: '{"sessionID":"session-v2-fixture","info":{"id":"session-v2-fixture","tokens":{"input":7,"output":3,"reasoning":0,"cache":{"read":1,"write":0}}}}'
