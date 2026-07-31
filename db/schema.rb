@@ -157,7 +157,6 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "parent_id"
     t.text "slug", null: false
     t.text "directory", null: false
-    t.text "title", null: false
     t.text "version", null: false
     t.text "share_url"
     t.integer "summary_additions"
@@ -182,9 +181,9 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "tokens_cache_write", default: 0, null: false
     t.text "metadata"
     t.text "fork_session_id"
-    t.text "fork_message_id"
     t.integer "time_suspended"
-    t.integer "fork_seq"
+    t.text "fork_boundary"
+    t.text "title"
     t.index ["parent_id"], name: "session_parent_idx"
     t.index ["project_id"], name: "session_project_idx"
     t.index ["time_suspended"], name: "session_time_suspended_idx"

@@ -94,7 +94,7 @@
                   <% if session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% end %>
                   <% if session.time_suspended_at %><span class="badge bg-warning text-dark"><%= t(".suspended") %></span><% end %>
                   <% unless session.time_archived_at || session.time_suspended_at %><span class="badge bg-success"><%= t(".active") %></span><% end %>
-                  <% if session.fork_session_id.present? %><div class="small text-medium-emphasis"><%= t(".fork") %> #<%= session.fork_seq || "-" %></div><% end %>
+                  <% if session.fork_session_id.present? %><div class="small text-medium-emphasis"><%= t(".fork") %> · <%= t(".fork_boundaries.#{session.fork_boundary_type}", message: session.fork_boundary_message_id, default: [session.fork_boundary_type, session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %>
                 </td>
                 <td><%= opencode_time(session.time_updated_at) %></td>
               </tr>

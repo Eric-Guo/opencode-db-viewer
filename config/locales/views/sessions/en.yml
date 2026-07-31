@@ -29,8 +29,10 @@ en:
       time_ago: "%{distance} ago"
       parent_session: "Parent session"
       forked_from: "Forked from"
-      sequence: "sequence"
-      message: "message"
+      fork_boundary: "boundary"
+      fork_boundaries:
+        before: "before message %{message}"
+        through: "through message %{message}"
       metadata_and_diffs: "Metadata and summary diffs"
       message_timeline: "Message Timeline"
       messages: "messages"

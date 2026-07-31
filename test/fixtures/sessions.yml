@@ -17,11 +17,12 @@ session_show_new:
   project_id: "project-show-with-sessions"
   slug: "slug-show-new"
   directory: "/tmp/show-project"
-  title: "new-session-fixture"
   version: "1.0.0"
   summary_additions: 5
   summary_deletions: 3
   summary_files: 2
+  fork_session_id: "session-show-old"
+  fork_boundary: '{"type":"before","messageID":"msg-boundary-fixture"}'
   time_created: 9100000000000
   time_updated: 9100000000000
 

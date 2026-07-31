@@ -29,8 +29,10 @@ zh-CN:
       time_ago: "%{distance}前"
       parent_session: "父会话"
       forked_from: "分支来源"
-      sequence: "序号"
-      message: "消息"
+      fork_boundary: "边界"
+      fork_boundaries:
+        before: "在消息 %{message} 之前"
+        through: "截至消息 %{message}"
       metadata_and_diffs: "元数据和变更摘要"
       message_timeline: "消息时间线"
       messages: "条消息"

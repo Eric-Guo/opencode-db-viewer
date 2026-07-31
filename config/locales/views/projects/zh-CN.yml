@@ -56,4 +56,7 @@ zh-CN:
       suspended: "已暂停"
       active: "活跃"
       fork: "分支会话"
+      fork_boundaries:
+        before: "在消息 %{message} 之前"
+        through: "截至消息 %{message}"
       no_sessions: "该项目暂无会话。"

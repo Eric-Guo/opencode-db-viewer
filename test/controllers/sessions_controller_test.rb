@@ -9,6 +9,19 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
+  test "should render a nullable title and the current fork boundary" do
+    project = projects(:project_show_with_sessions)
+    session = sessions(:session_show_new)
+
+    sign_in users(:user_fangzixue)
+    get project_session_url(project, session)
+
+    assert_response :success
+    assert_select ".card-header strong", text: session.slug
+    assert_includes response.body, session.fork_session_id
+    assert_includes response.body, I18n.t("sessions.show.fork_boundaries.before", message: "msg-boundary-fixture")
+  end
+
   test "should render legacy messages and parts in storage order" do
     project = projects(:project_session_parent)
     session = sessions(:session_parent_grouping_fixture)

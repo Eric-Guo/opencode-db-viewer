@@ -6,7 +6,6 @@ class Session < ApplicationRecord
   belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :sessions
   belongs_to :parent, class_name: "Session", foreign_key: :parent_id, inverse_of: :children, optional: true
   belongs_to :fork_session, class_name: "Session", foreign_key: :fork_session_id, inverse_of: :forks, optional: true
-  belongs_to :fork_message, class_name: "SessionMessage", foreign_key: :fork_message_id, optional: true
   belongs_to :workspace, class_name: "Workspace", foreign_key: :workspace_id, inverse_of: :sessions, optional: true
 
   has_many :messages, class_name: "Message", foreign_key: :session_id, inverse_of: :session, dependent: :destroy
@@ -71,6 +70,18 @@ class Session < ApplicationRecord
 
   def metadata_data
     @metadata_data ||= parsed_json(metadata)
+  end
+
+  def fork_boundary_data
+    @fork_boundary_data ||= parsed_json(fork_boundary)
+  end
+
+  def fork_boundary_type
+    fork_boundary_data["type"]
+  end
+
+  def fork_boundary_message_id
+    fork_boundary_data["messageID"]
   end
 
   def summary_diffs_data

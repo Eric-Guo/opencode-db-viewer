@@ -56,4 +56,7 @@ en:
       suspended: "Suspended"
       active: "Active"
       fork: "Fork"
+      fork_boundaries:
+        before: "before message %{message}"
+        through: "through message %{message}"
       no_sessions: "No sessions found for this project."

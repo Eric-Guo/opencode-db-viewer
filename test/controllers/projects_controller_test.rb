@@ -43,7 +43,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should get show when signed in and order sessions by time_updated desc" do
     project = projects(:project_show_with_sessions)
     old_title = sessions(:session_show_old).title
-    new_title = sessions(:session_show_new).title
+    new_title = sessions(:session_show_new).slug
 
     sign_in users(:user_fangzixue)
     get project_url(project)
@@ -56,6 +56,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select "tbody tr", count: 2
     assert_includes response.body, old_title
     assert_includes response.body, new_title
+    assert_includes response.body, I18n.t("projects.show.fork_boundaries.before", message: "msg-boundary-fixture")
     assert_operator response.body.index(new_title), :<, response.body.index(old_title)
   end
 
