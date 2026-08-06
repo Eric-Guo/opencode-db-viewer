@@ -199,6 +199,16 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["time_created"], name: "session_message_time_created_idx"
   end
 
+  create_table "session_message_retained", id: :text, force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "type", null: false
+    t.integer "seq", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "data", null: false
+    t.index ["session_id", "seq"], name: "session_message_retained_session_seq_idx"
+  end
+
   create_table "session_pending", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "type", null: false
@@ -298,15 +308,15 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
 
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
   add_foreign_key "event", "event_sequence", column: "aggregate_id", primary_key: "aggregate_id", on_delete: :cascade
-  add_foreign_key "instruction_entry", "session", on_delete: :cascade
-  add_foreign_key "instruction_state", "session", on_delete: :cascade
+  add_foreign_key "instruction_entry", "session_v2", column: "session_id", on_delete: :cascade
+  add_foreign_key "instruction_state", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "message", "session", on_delete: :cascade
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
   add_foreign_key "session_message", "session_v2", column: "session_id", on_delete: :cascade
-  add_foreign_key "session_pending", "session", on_delete: :cascade
+  add_foreign_key "session_pending", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "session_v2", "project", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
