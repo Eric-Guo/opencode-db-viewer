@@ -2,8 +2,8 @@
 
 A read-only Rails/CoreUI browser for an OpenCode SQLite database. The project and session pages support both OpenCode storage generations:
 
-- current sequenced messages in `session_message`, including assistant content, tool calls, usage, pending inputs, instruction context, and durable events;
-- legacy conversations in `message` and `part` for databases that still contain older sessions.
+- current sessions in `session_v2` with sequenced `session_message` records, including assistant content, tool calls, usage, pending inputs, instruction context, and durable events;
+- retained legacy conversations in `session`, `message`, and `part` for migrated databases that still contain older storage rows.
 
 Account and credential tables have matching models for schema completeness, but secret values are intentionally not exposed by the views.
 

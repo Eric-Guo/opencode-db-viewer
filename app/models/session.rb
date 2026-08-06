@@ -1,15 +1,14 @@
 class Session < ApplicationRecord
   include OpenCodeRecord
 
-  self.table_name = "session"
+  self.table_name = "session_v2"
 
   belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :sessions
   belongs_to :parent, class_name: "Session", foreign_key: :parent_id, inverse_of: :children, optional: true
   belongs_to :fork_session, class_name: "Session", foreign_key: :fork_session_id, inverse_of: :forks, optional: true
   belongs_to :workspace, class_name: "Workspace", foreign_key: :workspace_id, inverse_of: :sessions, optional: true
 
-  has_many :messages, class_name: "Message", foreign_key: :session_id, inverse_of: :session, dependent: :destroy
-  has_many :parts, class_name: "Part", foreign_key: :session_id, inverse_of: :session
+  has_many :legacy_messages, class_name: "Message", foreign_key: :session_id, primary_key: :id
   has_many :session_messages,
     class_name: "SessionMessage",
     foreign_key: :session_id,
@@ -35,11 +34,6 @@ class Session < ApplicationRecord
   has_many :events, through: :event_sequence, source: :events
   has_one :instruction_state,
     class_name: "InstructionState",
-    foreign_key: :session_id,
-    inverse_of: :session,
-    dependent: :destroy
-  has_one :session_share,
-    class_name: "SessionShare",
     foreign_key: :session_id,
     inverse_of: :session,
     dependent: :destroy

@@ -5,6 +5,7 @@ class SessionMessageTest < ActiveSupport::TestCase
     message = session_messages(:session_message_v2_assistant)
 
     assert_instance_of SessionMessage, message
+    assert_equal sessions(:session_v2_fixture), message.session
     assert_equal "assistant", message.message_type
     assert message.assistant?
   end

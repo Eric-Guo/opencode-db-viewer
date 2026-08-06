@@ -4,6 +4,11 @@ class Project < ApplicationRecord
   self.table_name = "project"
 
   has_many :sessions, class_name: "Session", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
+  has_many :legacy_sessions,
+    class_name: "LegacySession",
+    foreign_key: :project_id,
+    inverse_of: :project,
+    dependent: :destroy
   has_many :permissions, class_name: "Permission", foreign_key: :project_id, inverse_of: :project, dependent: :destroy
   has_many :project_directories,
     class_name: "ProjectDirectory",

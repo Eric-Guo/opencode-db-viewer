@@ -6,6 +6,7 @@ class Workspace < ApplicationRecord
 
   belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :workspaces
   has_many :sessions, class_name: "Session", foreign_key: :workspace_id, inverse_of: :workspace
+  has_many :legacy_sessions, class_name: "LegacySession", foreign_key: :workspace_id, inverse_of: :workspace
 
   def workspace_type
     self[:type]

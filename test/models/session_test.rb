@@ -1,6 +1,10 @@
 require "test_helper"
 
 class SessionTest < ActiveSupport::TestCase
+  test "uses the current session table" do
+    assert_equal "session_v2", Session.table_name
+  end
+
   test "parses the fork boundary" do
     session = sessions(:session_show_new)
 

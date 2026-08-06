@@ -48,10 +48,6 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
   end
 
-  create_table "data_migration", primary_key: "name", id: :text, force: :cascade do |t|
-    t.integer "time_completed", null: false
-  end
-
   create_table "event", id: :text, force: :cascade do |t|
     t.text "aggregate_id", null: false
     t.integer "seq", null: false
@@ -193,10 +189,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   create_table "session_message", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "type", null: false
+    t.integer "seq", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
     t.text "data", null: false
-    t.integer "seq", null: false
     t.index ["session_id", "seq"], name: "session_message_session_seq_idx", unique: true
     t.index ["session_id", "time_created", "id"], name: "session_message_session_time_created_id_idx"
     t.index ["session_id", "type", "seq"], name: "session_message_session_type_seq_idx"
@@ -221,6 +217,44 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "url", null: false
     t.integer "time_created", null: false
     t.integer "time_updated", null: false
+  end
+
+  create_table "session_v2", id: :text, force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "workspace_id"
+    t.text "parent_id"
+    t.text "fork_session_id"
+    t.text "fork_boundary"
+    t.text "slug", null: false
+    t.text "directory", null: false
+    t.text "path"
+    t.text "title"
+    t.text "version", null: false
+    t.text "share_url"
+    t.integer "summary_additions"
+    t.integer "summary_deletions"
+    t.integer "summary_files"
+    t.text "summary_diffs"
+    t.text "metadata"
+    t.float "cost", default: 0.0, null: false
+    t.integer "tokens_input", default: 0, null: false
+    t.integer "tokens_output", default: 0, null: false
+    t.integer "tokens_reasoning", default: 0, null: false
+    t.integer "tokens_cache_read", default: 0, null: false
+    t.integer "tokens_cache_write", default: 0, null: false
+    t.text "revert"
+    t.text "permission"
+    t.text "agent"
+    t.text "model"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.integer "time_compacting"
+    t.integer "time_archived"
+    t.integer "time_suspended"
+    t.index ["parent_id"], name: "session_v2_parent_idx"
+    t.index ["project_id"], name: "session_v2_project_idx"
+    t.index ["time_suspended"], name: "session_v2_time_suspended_idx"
+    t.index ["workspace_id"], name: "session_v2_workspace_idx"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -271,9 +305,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
-  add_foreign_key "session_message", "session", on_delete: :cascade
+  add_foreign_key "session_message", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_pending", "session", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
+  add_foreign_key "session_v2", "project", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
   add_foreign_key "workspace", "project", on_delete: :cascade

@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     add_to_breadcrumbs @session.title.presence || @session.slug
 
     @session_messages = @session.session_messages.order(:seq)
-    @legacy_messages = @session.messages.includes(:parts).order(:time_created, :id)
+    @legacy_messages = @session.legacy_messages.includes(:parts).order(:time_created, :id)
     @message_storage = @session_messages.exists? ? :session_message : :legacy
     @messages = (@message_storage == :session_message) ? @session_messages : @legacy_messages
     @pending_messages = @session.session_pendings.order(:admitted_seq)
