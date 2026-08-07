@@ -30,6 +30,15 @@
           <div class="border-start border-success border-4 ps-3 mb-3 text-break" style="white-space: pre-wrap;"><%= content["text"] %></div>
         <% when "reasoning" %>
           <details class="mb-3"><summary class="text-medium-emphasis"><%= t("sessions.show.thinking") %> (<%= content["text"].to_s.length %> <%= t("sessions.show.chars") %>)</summary><div class="bg-light rounded p-3 mt-2 text-break small" style="white-space: pre-wrap;"><%= content["text"] %></div></details>
+        <% when "file" %>
+          <% if content["mime"].to_s.start_with?("image/") && content["url"].present? %>
+            <div class="mb-3">
+              <img src="<%= content["url"] %>" alt="<%= content["filename"] %>" class="img-fluid rounded border" />
+              <div class="small text-medium-emphasis mt-1"><code><%= content["filename"] %></code> · <%= content["mime"] %></div>
+            </div>
+          <% else %>
+            <span class="badge bg-light text-dark border mb-3"><%= content["filename"].presence || t("sessions.show.file") %> · <%= content["mime"] %></span>
+          <% end %>
         <% when "tool" %>
           <% state = content["state"].is_a?(Hash) ? content["state"] : {} %>
           <details class="mb-3">
