@@ -54,7 +54,7 @@ class Session < ApplicationRecord
     epoch_time(time_compacting)
   end
 
-  def time_suspended_at
+  def execution_claimed_at
     epoch_time(time_suspended)
   end
 

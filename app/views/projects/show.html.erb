@@ -60,8 +60,8 @@
       <% end %>
       <% if @workspaces.any? %>
         <h6><%= t(".workspaces") %></h6>
-        <div class="table-responsive mb-3"><table class="table table-sm mb-0"><thead><tr><th><%= t(".name") %></th><th><%= t(".type") %></th><th><%= t(".branch") %></th><th><%= t(".directory") %></th><th><%= t(".last_used") %></th></tr></thead><tbody>
-          <% @workspaces.each do |workspace| %><tr><td><%= workspace.name.presence || workspace.id %></td><td><%= workspace.workspace_type %></td><td><%= workspace.branch.presence || "-" %></td><td><code><%= workspace.directory.presence || "-" %></code></td><td><%= opencode_time(workspace.time_used_at) %></td></tr><% end %>
+        <div class="table-responsive mb-3"><table class="table table-sm mb-0"><thead><tr><th><%= t(".workspace_id") %></th><th><%= t(".provider") %></th><th><%= t(".binding") %></th><th><%= t(".time_created") %></th><th><%= t(".last_used") %></th></tr></thead><tbody>
+          <% @workspaces.each do |workspace| %><tr><td><code><%= workspace.id %></code></td><td><%= workspace.provider %></td><td><code class="text-break"><%= workspace.binding_data.to_json %></code></td><td><%= opencode_time(workspace.created_time) %></td><td><%= opencode_time(workspace.last_used_time) %></td></tr><% end %>
         </tbody></table></div>
       <% end %>
       <% if @permissions.any? %>
@@ -92,8 +92,9 @@
                 <td class="text-center"><%= new_message_count.positive? ? new_message_count : @legacy_message_counts.fetch(session.id, 0) %><div class="small text-medium-emphasis"><%= new_message_count.positive? ? "session_message" : "message/part" %></div></td>
                 <td>
                   <% if session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% end %>
-                  <% if session.time_suspended_at %><span class="badge bg-warning text-dark"><%= t(".suspended") %></span><% end %>
-                  <% unless session.time_archived_at || session.time_suspended_at %><span class="badge bg-success"><%= t(".active") %></span><% end %>
+                  <% if session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><% end %>
+                  <% if session.resume_attempts.positive? %><div class="small text-medium-emphasis"><%= t(".resume_attempts", count: session.resume_attempts) %></div><% end %>
+                  <% unless session.time_archived_at || session.execution_claimed_at %><span class="badge bg-success"><%= t(".active") %></span><% end %>
                   <% if session.fork_session_id.present? %><div class="small text-medium-emphasis"><%= t(".fork") %> · <%= t(".fork_boundaries.#{session.fork_boundary_type}", message: session.fork_boundary_message_id, default: [session.fork_boundary_type, session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %>
                 </td>
                 <td><%= opencode_time(session.time_updated_at) %></td>

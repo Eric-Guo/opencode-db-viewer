@@ -53,10 +53,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select "div", text: I18n.t("projects.show.total_sessions")
     assert_select "div", text: I18n.t("projects.show.total_tokens")
     assert_select "div", text: I18n.t("projects.show.total_cost")
-    assert_select "tbody tr", count: 2
+    assert_select "table.table-striped tbody tr", count: 2
     assert_includes response.body, old_title
     assert_includes response.body, new_title
     assert_includes response.body, I18n.t("projects.show.fork_boundaries.before", message: "msg-boundary-fixture")
+    assert_includes response.body, "modal-new"
+    assert_includes response.body, "sandbox-new"
+    assert_includes response.body, I18n.t("projects.show.execution_claimed")
+    assert_includes response.body, I18n.t("projects.show.resume_attempts", count: 2)
+    assert_operator response.body.index("workspace-show-new"), :<, response.body.index("workspace-show-old")
     assert_operator response.body.index(new_title), :<, response.body.index(old_title)
   end
 

@@ -12,4 +12,10 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert_in_delta Time.zone.at(1_700_000_000.123).to_f, project.time_updated_at.to_f, 0.0001
   end
+
+  test "finds workspaces through current sessions" do
+    project = projects(:project_show_with_sessions)
+
+    assert_equal %w[workspace-show-new workspace-show-old], project.workspaces.ids.sort
+  end
 end

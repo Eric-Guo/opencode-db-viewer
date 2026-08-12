@@ -18,6 +18,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select ".card-header strong", text: session.slug
+    assert_includes response.body, "modal-new"
+    assert_includes response.body, I18n.t("sessions.show.execution_claimed")
+    assert_includes response.body, I18n.t("sessions.show.resume_attempts", count: 2)
     assert_includes response.body, session.fork_session_id
     assert_includes response.body, I18n.t("sessions.show.fork_boundaries.before", message: "msg-boundary-fixture")
   end
@@ -88,6 +91,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "request-fixture"
     assert_includes response.body, "response-fixture"
     assert_includes response.body, "test-provider/test-model"
+    assert_includes response.body, "test-workspace-provider"
     assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
 

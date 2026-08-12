@@ -261,6 +261,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_compacting"
     t.integer "time_archived"
     t.integer "time_suspended"
+    t.integer "resume_attempts", default: 0, null: false
     t.index ["parent_id"], name: "session_v2_parent_idx"
     t.index ["project_id"], name: "session_v2_project_idx"
     t.index ["time_suspended"], name: "session_v2_time_suspended_idx"
@@ -297,13 +298,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   end
 
   create_table "workspace", id: :text, force: :cascade do |t|
-    t.text "type", null: false
-    t.text "name", default: "", null: false
-    t.text "branch"
-    t.text "directory"
-    t.text "extra"
-    t.text "project_id", null: false
-    t.integer "time_used", default: 0, null: false
+    t.text "provider", null: false
+    t.text "binding", null: false
+    t.integer "created_at", null: false
+    t.integer "last_used_at", null: false
   end
 
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
@@ -321,5 +319,4 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "session_v2", "project", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
-  add_foreign_key "workspace", "project", on_delete: :cascade
 end

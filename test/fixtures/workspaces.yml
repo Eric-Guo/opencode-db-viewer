@@ -1,0 +1,21 @@
+---
+workspace_show_old:
+  id: "workspace-show-old"
+  provider: "modal-old"
+  binding: '{"sandboxId":"sandbox-old"}'
+  created_at: 1700000000000
+  last_used_at: 1700000010000
+
+workspace_show_new:
+  id: "workspace-show-new"
+  provider: "modal-new"
+  binding: '{"sandboxId":"sandbox-new","snapshotImageId":"image-new"}'
+  created_at: 1700000020000
+  last_used_at: 1700000030000
+
+workspace_session_v2:
+  id: "workspace-session-v2"
+  provider: "test-workspace-provider"
+  binding: '{"workspace":"fixture"}'
+  created_at: 1700000000000
+  last_used_at: 1700000010000

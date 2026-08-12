@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
       Arel.sql("tokens_input + tokens_output + tokens_reasoning + tokens_cache_read + tokens_cache_write")
     ).to_i
     @project_directories = @project.project_directories.order(:directory)
-    @workspaces = @project.workspaces.order(time_used: :desc)
+    @workspaces = @project.workspaces.order(last_used_at: :desc)
     @permissions = @project.permissions.order(:action, :resource)
     @pagy, @sessions = pagy(sessions_scope.order(time_updated: :desc), items: current_user.preferred_page_length)
     session_ids = @sessions.map(&:id)
