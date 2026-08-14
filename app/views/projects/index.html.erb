@@ -12,7 +12,7 @@
             <th><%= t(".name") %></th>
             <th><%= t(".worktree") %></th>
             <th><%= t(".vcs") %></th>
-            <th class="text-center"><%= t(".directories") %></th>
+            <th class="text-center"><%= t(".worktrees") %></th>
             <th class="text-center"><%= t(".sessions") %></th>
             <th><%= t(".time_updated") %></th>
           </tr>
@@ -27,7 +27,7 @@
               </td>
               <td><code class="small"><%= truncate(project.worktree, length: 60) %></code></td>
               <td><span class="badge bg-light text-dark border"><%= project.vcs.presence || "-" %></span></td>
-              <td class="text-center"><%= @directory_counts.fetch(project.id, 0) %></td>
+              <td class="text-center"><%= @worktree_counts.fetch(project.id, 0) %></td>
               <td class="text-center"><%= @session_counts.fetch(project.id, 0) %></td>
               <td>
                 <% if updated_time %>

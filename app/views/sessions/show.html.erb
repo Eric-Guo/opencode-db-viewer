@@ -55,12 +55,12 @@
   </div>
 </div>
 
-<% if @pending_messages.any? %>
+<% if @inbox_items.any? %>
   <div class="card mb-4">
-    <div class="card-header"><strong><%= t(".pending_inputs") %></strong><span class="badge bg-warning text-dark ms-2"><%= @pending_messages.size %></span></div>
+    <div class="card-header"><strong><%= t(".session_inbox") %></strong><span class="badge bg-warning text-dark ms-2"><%= @inbox_items.size %></span></div>
     <div class="card-body">
-      <% @pending_messages.each do |pending| %>
-        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= pending.pending_type %></span> <code><%= pending.id %></code> · #<%= pending.admitted_seq %> · <%= pending.delivery.presence || "-" %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(pending.parsed_data) %></code></pre></details>
+      <% @inbox_items.each do |item| %>
+        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= item.inbox_type %></span> <code><%= item.id %></code> · #<%= item.enqueued_seq %> · <%= item.delivery %> · <%= opencode_time(item.time_created_at) %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(item.parsed_payload) %></code></pre></details>
       <% end %>
     </div>
   </div>

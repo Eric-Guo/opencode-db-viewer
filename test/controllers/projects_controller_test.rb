@@ -13,7 +13,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:user_fangzixue)
     get projects_url
     assert_response :success
-    assert_select "th", text: I18n.t("projects.index.directories")
+    assert_select "th", text: I18n.t("projects.index.worktrees")
     assert_select "th", text: I18n.t("projects.index.sessions")
     assert_select "th", text: I18n.t("projects.index.time_updated")
   end
@@ -71,6 +71,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, I18n.t("projects.show.no_sessions")
+  end
+
+  test "should render current project worktrees" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_session_v2))
+
+    assert_response :success
+    assert_select "h6", text: I18n.t("projects.show.worktrees")
+    assert_includes response.body, "/tmp/session-v2-project-feature"
+    assert_includes response.body, "git"
   end
 
   test "should order projects by time_updated desc" do

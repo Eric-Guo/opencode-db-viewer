@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     @legacy_messages = @session.legacy_messages.includes(:parts).order(:time_created, :id)
     @message_storage = @session_messages.exists? ? :session_message : :legacy
     @messages = (@message_storage == :session_message) ? @session_messages : @legacy_messages
-    @pending_messages = @session.session_pendings.order(:admitted_seq)
+    @inbox_items = @session.session_inboxes.order(:enqueued_seq)
     @instruction_entries = @session.instruction_entries.order(:key)
     events_scope = OpenCodeEvent.where(aggregate_id: @session.id)
     @event_count = events_scope.count

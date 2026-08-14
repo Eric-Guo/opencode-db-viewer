@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
     @pagy, @projects = pagy(policy_scope(Project).order(time_updated: :desc), items: current_user.preferred_page_length)
     project_ids = @projects.map(&:id)
     @session_counts = Session.where(project_id: project_ids).group(:project_id).count
-    @directory_counts = ProjectDirectory.where(project_id: project_ids).group(:project_id).count
+    @worktree_counts = Worktree.where(project_id: project_ids).group(:project_id).count
   end
 
   def show
@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
     @total_tokens = sessions_scope.sum(
       Arel.sql("tokens_input + tokens_output + tokens_reasoning + tokens_cache_read + tokens_cache_write")
     ).to_i
-    @project_directories = @project.project_directories.order(:directory)
+    @worktrees = @project.worktrees.order(:directory)
     @workspaces = @project.workspaces.order(last_used_at: :desc)
     @permissions = @project.permissions.order(:action, :resource)
     @pagy, @sessions = pagy(sessions_scope.order(time_updated: :desc), items: current_user.preferred_page_length)

@@ -62,7 +62,7 @@ en:
       snapshot: "Snapshot"
       agent_switched: "Agent switched to %{agent}"
       model_switched: "Model switched to %{model}"
-      pending_inputs: "Pending Inputs"
+      session_inbox: "Session Inbox"
       instruction_context: "Instruction Context"
       epoch: "Epoch"
       through_sequence: "through sequence"

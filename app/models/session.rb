@@ -19,6 +19,11 @@ class Session < ApplicationRecord
     foreign_key: :session_id,
     inverse_of: :session,
     dependent: :destroy
+  has_many :session_inboxes,
+    class_name: "SessionInbox",
+    foreign_key: :session_id,
+    inverse_of: :session,
+    dependent: :destroy
   has_many :instruction_entries,
     class_name: "InstructionEntry",
     foreign_key: :session_id,

@@ -186,6 +186,17 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["workspace_id"], name: "session_workspace_idx"
   end
 
+  create_table "session_inbox", id: :text, force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "type", null: false
+    t.text "payload", null: false
+    t.text "delivery", null: false
+    t.integer "enqueued_seq", null: false
+    t.integer "time_created", null: false
+    t.index ["session_id", "delivery", "enqueued_seq"], name: "session_inbox_session_delivery_seq_idx"
+    t.index ["session_id", "enqueued_seq"], name: "session_inbox_session_enqueued_seq_idx", unique: true
+  end
+
   create_table "session_message", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.text "type", null: false
@@ -304,6 +315,13 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "last_used_at", null: false
   end
 
+  create_table "worktree", primary_key: ["project_id", "directory"], force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "directory", null: false
+    t.text "strategy"
+    t.integer "time_created", null: false
+  end
+
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
   add_foreign_key "event", "event_sequence", column: "aggregate_id", primary_key: "aggregate_id", on_delete: :cascade
   add_foreign_key "instruction_entry", "session_v2", column: "session_id", on_delete: :cascade
@@ -313,10 +331,12 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
+  add_foreign_key "session_inbox", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_message", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_pending", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "session_v2", "project", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
+  add_foreign_key "worktree", "project", on_delete: :cascade
 end

@@ -15,6 +15,11 @@ class Project < ApplicationRecord
     foreign_key: :project_id,
     inverse_of: :project,
     dependent: :destroy
+  has_many :worktrees,
+    class_name: "Worktree",
+    foreign_key: :project_id,
+    inverse_of: :project,
+    dependent: :destroy
   has_many :workspaces, -> { distinct }, through: :sessions
 
   def sandboxes_data

@@ -1,0 +1,9 @@
+---
+session_inbox_v2_user:
+  id: "inbox-v2-user-fixture"
+  session_id: "session-v2-fixture"
+  type: "user"
+  payload: '{"text":"Queued current schema prompt","files":[],"metadata":{"source":"fixture"}}'
+  delivery: "queue"
+  enqueued_seq: 42
+  time_created: 1700000040000

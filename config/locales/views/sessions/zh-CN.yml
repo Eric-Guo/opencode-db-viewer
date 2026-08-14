@@ -62,7 +62,7 @@ zh-CN:
       snapshot: "快照"
       agent_switched: "代理已切换为 %{agent}"
       model_switched: "模型已切换为 %{model}"
-      pending_inputs: "待处理输入"
+      session_inbox: "会话收件箱"
       instruction_context: "指令上下文"
       epoch: "纪元"
       through_sequence: "截至序号"

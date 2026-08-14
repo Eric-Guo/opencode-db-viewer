@@ -92,6 +92,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "response-fixture"
     assert_includes response.body, "test-provider/test-model"
     assert_includes response.body, "test-workspace-provider"
+    assert_select ".card-header strong", text: I18n.t("sessions.show.session_inbox")
+    assert_includes response.body, "inbox-v2-user-fixture"
+    assert_includes response.body, "Queued current schema prompt"
+    assert_includes response.body, "queue"
     assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
 
