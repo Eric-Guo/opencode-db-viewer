@@ -67,5 +67,9 @@ zh-CN:
       epoch: "纪元"
       through_sequence: "截至序号"
       removed: "已移除"
+      remove_session: "删除会话"
+      remove_confirm: "确定删除该会话及其所有消息吗？"
       durable_events: "持久事件日志"
       latest_events: "显示最近 %{count} 条"
+    destroy:
+      session_removed: "会话已删除。"

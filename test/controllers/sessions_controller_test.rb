@@ -9,6 +9,34 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
+  test "should redirect destroy to login when not signed in" do
+    delete project_session_url(projects(:project_show_with_sessions), sessions(:session_show_old))
+    assert_response :redirect
+    assert_redirected_to new_user_session_path
+  end
+
+  test "should destroy session and redirect to project page" do
+    project = projects(:project_show_with_sessions)
+    session = sessions(:session_show_old)
+
+    sign_in users(:user_fangzixue)
+    assert_difference -> { Session.count }, -1 do
+      delete project_session_url(project, session)
+    end
+    assert_redirected_to project_path(project)
+  end
+
+  test "should destroy legacy session and redirect to project page" do
+    project = projects(:project_session_parent)
+    session = legacy_sessions(:session_legacy_only_fixture)
+
+    sign_in users(:user_fangzixue)
+    assert_difference -> { LegacySession.count }, -1 do
+      delete project_session_url(project, session.id)
+    end
+    assert_redirected_to project_path(project)
+  end
+
   test "should render a nullable title and the current fork boundary" do
     project = projects(:project_show_with_sessions)
     session = sessions(:session_show_new)

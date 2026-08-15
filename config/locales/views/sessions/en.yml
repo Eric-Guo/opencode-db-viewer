@@ -67,5 +67,9 @@ en:
       epoch: "Epoch"
       through_sequence: "through sequence"
       removed: "Removed"
+      remove_session: "Remove Session"
+      remove_confirm: "Remove this session and all its messages?"
       durable_events: "Durable Event Log"
       latest_events: "showing latest %{count}"
+    destroy:
+      session_removed: "Session removed."

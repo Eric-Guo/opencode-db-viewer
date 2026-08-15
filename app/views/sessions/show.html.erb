@@ -2,6 +2,9 @@
   <div class="card-header bg-primary text-white d-flex align-items-center">
     <%= svg_icon("free.svg#cil-chat-bubble", "icon me-2") %>
     <strong><%= @session.title.presence || @session.slug %></strong>
+    <%= button_to project_session_path(@project, @session), method: :delete, class: "btn btn-danger btn-sm", form: {class: "ms-auto"}, onclick: "return confirm(this.dataset.confirm)", data: {confirm: t(".remove_confirm")} do %>
+      <%= svg_icon("free.svg#cil-trash", "icon me-1") %><%= t(".remove_session") %>
+    <% end %>
   </div>
   <div class="card-body">
     <div class="row g-3">

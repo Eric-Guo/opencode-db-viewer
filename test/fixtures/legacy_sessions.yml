@@ -9,6 +9,16 @@ session_parent_grouping_fixture:
   time_created: 9200000000000
   time_updated: 9200000000000
 
+session_legacy_only_fixture:
+  id: "session-legacy-only-fixture"
+  project_id: "project-session-parent"
+  slug: "slug-session-legacy-only-fixture"
+  directory: "/tmp/session-legacy-only-fixture"
+  title: "session-legacy-only-fixture"
+  version: "1.0.0"
+  time_created: 9250000000000
+  time_updated: 9250000000000
+
 session_file_parts_fixture:
   id: "session-file-parts-fixture"
   project_id: "project-session-file"

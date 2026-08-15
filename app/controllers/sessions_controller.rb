@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  after_action :verify_authorized, only: :show
+  after_action :verify_authorized, only: %i[show destroy]
   before_action :set_breadcrumbs, if: -> { request.format.html? }
 
   def show
@@ -37,6 +37,16 @@ class SessionsController < ApplicationController
       data = event.parsed_data
       @tool_call_names[data["callID"]] = data["name"] if data.is_a?(Hash) && data["callID"].present?
     end
+  end
+
+  def destroy
+    @project = policy_scope(Project).find(params[:project_id])
+    @session = @project.sessions.where(id: params[:id]).first ||
+      @project.legacy_sessions.find(params[:id])
+    authorize @session
+
+    @session.destroy!
+    redirect_to project_path(@project), notice: t(".session_removed")
   end
 
   private

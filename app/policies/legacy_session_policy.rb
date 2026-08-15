@@ -1,0 +1,2 @@
+class LegacySessionPolicy < SessionPolicy
+end
