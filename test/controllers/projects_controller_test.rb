@@ -73,6 +73,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, I18n.t("projects.show.no_sessions")
   end
 
+  test "should list sessions attached to duplicate project rows with the same worktree" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "table.table-striped tbody tr", count: 1
+    assert_includes response.body, "sibling-session-title-fixture"
+  end
+
+  test "should warn about duplicate project rows and suggest the move_sessions command" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "div.alert-warning" do |alert|
+      assert_includes alert.text, I18n.t("projects.show.duplicate_projects_title")
+    end
+    assert_includes response.body, "project-show-sibling-duplicate"
+    assert_includes response.body, "projects:move_sessions[project-show-sibling-main,project-show-sibling-duplicate]"
+  end
+
+  test "should not warn when the project worktree is not duplicated" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_with_sessions))
+
+    assert_response :success
+    assert_select "div.alert-warning", count: 0
+  end
+
   test "should render current project worktrees" do
     sign_in users(:user_fangzixue)
     get project_url(projects(:project_session_v2))

@@ -90,3 +90,13 @@ session_v2_fixture:
   metadata: '{"source":"test"}'
   time_created: 1700000010000
   time_updated: 1700000020000
+
+session_show_sibling_fixture:
+  id: "session-show-sibling-fixture"
+  project_id: "project-show-sibling-duplicate"
+  slug: "slug-show-sibling-fixture"
+  directory: "/tmp/show-sibling-project"
+  title: "sibling-session-title-fixture"
+  version: "1.0.0"
+  time_created: 9700000000000
+  time_updated: 9700000000000

@@ -127,6 +127,28 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
 
+  test "should show session attached to a duplicate project row with the same worktree" do
+    project = projects(:project_show_sibling_main)
+    session = sessions(:session_show_sibling_fixture)
+
+    sign_in users(:user_fangzixue)
+    get project_session_url(project, session)
+
+    assert_response :success
+    assert_includes response.body, "sibling-session-title-fixture"
+  end
+
+  test "should destroy session attached to a duplicate project row with the same worktree" do
+    project = projects(:project_show_sibling_main)
+    session = sessions(:session_show_sibling_fixture)
+
+    sign_in users(:user_fangzixue)
+    assert_difference -> { Session.count }, -1 do
+      delete project_session_url(project, session)
+    end
+    assert_redirected_to project_path(project)
+  end
+
   test "should collapse consecutive part update events of the same part into one row" do
     project = projects(:project_session_v2)
     session = sessions(:session_v2_fixture)

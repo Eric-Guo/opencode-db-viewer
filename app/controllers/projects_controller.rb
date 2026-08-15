@@ -19,7 +19,13 @@ class ProjectsController < ApplicationController
     authorize @project
     add_to_breadcrumbs t("projects.index.title"), projects_path
     add_to_breadcrumbs @project.name.presence || @project.id
-    sessions_scope = @project.sessions
+    @duplicate_projects =
+      if @project.worktree.present?
+        Project.where(worktree: @project.worktree).where.not(id: @project.id).order(:id)
+      else
+        Project.none
+      end
+    sessions_scope = Session.where(project_id: @project.worktree_project_ids)
     @total_sessions, @total_additions, @total_deletions = sessions_scope.pick(
       Arel.sql("COUNT(*)"),
       Arel.sql("COALESCE(SUM(summary_additions), 0)"),

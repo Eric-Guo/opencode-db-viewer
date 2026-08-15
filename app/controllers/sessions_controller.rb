@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
 
   def show
     @project = policy_scope(Project).find(params[:project_id])
-    @session = @project.sessions.find(params[:id])
+    @session = Session.where(project_id: @project.worktree_project_ids).find(params[:id])
     authorize @session
 
     add_to_breadcrumbs t("projects.index.title"), projects_path
@@ -41,7 +41,7 @@ class SessionsController < ApplicationController
 
   def destroy
     @project = policy_scope(Project).find(params[:project_id])
-    @session = @project.sessions.where(id: params[:id]).first ||
+    @session = Session.where(project_id: @project.worktree_project_ids).where(id: params[:id]).first ||
       @project.legacy_sessions.find(params[:id])
     authorize @session
 

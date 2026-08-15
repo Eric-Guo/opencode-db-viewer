@@ -22,6 +22,14 @@ class Project < ApplicationRecord
     dependent: :destroy
   has_many :workspaces, -> { distinct }, through: :sessions
 
+  # opencode can create multiple project rows for the same worktree (for
+  # example when a different app version derives the project id differently).
+  # Sessions may be attached to any of those rows, so group them by worktree.
+  def worktree_project_ids
+    @worktree_project_ids ||=
+      worktree.present? ? Project.where(worktree: worktree).pluck(:id) : [id]
+  end
+
   def sandboxes_data
     @sandboxes_data ||= parsed_json(sandboxes, fallback: [])
   end

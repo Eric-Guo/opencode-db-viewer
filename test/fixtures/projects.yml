@@ -80,3 +80,19 @@ project_session_v2:
   commands: '{"start":"bin/dev"}'
   time_created: 9600000000000
   time_updated: 9600000000000
+
+project_show_sibling_main:
+  id: "project-show-sibling-main"
+  name: "show-sibling-main"
+  worktree: "/tmp/show-sibling-project"
+  sandboxes: "[]"
+  time_created: 9700000000000
+  time_updated: 9700000000000
+
+project_show_sibling_duplicate:
+  id: "project-show-sibling-duplicate"
+  name: "show-sibling-duplicate"
+  worktree: "/tmp/show-sibling-project"
+  sandboxes: "[]"
+  time_created: 9700000000001
+  time_updated: 9700000000001

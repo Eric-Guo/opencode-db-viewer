@@ -64,3 +64,5 @@ zh-CN:
         before: "在消息 %{message} 之前"
         through: "截至消息 %{message}"
       no_sessions: "该项目暂无会话。"
+      duplicate_projects_title: "检测到重复的项目记录"
+      duplicate_projects_body: "另有 %{count} 个项目记录指向同一工作目录，会话可能分散在不同记录下。可以运行以下命令将会话合并到同一条项目记录："
