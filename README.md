@@ -37,3 +37,10 @@ Make sure debug only having one version install as default gems, otherwise unins
 gem uninstall -i /opt/homebrew/Cellar/ruby/3.2.2/lib/ruby/gems/3.2.0 debug
 gem install debug --default
 ```
+
+## Compress DB
+
+```bash
+cd /Users/guochunzhong/.local/share/opencode
+sqlite3 opencode-eric_dev.db 'VACUUM'
+```
