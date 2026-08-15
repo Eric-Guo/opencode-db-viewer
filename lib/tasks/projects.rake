@@ -25,6 +25,33 @@ namespace :projects do
     puts "Done."
   end
 
+  desc "Move all sessions (and legacy sessions) from one project to another, e.g. when the old " \
+    "project's worktree was removed. Usage: bin/rails 'projects:move_sessions[old_project_id,target_project_id]' " \
+    "Use DRY_RUN=1 to preview."
+  task :move_sessions, [:old_project_id, :target_project_id] => :environment do |_t, args|
+    dry_run = ENV["DRY_RUN"] == "1"
+    abort("Usage: bin/rails 'projects:move_sessions[old_project_id,target_project_id]'") if args[:old_project_id].blank? || args[:target_project_id].blank?
+    abort("old_project_id and target_project_id must differ.") if args[:old_project_id] == args[:target_project_id]
+
+    old_project = Project.find_by(id: args[:old_project_id])
+    target_project = Project.find_by(id: args[:target_project_id])
+    abort("Old project not found: #{args[:old_project_id]}") unless old_project
+    abort("Target project not found: #{args[:target_project_id]}") unless target_project
+
+    puts "Move sessions: #{old_project.id} (#{old_project.name.presence || old_project.worktree}) " \
+      "-> #{target_project.id} (#{target_project.name.presence || target_project.worktree})"
+
+    now_ms = (Time.current.to_f * 1000).to_i
+    [[Session, "sessions"], [LegacySession, "legacy sessions"]].each do |model, label|
+      count = model.where(project_id: old_project.id).count
+      puts "  #{label}: move #{count}"
+      model.where(project_id: old_project.id).update_all(project_id: target_project.id) unless dry_run || count.zero?
+    end
+    target_project.update!(time_updated: now_ms) unless dry_run
+
+    puts dry_run ? "Dry run, nothing changed." : "Done."
+  end
+
   desc "Move sessions (and legacy sessions) from the global project into per-directory " \
     "projects, creating projects when missing. Use DRY_RUN=1 to preview."
   task move_sessions_from_global: :environment do
