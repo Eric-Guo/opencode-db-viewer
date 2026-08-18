@@ -76,6 +76,31 @@ namespace :sessions do
     puts "Dry run, nothing changed." if ENV["DRY_RUN"] == "1"
   end
 
+  desc "List the top 20 biggest session_message rows (by data column size) with their session " \
+    "id and title. Usage: bin/rails sessions:biggest_messages. Override the limit with LIMIT=50."
+  task biggest_messages: :environment do
+    limit = (ENV["LIMIT"] || 20).to_i
+    adapter = ActiveRecord::Base.connection.adapter_name.downcase
+    size_sql = adapter.include?("postgres") ? "octet_length(data)" : "length(data)"
+
+    rows = SessionMessage
+      .joins(session: :project)
+      .select("session_message.id", "session_message.session_id", "#{size_sql} AS data_size",
+        "#{Session.quoted_table_name}.title AS session_title",
+        "#{Project.quoted_table_name}.name AS project_name",
+        "#{Project.quoted_table_name}.worktree AS project_worktree")
+      .order(Arel.sql("#{size_sql} DESC"))
+      .limit(limit)
+
+    rows.each_with_index do |row, i|
+      project = row.project_name.presence || row.project_worktree.to_s
+      puts format("%3d. %10s bytes  msg=%s  session=%s  project=%s  title=%s",
+        i + 1, ActiveSupport::NumberHelper.number_to_delimited(row.data_size),
+        row.id, row.session_id, project, row.session_title.to_s.truncate(60))
+    end
+    puts "No session_message rows found." if rows.empty?
+  end
+
   desc "Convert markdown data-URI images embedded in message text into structured file content " \
     "parts across every session in the database. Use DRY_RUN=1 to preview."
   task convert_all: :environment do
