@@ -114,6 +114,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, I18n.t("sessions.show.tool_structured")
     assert_includes response.body, I18n.t("sessions.show.tool_result")
     assert_includes response.body, "Content result fixture"
+    assert_select "img[src=?]", "data:image/png;base64,iVBORw0KGgo="
+    assert_select "span.badge", text: /spec\.pdf · application\/pdf/
     assert_includes response.body, "Structured result fixture"
     assert_includes response.body, "Raw result fixture"
     assert_includes response.body, "request-fixture"
