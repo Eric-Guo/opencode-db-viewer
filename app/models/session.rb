@@ -63,6 +63,14 @@ class Session < ApplicationRecord
     epoch_time(time_suspended)
   end
 
+  def time_idle_at
+    epoch_time(time_idle)
+  end
+
+  def time_viewed_at
+    epoch_time(time_viewed)
+  end
+
   def model_data
     @model_data ||= parsed_json(model)
   end

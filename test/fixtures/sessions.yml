@@ -27,6 +27,9 @@ session_show_new:
   fork_boundary: '{"type":"before","messageID":"msg-boundary-fixture"}'
   time_suspended: 1700000030000
   resume_attempts: 2
+  time_idle: 1700000040000
+  time_viewed: 1700000050000
+  idle_outcome: "succeeded"
   time_created: 9100000000000
   time_updated: 9100000000000
 

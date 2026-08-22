@@ -58,6 +58,7 @@ zh-CN:
       archived: "已归档"
       execution_claimed: "已声明执行"
       resume_attempts: "已恢复尝试 %{count} 次"
+      idle_outcome: "空闲：%{outcome}"
       active: "活跃"
       fork: "分支会话"
       fork_boundaries:

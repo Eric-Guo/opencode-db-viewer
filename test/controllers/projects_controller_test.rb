@@ -61,6 +61,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "sandbox-new"
     assert_includes response.body, I18n.t("projects.show.execution_claimed")
     assert_includes response.body, I18n.t("projects.show.resume_attempts", count: 2)
+    assert_includes response.body, I18n.t("projects.show.idle_outcome", outcome: "succeeded")
     assert_operator response.body.index("workspace-show-new"), :<, response.body.index("workspace-show-old")
     assert_operator response.body.index(new_title), :<, response.body.index(old_title)
   end

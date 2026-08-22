@@ -58,6 +58,7 @@ en:
       archived: "Archived"
       execution_claimed: "Execution claimed"
       resume_attempts: "%{count} resume attempts"
+      idle_outcome: "Idle: %{outcome}"
       active: "Active"
       fork: "Fork"
       fork_boundaries:

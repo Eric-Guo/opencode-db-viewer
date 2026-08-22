@@ -49,6 +49,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "modal-new"
     assert_includes response.body, I18n.t("sessions.show.execution_claimed")
     assert_includes response.body, I18n.t("sessions.show.resume_attempts", count: 2)
+    assert_includes response.body, I18n.t("sessions.show.idle_outcome", outcome: "succeeded")
+    assert_includes response.body, I18n.t("sessions.show.time_viewed")
     assert_includes response.body, session.fork_session_id
     assert_includes response.body, I18n.t("sessions.show.fork_boundaries.before", message: "msg-boundary-fixture")
   end

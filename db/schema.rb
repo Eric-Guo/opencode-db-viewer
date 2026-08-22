@@ -273,6 +273,9 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_archived"
     t.integer "time_suspended"
     t.integer "resume_attempts", default: 0, null: false
+    t.integer "time_idle"
+    t.integer "time_viewed"
+    t.text "idle_outcome"
     t.index ["parent_id"], name: "session_v2_parent_idx"
     t.index ["project_id"], name: "session_v2_project_idx"
     t.index ["time_suspended"], name: "session_v2_time_suspended_idx"

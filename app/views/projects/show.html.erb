@@ -109,6 +109,7 @@
                   <% if session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% end %>
                   <% if session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><% end %>
                   <% if session.resume_attempts.positive? %><div class="small text-medium-emphasis"><%= t(".resume_attempts", count: session.resume_attempts) %></div><% end %>
+                  <% if session.time_idle_at %><div class="small text-medium-emphasis"><%= t(".idle_outcome", outcome: session.idle_outcome.presence || "-") %></div><% end %>
                   <% unless session.time_archived_at || session.execution_claimed_at %><span class="badge bg-success"><%= t(".active") %></span><% end %>
                   <% if session.fork_session_id.present? %><div class="small text-medium-emphasis"><%= t(".fork") %> · <%= t(".fork_boundaries.#{session.fork_boundary_type}", message: session.fork_boundary_message_id, default: [session.fork_boundary_type, session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %>
                 </td>
