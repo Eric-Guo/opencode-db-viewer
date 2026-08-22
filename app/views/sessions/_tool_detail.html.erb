@@ -38,7 +38,12 @@
             <img src="<%= file_uri %>" alt="<%= item["filename"] %>" class="img-fluid rounded border mb-1" />
             <div class="small text-medium-emphasis mb-2"><% if item["filename"].present? %><code><%= item["filename"] %></code> · <% end %><%= item["mime"] %></div>
           <% elsif item.is_a?(Hash) && item["type"] == "file" %>
-            <span class="badge bg-white text-dark border mb-2"><%= item["filename"].presence || t("sessions.show.file") %> · <%= item["mime"] %></span>
+            <div class="mb-2">
+              <span class="badge bg-white text-dark border"><%= item["filename"].presence || t("sessions.show.file") %> · <%= item["mime"] %></span>
+              <% if file_uri.to_s.start_with?("data:") && local_assigns[:message] %>
+                <%= link_to t("sessions.show.download"), project_session_message_path(@project, @session, message, content: content_index, item: index), class: "small" %>
+              <% end %>
+            </div>
           <% else %>
             <% value = item.is_a?(Hash) && item["type"] == "text" ? item["text"] : item %>
             <pre class="bg-white border rounded p-3 mb-2 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(value) %></code></pre>

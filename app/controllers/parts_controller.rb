@@ -1,4 +1,6 @@
 class PartsController < ApplicationController
+  include DataUrlDownload
+
   after_action :verify_authorized, only: %i[show]
 
   # Serves a legacy part attachment stored as a data URL (e.g. a PDF captured
@@ -29,12 +31,5 @@ class PartsController < ApplicationController
     elsif part.tool?
       part.tool_attachments[params[:attachment].to_i]
     end
-  end
-
-  def decode_data_url(url)
-    match = %r{\Adata:([^;,]+)?(;base64)?,(.*)\z}m.match(url)
-    return [nil, nil] unless match
-
-    [match[1].presence || "application/octet-stream", match[2] ? Base64.decode64(match[3]) : match[3]]
   end
 end

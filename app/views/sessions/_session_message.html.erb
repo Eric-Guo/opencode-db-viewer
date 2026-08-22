@@ -25,7 +25,7 @@
         <% if message.finish_reason.present? %><span class="badge bg-dark"><%= message.finish_reason %></span><% end %>
       </div>
 
-      <% message.content.each do |content| %>
+      <% message.content.each_with_index do |content, content_index| %>
         <% case content["type"]; when "text" %>
           <div class="border-start border-success border-4 ps-3 mb-3 text-break" style="white-space: pre-wrap;"><%= content["text"] %></div>
         <% when "reasoning" %>
@@ -38,12 +38,15 @@
             </div>
           <% else %>
             <span class="badge bg-light text-dark border mb-3"><%= content["filename"].presence || t("sessions.show.file") %> · <%= content["mime"] %></span>
+            <% if (content["url"].presence || content["uri"]).to_s.start_with?("data:") %>
+              <%= link_to t("sessions.show.download"), project_session_message_path(@project, @session, message, content: content_index), class: "small" %>
+            <% end %>
           <% end %>
         <% when "tool" %>
           <% state = content["state"].is_a?(Hash) ? content["state"] : {} %>
           <details class="mb-3">
             <summary><span class="badge bg-dark"><%= content["name"] %></span> <span class="badge bg-<%= state["status"] == "completed" ? "success" : (state["status"] == "error" ? "danger" : "warning") %>"><%= state["status"] %></span> <code class="small"><%= content["id"] %></code></summary>
-            <%= render "sessions/tool_detail", tool: content, state: state %>
+            <%= render "sessions/tool_detail", tool: content, state: state, message: message, content_index: content_index %>
           </details>
         <% else %>
           <pre class="bg-light rounded p-3 small"><code><%= pretty_json(content) %></code></pre>

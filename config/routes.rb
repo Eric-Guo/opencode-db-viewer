@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :projects, only: %i[index show] do
     resources :sessions, only: %i[show destroy] do
       resources :parts, only: %i[show]
+      resources :messages, only: %i[show], controller: "session_messages"
     end
   end
 
