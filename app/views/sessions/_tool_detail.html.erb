@@ -47,6 +47,21 @@
       </section>
     <% end %>
 
+    <% attachments = local_assigns[:part] ? part.tool_attachments : [] %>
+    <% if attachments.any? %>
+      <section class="mb-3">
+        <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_attachments") %></div>
+        <% attachments.each_with_index do |attachment, index| %>
+          <div class="mb-1">
+            <span class="badge bg-white text-dark border"><%= part.attachment_filename(attachment) %> · <%= attachment["mime"] %></span>
+            <% if attachment["url"].to_s.start_with?("data:") %>
+              <%= link_to t("sessions.show.download"), project_session_part_path(@project, @session, part, attachment: index), class: "small" %>
+            <% end %>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
+
     <% if state["error"].present? %>
       <section class="mb-3">
         <div class="small fw-semibold text-uppercase text-danger mb-1"><%= t("sessions.show.tool_error") %></div>

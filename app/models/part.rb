@@ -67,6 +67,18 @@ class Part < ApplicationRecord
     tool_state["input"]
   end
 
+  def tool_attachments
+    value = tool_state["attachments"]
+    value.is_a?(Array) ? value.select { |item| item.is_a?(Hash) } : []
+  end
+
+  def attachment_filename(attachment)
+    input_path = tool_input.is_a?(Hash) ? tool_input["filePath"].to_s : ""
+    attachment["filename"].presence ||
+      File.basename(input_path).presence ||
+      "part-#{id}#{Rack::Mime::MIME_TYPES.invert[attachment["mime"].to_s] || ".bin"}"
+  end
+
   def tool_output
     tool_state["output"]
   end

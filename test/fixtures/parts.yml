@@ -39,6 +39,14 @@ part_msg_user_file_attachment_fixture:
   time_updated: 1700000004100
   data: '{"type":"file","filename":"demo.png","mime":"image/png","url":"https://example.com/demo.png"}'
 
+part_msg_user_file_tool_pdf_fixture:
+  id: "part-msg-user-file-tool-pdf-fixture"
+  message_id: "msg-user-file-fixture"
+  session_id: "session-file-parts-fixture"
+  time_created: 1700000004200
+  time_updated: 1700000004200
+  data: '{"type":"tool","callID":"call-file-pdf-fixture","tool":"read","state":{"status":"completed","input":{"filePath":"/tmp/demo.pdf"},"output":"PDF read successfully","attachments":[{"id":"att-file-pdf-fixture","type":"file","mime":"application/pdf","url":"data:application/pdf;base64,JVBERi0xLjQgZml4dHVyZQo="}]}}'
+
 part_msg_user_chain_one_text_fixture:
   id: "part-msg-user-chain-one-text-fixture"
   message_id: "msg-user-chain-one-fixture"

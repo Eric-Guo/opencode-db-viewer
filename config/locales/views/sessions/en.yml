@@ -56,6 +56,8 @@ en:
       files_affected: "file(s) affected"
       file: "File"
       open: "Open"
+      download: "Download"
+      tool_attachments: "Attachments"
       tokens_in: "In"
       tokens_out: "Out"
       cache_read: "Cache"

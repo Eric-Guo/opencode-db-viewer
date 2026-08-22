@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   draw :admin
 
   resources :projects, only: %i[index show] do
-    resources :sessions, only: %i[show destroy]
+    resources :sessions, only: %i[show destroy] do
+      resources :parts, only: %i[show]
+    end
   end
 
   namespace :ui do

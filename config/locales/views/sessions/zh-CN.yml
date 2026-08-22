@@ -56,6 +56,8 @@ zh-CN:
       files_affected: "个文件受影响"
       file: "文件"
       open: "打开"
+      download: "下载"
+      tool_attachments: "附件"
       tokens_in: "输入"
       tokens_out: "输出"
       cache_read: "缓存"
