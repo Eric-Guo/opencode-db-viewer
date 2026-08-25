@@ -76,7 +76,7 @@
       <% if @workspaces.any? %>
         <h6><%= t(".workspaces") %></h6>
         <div class="table-responsive mb-3"><table class="table table-sm mb-0"><thead><tr><th><%= t(".workspace_id") %></th><th><%= t(".provider") %></th><th><%= t(".binding") %></th><th><%= t(".time_created") %></th><th><%= t(".last_used") %></th></tr></thead><tbody>
-          <% @workspaces.each do |workspace| %><tr><td><code><%= workspace.id %></code></td><td><%= workspace.provider %></td><td><code class="text-break"><%= workspace.binding_data.to_json %></code></td><td><%= opencode_time(workspace.created_time) %></td><td><%= opencode_time(workspace.last_used_time) %></td></tr><% end %>
+          <% @workspaces.each do |workspace| %><tr><td><code><%= workspace.id %></code></td><td><%= workspace.provider %></td><td><% if workspace.binding %><code class="text-break"><%= workspace.binding_data.to_json %></code><% else %>-<% end %></td><td><%= opencode_time(workspace.created_time) %></td><td><%= opencode_time(workspace.last_used_time) %></td></tr><% end %>
         </tbody></table></div>
       <% end %>
       <% if @permissions.any? %>

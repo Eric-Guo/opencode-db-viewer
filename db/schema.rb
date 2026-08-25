@@ -313,7 +313,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
 
   create_table "workspace", id: :text, force: :cascade do |t|
     t.text "provider", null: false
-    t.text "binding", null: false
+    t.text "binding"
     t.integer "created_at", null: false
     t.integer "last_used_at", null: false
   end
