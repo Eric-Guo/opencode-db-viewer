@@ -14,6 +14,10 @@ class Session < ApplicationRecord
     foreign_key: :session_id,
     inverse_of: :session,
     dependent: :destroy
+  has_many :retained_session_messages,
+    class_name: "SessionMessageRetained",
+    foreign_key: :session_id,
+    inverse_of: :session
   has_many :session_pendings,
     class_name: "SessionPending",
     foreign_key: :session_id,
