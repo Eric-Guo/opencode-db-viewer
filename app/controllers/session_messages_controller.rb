@@ -10,7 +10,8 @@ class SessionMessagesController < ApplicationController
     session = Session.where(project_id: project.worktree_project_ids).find(params[:session_id])
     authorize session, :show?
 
-    message = session.session_messages.find(params[:id])
+    message = session.session_messages.where(id: params[:id]).first ||
+      session.retained_session_messages.find(params[:id])
     item, tool_state = find_file_item(message)
     raise ActiveRecord::RecordNotFound unless item
 

@@ -11,10 +11,23 @@ class SessionsController < ApplicationController
     add_to_breadcrumbs @project.name.presence || @project.id, project_path(@project)
     add_to_breadcrumbs @session.title.presence || @session.slug
 
-    @session_messages = @session.session_messages.order(:seq)
+    @session_messages = @session.session_messages.order(:seq).to_a
+    @retained_session_messages = @session.retained_session_messages.order(:seq).to_a
     @legacy_messages = @session.legacy_messages.includes(:parts).order(:time_created, :id)
-    @message_storage = @session_messages.exists? ? :session_message : :legacy
-    @messages = (@message_storage == :session_message) ? @session_messages : @legacy_messages
+    @message_storage = (@session_messages.any? || @retained_session_messages.any?) ? :session_message : :legacy
+    @message_storage_label = if @message_storage == :session_message
+      [
+        ("session_message" if @session_messages.any?),
+        ("session_message_retained" if @retained_session_messages.any?)
+      ].compact.join(" + ")
+    else
+      "message / part"
+    end
+    @messages = if @message_storage == :session_message
+      (@session_messages + @retained_session_messages).uniq(&:id).sort_by(&:seq)
+    else
+      @legacy_messages
+    end
     @inbox_items = @session.session_inboxes.order(:enqueued_seq)
     @instruction_entries = @session.instruction_entries.order(:key)
     events_scope = OpenCodeEvent.where(aggregate_id: @session.id)

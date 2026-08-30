@@ -110,6 +110,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "session_message"
     assert_includes response.body, "Current schema user prompt"
+    assert_includes response.body, "Retained V2 prompt"
     assert_includes response.body, "Current schema reasoning"
     assert_includes response.body, "Current schema assistant response"
     assert_includes response.body, I18n.t("sessions.show.tool_content")
@@ -128,6 +129,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "inbox-v2-user-fixture"
     assert_includes response.body, "Queued current schema prompt"
     assert_includes response.body, "queue"
+    assert_includes response.body, "session_message + session_message_retained"
+    assert_operator response.body.index("Retained V2 prompt"), :<, response.body.index("Current schema user prompt")
     assert_operator response.body.index("Current schema user prompt"), :<, response.body.index("Current schema assistant response")
   end
 

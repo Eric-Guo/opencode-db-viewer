@@ -42,7 +42,7 @@
     <strong><%= t(".message_timeline") %></strong>
     <span class="badge bg-primary"><%= @messages.size %> <%= t(".messages") %></span>
     <span class="badge bg-dark"><%= t(".durable_events") %> <%= @event_count %></span>
-    <span class="badge bg-light text-dark border"><%= @message_storage == :session_message ? "session_message" : "message / part" %></span>
+    <span class="badge bg-light text-dark border"><%= @message_storage_label %></span>
     <% if @event_count > @events.size %><small class="text-medium-emphasis"><%= t(".latest_events", count: @events.size) %></small><% end %>
   </div>
   <div class="card-body">
