@@ -4,11 +4,11 @@
     <div class="card-body oc-agent-grid">
       <% @children.each do |child| %>
         <article class="oc-agent-card">
-          <div class="d-flex justify-content-between gap-2 mb-2"><span class="small text-medium-emphasis"><%= child.agent.presence || t("viewer.subagent") %></span><%= session_state_badge(child) %></div>
+          <div class="d-flex justify-content-between gap-2 mb-2"><span class="small text-body-secondary"><%= child.agent.presence || t("viewer.subagent") %></span><%= session_state_badge(child) %></div>
           <div class="fw-semibold"><%= link_to child.title.presence || child.slug, project_session_path(child.project_id, child) %></div>
-          <code class="d-block small text-medium-emphasis text-break mt-1"><%= child.id %></code>
+          <code class="d-block small text-body-secondary text-break mt-1"><%= child.id %></code>
           <div class="small mt-3"><%= number_with_delimiter(child.total_tokens) %> <%= t("projects.show.tokens") %> · <%= number_to_currency(child.cost.to_f, precision: 4) %></div>
-          <div class="small text-medium-emphasis"><%= t("projects.show.session_time_updated") %> <%= opencode_time(child.time_updated_at) %></div>
+          <div class="small text-body-secondary"><%= t("projects.show.session_time_updated") %> <%= opencode_time(child.time_updated_at) %></div>
         </article>
       <% end %>
     </div>

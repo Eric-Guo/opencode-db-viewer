@@ -1,7 +1,13 @@
+body {
+  background-color: var(--cui-tertiary-bg);
+}
+
 .wrapper {
   width: 100%;
-  @include ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));
-  @include ltr-rtl("padding-right", var(--cui-sidebar-occupy-end, 0));
-  will-change: auto;
-  @include transition(padding .15s);
+  padding-inline: var(--cui-sidebar-occupy-start, 0) var(--cui-sidebar-occupy-end, 0);
+  transition: padding .15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper { transition: none; }
 }

@@ -1,5 +1,4 @@
-<% content_for :head do %><%= append_javascript_pack_tag "stimulus" %><% end %>
-<div class="oc-page-intro mb-4"><p class="oc-eyebrow">OpenCode</p><h1 class="fs-3"><%= t(".title") %></h1><p class="text-medium-emphasis mb-0"><%= t("viewer.projects_intro") %></p></div>
+<div class="oc-page-intro mb-4"><p class="oc-eyebrow">OpenCode</p><h1 class="fs-3"><%= t(".title") %></h1><p class="text-body-secondary mb-0"><%= t("viewer.projects_intro") %></p></div>
 <%= form_with url: projects_path, method: :get, class: "d-flex gap-2 mb-3", local: true do |form| %>
   <%= form.label :q, t("viewer.search_projects"), class: "visually-hidden" %>
   <%= form.search_field :q, value: @query, placeholder: t("viewer.search_projects"), aria: {label: t("viewer.search_projects")}, class: "form-control" %>
@@ -14,7 +13,7 @@
   <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle mb-0">
-        <thead class="table-light">
+        <thead class="oc-table-heading">
           <tr>
             <th><%= t(".name") %></th>
             <th><%= t(".worktree") %></th>
@@ -25,22 +24,22 @@
           </tr>
         </thead>
         <tbody>
-          <% if @projects.empty? %><tr><td colspan="6" class="text-center text-medium-emphasis py-4"><%= t("viewer.no_projects") %></td></tr><% end %>
+          <% if @projects.empty? %><tr><td colspan="6" class="text-center text-body-secondary py-4"><%= t("viewer.no_projects") %></td></tr><% end %>
           <% @projects.each do |project| %>
             <% updated_time = project.time_updated_at %>
             <tr>
               <td>
                 <div class="fw-semibold"><%= link_to(project.name.presence || project.id, project_path(project), class: "text-decoration-none") %></div>
-                <code class="small text-medium-emphasis"><%= project.id %></code>
+                <code class="small text-body-secondary"><%= project.id %></code>
               </td>
               <td><code class="small"><%= truncate(project.worktree, length: 60) %></code></td>
-              <td><span class="badge bg-light text-dark border"><%= project.vcs.presence || "-" %></span></td>
+              <td><span class="badge bg-body-tertiary text-body border"><%= project.vcs.presence || "-" %></span></td>
               <td class="text-center"><%= @worktree_counts.fetch(project.id, 0) %></td>
-              <td class="text-center"><strong><%= @session_counts.fetch(project.id, 0) %></strong><div class="small text-medium-emphasis"><%= t("viewer.subagent_count", count: @subagent_counts.fetch(project.id, 0)) %></div></td>
+              <td class="text-center"><strong><%= @session_counts.fetch(project.id, 0) %></strong><div class="small text-body-secondary"><%= t("viewer.subagent_count", count: @subagent_counts.fetch(project.id, 0)) %></div></td>
               <td>
                 <% if updated_time %>
                   <%= time_tag(updated_time, t(".time_ago", distance: time_ago_in_words(updated_time)), title: opencode_time(updated_time)) %>
-                  <div class="small text-medium-emphasis"><%= opencode_time(updated_time) %></div>
+                  <div class="small text-body-secondary"><%= opencode_time(updated_time) %></div>
                 <% else %>
                   -
                 <% end %>

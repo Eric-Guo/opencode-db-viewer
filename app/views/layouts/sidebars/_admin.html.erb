@@ -1,16 +1,19 @@
-<div class="sidebar sidebar-dark sidebar-fixed bg-dark-gradient <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
-  <div class="sidebar-brand d-none d-md-flex">
-    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <svg alt="CoreUI Logo" class="sidebar-brand-full" height="46" width="118">
-        <use xlink:href="<%= asset_path('coreui.svg#full') %>"></use>
-      </svg>
-    <% end %>
-    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <svg alt="CoreUI Logo" class="sidebar-brand-narrow" height="46" width="46">
-        <use xlink:href="<%= asset_path('coreui.svg#signet') %>"></use>
-      </svg>
-    <% end %>
-    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable" data-action="click->sidebar#click"></button>
+<div class="sidebar sidebar-dark sidebar-fixed border-end <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
+  <div class="sidebar-header border-bottom">
+    <div class="sidebar-brand">
+      <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+        <svg alt="CoreUI Logo" class="sidebar-brand-full" height="32" width="110">
+          <use xlink:href="<%= asset_path('coreui.svg#full') %>"></use>
+        </svg>
+      <% end %>
+      <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+        <svg alt="CoreUI Logo" class="sidebar-brand-narrow" height="32" width="32">
+          <use xlink:href="<%= asset_path('coreui.svg#signet') %>"></use>
+        </svg>
+      <% end %>
+    </div>
+    <button class="sidebar-toggler d-none d-lg-block" type="button" data-action="sidebar#toggle" aria-label="<%= t("layouts.header.toggle_narrow_sidebar") %>"></button>
+    <button class="btn-close d-lg-none" type="button" data-coreui-close="sidebar" data-coreui-theme="dark" aria-label="<%= t("layouts.header.close_navigation") %>"></button>
   </div>
   <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
     <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>

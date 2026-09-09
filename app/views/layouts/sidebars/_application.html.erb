@@ -1,12 +1,15 @@
-<div class="sidebar sidebar-dark sidebar-fixed bg-dark-gradient <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
-  <div class="sidebar-brand d-none d-md-flex">
-    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <span class="sidebar-brand-full"><strong class="d-block fs-5">OpenCode</strong><small class="oc-brand-caption">DB VIEWER</small></span>
-    <% end %>
-    <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <span class="sidebar-brand-narrow fw-bold" aria-label="OpenCode">OC</span>
-    <% end %>
-    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable" data-action="click->sidebar#click"></button>
+<div class="sidebar sidebar-dark sidebar-fixed border-end <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
+  <div class="sidebar-header border-bottom">
+    <div class="sidebar-brand">
+      <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+        <span class="sidebar-brand-full"><strong class="d-block fs-5">OpenCode</strong><small class="oc-brand-caption">DB VIEWER</small></span>
+      <% end %>
+      <%= link_to root_path, class: "text-reset text-decoration-none" do %>
+        <span class="sidebar-brand-narrow fw-bold" aria-label="OpenCode">OC</span>
+      <% end %>
+    </div>
+    <button class="sidebar-toggler d-none d-lg-block" type="button" data-action="sidebar#toggle" aria-label="<%= t("layouts.header.toggle_narrow_sidebar") %>"></button>
+    <button class="btn-close d-lg-none" type="button" data-coreui-close="sidebar" data-coreui-theme="dark" aria-label="<%= t("layouts.header.close_navigation") %>"></button>
   </div>
   <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
     <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>
@@ -15,11 +18,10 @@
     <%= nav_item(t('.projects'), projects_path, 'free.svg#cil-folder') %>
 
     <li class="nav-title"><%= t('user.account') -%></li>
-    <li class="nav-group" data-controller='expender'
-      data-expender-url-value='<%= account_ui_nav_group_items_path -%>'
-      data-expender-loaded-value="<%= controller_name == 'profiles' -%>"
-      class="<%= controller_name == 'profiles' ? 'show' : '' -%>">
-      <a class="nav-link nav-group-toggle" data-action='expender#click'>
+    <li class="nav-group <%= controller_name == 'profiles' ? 'show' : '' -%>" data-controller="expender"
+      data-expender-url-value="<%= account_ui_nav_group_items_path -%>"
+      data-expender-loaded-value="<%= controller_name == 'profiles' -%>">
+      <a class="nav-link nav-group-toggle" data-action="expender#click" href="#">
         <%= svg_icon('free.svg#cil-puzzle', 'nav-icon') %>
         <%= t('user.account') -%>
       </a>

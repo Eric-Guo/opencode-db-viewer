@@ -1,0 +1,10 @@
+zh-CN:
+  layouts:
+    header:
+      select_theme: 选择颜色主题
+      light: 浅色
+      dark: 深色
+      auto: 跟随系统
+      toggle_navigation: 切换导航
+      close_navigation: 关闭导航
+      toggle_narrow_sidebar: 切换侧边栏宽度

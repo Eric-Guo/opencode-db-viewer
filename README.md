@@ -1,6 +1,6 @@
 # OpenCode DB Viewer
 
-A read-only Rails/CoreUI browser for an OpenCode SQLite database. The project and session pages support both OpenCode storage generations:
+A read-only Rails/CoreUI 5 browser for an OpenCode SQLite database. The project and session pages support both OpenCode storage generations:
 
 - current sessions in `session_v2` with sequenced `session_message` records, including assistant content, tool calls, usage, pending inputs, instruction context, and durable events;
 - retained legacy conversations in `session`, `message`, and `part` for migrated databases that still contain older storage rows.
@@ -21,6 +21,8 @@ bin/rails server
 
 Run the Rails suite with `bin/rails test`, and the project/session browser checks with `HEADLESS=1 bin/rails test:system`. Tests use the separate database under `storage/`, including fixtures for background subagents and browser Code Mode calls.
 
+The header's color-theme menu supports Light, Dark, and Auto (system preference), saved in the browser. CoreUI 5 integration checks cover color modes, responsive navigation, admin charts, tables, and modal selects in `test/system/coreui_v5_test.rb`.
+
 ### When you want to debug the SCSS
 
 Set `shakapacker.yml` hmr to true.
@@ -29,9 +31,9 @@ Set `shakapacker.yml` hmr to true.
 hmr: true
 ```
 
-### Why should always include "stimulus"
+### Frontend initialization
 
-Because using webpack 5, the loading sequence do matter.
+The application pack starts Stimulus and registers the controllers in `app/javascript/controllers`. Charts, DataTables, and Selectize load their dependencies when their controllers connect. Pages only append their optional stylesheet packs; a separate Stimulus JavaScript pack is no longer needed.
 
 ### How to debug in VSCode?
 

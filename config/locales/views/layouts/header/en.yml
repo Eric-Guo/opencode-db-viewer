@@ -1,0 +1,10 @@
+en:
+  layouts:
+    header:
+      select_theme: Select color theme
+      light: Light
+      dark: Dark
+      auto: Auto
+      toggle_navigation: Toggle navigation
+      close_navigation: Close navigation
+      toggle_narrow_sidebar: Toggle narrow sidebar

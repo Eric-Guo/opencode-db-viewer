@@ -1,4 +1,3 @@
-<% content_for :head do %><%= append_javascript_pack_tag "stimulus" %><% end %>
 <div class="card mb-4">
   <div class="card-header oc-heading d-flex align-items-center">
     <%= svg_icon("free.svg#cil-folder-open", "icon me-2") %>
@@ -7,37 +6,37 @@
   <div class="card-body">
     <div class="row g-3">
       <div class="col-lg-8">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".worktree") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".worktree") %></div>
         <code class="text-break"><%= @project.worktree %></code>
       </div>
       <div class="col-lg-4">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".project_id") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".project_id") %></div>
         <code class="text-break"><%= @project.id %></code>
       </div>
       <div class="col-md-3">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".vcs") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".vcs") %></div>
         <%= @project.vcs.presence || "-" %>
       </div>
       <div class="col-md-3">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_created") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_created") %></div>
         <%= opencode_time(@project.time_created_at) %>
       </div>
       <div class="col-md-3">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_updated") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_updated") %></div>
         <%= opencode_time(@project.time_updated_at) %>
       </div>
       <div class="col-md-3">
-        <div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_initialized") %></div>
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_initialized") %></div>
         <%= opencode_time(@project.time_initialized_at) %>
       </div>
       <% if @project.has_attribute?(:project_name) && @project[:project_name].present? %>
-        <div class="col-12"><div class="oc-session-link"><span class="oc-eyebrow">MyTodo</span><strong><%= @project[:project_name] %></strong><div class="small text-medium-emphasis"><%= t("viewer.mytodo_mapping", project: @project[:project_id], work_package: @project[:work_package_id]) %></div></div></div>
+        <div class="col-12"><div class="oc-session-link"><span class="oc-eyebrow">MyTodo</span><strong><%= @project[:project_name] %></strong><div class="small text-body-secondary"><%= t("viewer.mytodo_mapping", project: @project[:project_id], work_package: @project[:work_package_id]) %></div></div></div>
       <% end %>
       <% if @project.commands_data.present? || @project.sandboxes_data.present? %>
         <div class="col-12">
           <details>
             <summary class="fw-semibold"><%= t(".configuration") %></summary>
-            <pre class="bg-light rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({commands: @project.commands_data, sandboxes: @project.sandboxes_data}) %></code></pre>
+            <pre class="bg-body-tertiary rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({commands: @project.commands_data, sandboxes: @project.sandboxes_data}) %></code></pre>
           </details>
         </div>
       <% end %>
@@ -61,10 +60,10 @@
 <% end %>
 
 <div class="row g-3 mb-4 oc-project-stats">
-  <div class="col-sm-6 col-xl-3"><div class="card"><div class="card-body"><div class="fs-4 fw-semibold"><%= @total_sessions %></div><div><%= t(".total_sessions") %></div><small class="text-medium-emphasis"><%= t("viewer.subagent_count", count: @subagent_count) %></small></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card"><div class="card-body"><div class="fs-4 fw-semibold"><%= @total_sessions %></div><div><%= t(".total_sessions") %></div><small class="text-body-secondary"><%= t("viewer.subagent_count", count: @subagent_count) %></small></div></div></div>
   <div class="col-sm-6 col-xl-3"><div class="card"><div class="card-body"><div class="fs-4 fw-semibold"><%= number_with_delimiter(@total_tokens) %></div><div><%= t(".total_tokens") %></div></div></div></div>
   <div class="col-sm-6 col-xl-3"><div class="card"><div class="card-body"><div class="fs-4 fw-semibold"><%= number_to_currency(@total_cost, precision: 6) %></div><div><%= t(".total_cost") %></div></div></div></div>
-  <div class="col-sm-6 col-xl-3"><div class="card bg-light"><div class="card-body"><div class="fs-4 fw-semibold"><span class="text-success">+<%= @total_additions %></span> <span class="text-danger">-<%= @total_deletions %></span></div><div><%= t(".code_changes") %></div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card bg-body-tertiary"><div class="card-body"><div class="fs-4 fw-semibold"><span class="text-success">+<%= @total_additions %></span> <span class="text-danger">-<%= @total_deletions %></span></div><div><%= t(".code_changes") %></div></div></div></div>
 </div>
 
 
@@ -85,32 +84,32 @@
   <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle mb-0">
-        <thead class="table-light"><tr><th><%= t(".session_title") %></th><th><%= t(".agent_model") %></th><th class="text-end"><%= t(".usage") %></th><th class="text-center"><%= t(".messages") %></th><th><%= t(".state") %></th><th><%= t(".session_time_updated") %></th></tr></thead>
+        <thead class="oc-table-heading"><tr><th><%= t(".session_title") %></th><th><%= t(".agent_model") %></th><th class="text-end"><%= t(".usage") %></th><th class="text-center"><%= t(".messages") %></th><th><%= t(".state") %></th><th><%= t(".session_time_updated") %></th></tr></thead>
         <tbody>
           <% if @sessions.load.any? %>
             <% @sessions.each do |session| %>
               <% new_message_count = @session_message_counts.fetch(session.id, 0) + @retained_message_counts.fetch(session.id, 0) %>
               <tr>
-                <td><div class="fw-semibold"><%= link_to(session.title.presence || session.slug, project_session_path(@project, session), class: "text-decoration-none") %></div><code class="small text-medium-emphasis"><%= session.id %></code>
-                  <% if session.parent_id.present? %><div class="small mt-1"><span class="badge bg-light text-dark border"><%= t("viewer.subagent") %></span> <% if session.parent %><%= link_to session.parent.title.presence || session.parent.slug, project_session_path(session.parent.project_id, session.parent) %><% else %><code><%= session.parent_id %></code><% end %></div><% end %>
-                  <% if @child_counts.fetch(session.id, 0).positive? %><div class="small text-medium-emphasis mt-1"><%= t("viewer.subagent_count", count: @child_counts[session.id]) %></div><% end %>
+                <td><div class="fw-semibold"><%= link_to(session.title.presence || session.slug, project_session_path(@project, session), class: "text-decoration-none") %></div><code class="small text-body-secondary"><%= session.id %></code>
+                  <% if session.parent_id.present? %><div class="small mt-1"><span class="badge bg-body-tertiary text-body border"><%= t("viewer.subagent") %></span> <% if session.parent %><%= link_to session.parent.title.presence || session.parent.slug, project_session_path(session.parent.project_id, session.parent) %><% else %><code><%= session.parent_id %></code><% end %></div><% end %>
+                  <% if @child_counts.fetch(session.id, 0).positive? %><div class="small text-body-secondary mt-1"><%= t("viewer.subagent_count", count: @child_counts[session.id]) %></div><% end %>
                 </td>
-                <td><div><%= session.agent.presence || "-" %></div><small class="text-medium-emphasis"><%= [session.model_data["providerID"], session.model_data["id"]].compact.join("/").presence || "-" %></small></td>
-                <td class="text-end"><div><%= number_with_delimiter(session.total_tokens) %> <small><%= t(".tokens") %></small></div><small class="text-medium-emphasis"><%= number_to_currency(session.cost.to_f, precision: 6) %></small></td>
-                <td class="text-center"><%= new_message_count.positive? ? new_message_count : @legacy_message_counts.fetch(session.id, 0) %><div class="small text-medium-emphasis"><%= new_message_count.positive? ? "session_message" : "message/part" %></div></td>
+                <td><div><%= session.agent.presence || "-" %></div><small class="text-body-secondary"><%= [session.model_data["providerID"], session.model_data["id"]].compact.join("/").presence || "-" %></small></td>
+                <td class="text-end"><div><%= number_with_delimiter(session.total_tokens) %> <small><%= t(".tokens") %></small></div><small class="text-body-secondary"><%= number_to_currency(session.cost.to_f, precision: 6) %></small></td>
+                <td class="text-center"><%= new_message_count.positive? ? new_message_count : @legacy_message_counts.fetch(session.id, 0) %><div class="small text-body-secondary"><%= new_message_count.positive? ? "session_message" : "message/part" %></div></td>
                 <td>
                   <% if session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% end %>
                   <% if session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><% end %>
-                  <% if session.resume_attempts.positive? %><div class="small text-medium-emphasis"><%= t(".resume_attempts", count: session.resume_attempts) %></div><% end %>
-                  <% if session.time_idle_at %><div class="small text-medium-emphasis"><%= t(".idle_outcome", outcome: session.idle_outcome.presence || "-") %></div><% end %>
+                  <% if session.resume_attempts.positive? %><div class="small text-body-secondary"><%= t(".resume_attempts", count: session.resume_attempts) %></div><% end %>
+                  <% if session.time_idle_at %><div class="small text-body-secondary"><%= t(".idle_outcome", outcome: session.idle_outcome.presence || "-") %></div><% end %>
                   <% unless session.time_archived_at || session.execution_claimed_at %><%= session_state_badge(session) %><% end %>
-                  <% if session.fork_session_id.present? %><div class="small text-medium-emphasis"><%= t(".fork") %> · <%= t(".fork_boundaries.#{session.fork_boundary_type}", message: session.fork_boundary_message_id, default: [session.fork_boundary_type, session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %>
+                  <% if session.fork_session_id.present? %><div class="small text-body-secondary"><%= t(".fork") %> · <%= t(".fork_boundaries.#{session.fork_boundary_type}", message: session.fork_boundary_message_id, default: [session.fork_boundary_type, session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %>
                 </td>
                 <td><%= opencode_time(session.time_updated_at) %></td>
               </tr>
             <% end %>
           <% else %>
-            <tr><td colspan="6" class="text-center text-medium-emphasis py-4"><%= t(".no_sessions") %></td></tr>
+            <tr><td colspan="6" class="text-center text-body-secondary py-4"><%= t(".no_sessions") %></td></tr>
           <% end %>
         </tbody>
       </table>
@@ -137,7 +136,7 @@
       <% end %>
       <% if @permissions.any? %>
         <h6><%= t(".saved_permissions") %></h6>
-        <div class="d-flex flex-wrap gap-2"><% @permissions.each do |permission| %><span class="badge bg-light text-dark border"><%= permission.action %> · <%= permission.resource %></span><% end %></div>
+        <div class="d-flex flex-wrap gap-2"><% @permissions.each do |permission| %><span class="badge bg-body-tertiary text-body border"><%= permission.action %> · <%= permission.resource %></span><% end %></div>
       <% end %>
     </div>
   </details>

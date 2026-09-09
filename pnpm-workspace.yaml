@@ -1,4 +1,2 @@
 allowBuilds:
-  postinstall-postinstall: true
-ignoredBuiltDependencies:
-  - postinstall-postinstall
+  '@parcel/watcher': true

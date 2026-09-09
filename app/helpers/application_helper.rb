@@ -115,7 +115,7 @@ module ApplicationHelper
   def footer
     content_tag :footer, class: "footer" do
       concat content_tag(:span, "OpenCode DB Viewer")
-      concat content_tag(:span, "Rails · CoreUI", class: "ms-auto text-medium-emphasis small")
+      concat content_tag(:span, "Rails · CoreUI", class: "ms-auto text-body-secondary small")
     end
   end
 end

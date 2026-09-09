@@ -1,4 +1,3 @@
-<% content_for :head do %><%= append_javascript_pack_tag "stimulus" %><% end %>
 <div class="card mb-4 oc-overview">
   <div class="card-header oc-heading d-flex align-items-center flex-wrap gap-2">
     <%= svg_icon("free.svg#cil-chat-bubble", "icon me-2") %>
@@ -10,39 +9,39 @@
   </div>
   <div class="card-body">
     <div class="oc-session-summary mb-3">
-      <div><span class="oc-eyebrow"><%= t(".agent_model") %></span><strong><%= @session.agent.presence || "—" %></strong><small class="d-block text-medium-emphasis"><%= [@session.model_data["providerID"], @session.model_data["id"]].compact.join("/") %></small></div>
+      <div><span class="oc-eyebrow"><%= t(".agent_model") %></span><strong><%= @session.agent.presence || "—" %></strong><small class="d-block text-body-secondary"><%= [@session.model_data["providerID"], @session.model_data["id"]].compact.join("/") %></small></div>
       <div><span class="oc-eyebrow"><%= t(".tokens") %></span><strong><%= number_with_delimiter(@session.total_tokens) %></strong></div>
       <div><span class="oc-eyebrow"><%= t(".cost") %></span><strong><%= number_to_currency(@session.cost.to_f, precision: 4) %></strong></div>
-      <div><span class="oc-eyebrow"><%= t("viewer.activity") %></span><strong><%= t("viewer.tool_count", count: @tools.size) %></strong><small class="d-block text-medium-emphasis"><%= t("viewer.browser_count", count: @tool_counts.fetch("browser", 0)) %> · <%= t("viewer.subagent_count", count: @children.size) %></small></div>
+      <div><span class="oc-eyebrow"><%= t("viewer.activity") %></span><strong><%= t("viewer.tool_count", count: @tools.size) %></strong><small class="d-block text-body-secondary"><%= t("viewer.browser_count", count: @tool_counts.fetch("browser", 0)) %> · <%= t("viewer.subagent_count", count: @children.size) %></small></div>
     </div>
-    <div class="small text-medium-emphasis mb-3"><code class="text-break"><%= @session.directory %></code></div>
+    <div class="small text-body-secondary mb-3"><code class="text-break"><%= @session.directory %></code></div>
     <% if @session.parent_id.present? %><div class="mb-3"><span class="oc-eyebrow"><%= t(".parent_session") %></span><%= related_session_link(@session.parent_id) %></div><% end %>
     <details>
       <summary class="small fw-semibold"><%= t("viewer.session_details") %></summary>
     <div class="row g-3 mt-1">
-      <div class="col-lg-8"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".session_id") %></div><code class="text-break"><%= @session.id %></code></div>
-      <div class="col-lg-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".version") %></div><%= @session.version %></div>
-      <div class="col-lg-8"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".directory") %></div><code class="text-break"><%= @session.directory %></code><% if @session.path.present? %><div class="small text-medium-emphasis"><%= t(".path") %>: <code><%= @session.path %></code></div><% end %></div>
-      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".agent_model") %></div><%= @session.agent.presence || "-" %><div class="small text-medium-emphasis"><%= [@session.model_data["providerID"], @session.model_data["id"], @session.model_data["variant"]].compact.join("/").presence || "-" %></div></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".cost") %></div><%= number_to_currency(@session.cost.to_f, precision: 8) %></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_input") %></div><%= number_with_delimiter(@session.tokens_input) %></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_output") %></div><%= number_with_delimiter(@session.tokens_output) %></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".tokens_other") %></div><%= number_with_delimiter(@session.tokens_reasoning.to_i + @session.tokens_cache_read.to_i + @session.tokens_cache_write.to_i) %></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".files_changed") %></div><%= @session.summary_files || 0 %></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".additions") %></div><span class="text-success">+<%= @session.summary_additions || 0 %></span></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".deletions") %></div><span class="text-danger">-<%= @session.summary_deletions || 0 %></span></div>
-      <div class="col-md-3"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".state") %></div><% if @session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% elsif @session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><div class="small text-medium-emphasis"><%= opencode_time(@session.execution_claimed_at) %></div><div class="small text-medium-emphasis"><%= t(".resume_attempts", count: @session.resume_attempts) %></div><% elsif @session.time_compacting_at %><span class="badge bg-info"><%= t(".compacting") %></span><% else %><%= session_state_badge(@session) %><% end %><% if @session.time_idle_at %><div class="small text-medium-emphasis"><%= t(".idle_outcome", outcome: @session.idle_outcome.presence || "-") %> · <%= opencode_time(@session.time_idle_at) %></div><% end %></div>
-      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_created") %></div><%= opencode_time(@session.time_created_at) %></div>
-      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_updated") %></div><%= opencode_time(@session.time_updated_at) %></div>
+      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".session_id") %></div><code class="text-break"><%= @session.id %></code></div>
+      <div class="col-lg-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".version") %></div><%= @session.version %></div>
+      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".directory") %></div><code class="text-break"><%= @session.directory %></code><% if @session.path.present? %><div class="small text-body-secondary"><%= t(".path") %>: <code><%= @session.path %></code></div><% end %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".agent_model") %></div><%= @session.agent.presence || "-" %><div class="small text-body-secondary"><%= [@session.model_data["providerID"], @session.model_data["id"], @session.model_data["variant"]].compact.join("/").presence || "-" %></div></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".cost") %></div><%= number_to_currency(@session.cost.to_f, precision: 8) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_input") %></div><%= number_with_delimiter(@session.tokens_input) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_output") %></div><%= number_with_delimiter(@session.tokens_output) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_other") %></div><%= number_with_delimiter(@session.tokens_reasoning.to_i + @session.tokens_cache_read.to_i + @session.tokens_cache_write.to_i) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".files_changed") %></div><%= @session.summary_files || 0 %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".additions") %></div><span class="text-success">+<%= @session.summary_additions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".deletions") %></div><span class="text-danger">-<%= @session.summary_deletions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".state") %></div><% if @session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% elsif @session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><div class="small text-body-secondary"><%= opencode_time(@session.execution_claimed_at) %></div><div class="small text-body-secondary"><%= t(".resume_attempts", count: @session.resume_attempts) %></div><% elsif @session.time_compacting_at %><span class="badge bg-info"><%= t(".compacting") %></span><% else %><%= session_state_badge(@session) %><% end %><% if @session.time_idle_at %><div class="small text-body-secondary"><%= t(".idle_outcome", outcome: @session.idle_outcome.presence || "-") %> · <%= opencode_time(@session.time_idle_at) %></div><% end %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_created") %></div><%= opencode_time(@session.time_created_at) %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_updated") %></div><%= opencode_time(@session.time_updated_at) %></div>
       <% if @session.time_viewed_at %>
-        <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".time_viewed") %></div><%= opencode_time(@session.time_viewed_at) %></div>
+        <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_viewed") %></div><%= opencode_time(@session.time_viewed_at) %></div>
       <% end %>
-      <div class="col-md-4"><div class="text-medium-emphasis small text-uppercase fw-semibold"><%= t(".workspace") %></div><% if @session.workspace %><%= @session.workspace.provider %><div class="small"><code><%= @session.workspace.id %></code></div><% else %><code><%= @session.workspace_id.presence || "-" %></code><% end %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".workspace") %></div><% if @session.workspace %><%= @session.workspace.provider %><div class="small"><code><%= @session.workspace.id %></code></div><% else %><code><%= @session.workspace_id.presence || "-" %></code><% end %></div>
       <% if @session.parent_id.present? || @session.fork_session_id.present? %>
         <div class="col-12"><div class="alert alert-light border mb-0"><% if @session.parent_id.present? %><div><%= t(".parent_session") %>: <%= related_session_link(@session.parent_id) %></div><% end %><% if @session.fork_session_id.present? %><div><%= t(".forked_from") %>: <%= related_session_link(@session.fork_session_id, label: @session.fork_session_id) %> · <%= t(".fork_boundary") %>: <%= t(".fork_boundaries.#{@session.fork_boundary_type}", message: @session.fork_boundary_message_id, default: [@session.fork_boundary_type, @session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %></div></div>
       <% end %>
       <% if @session.metadata_data.present? || @session.summary_diffs_data.present? %>
-        <div class="col-12"><details><summary class="fw-semibold"><%= t(".metadata_and_diffs") %></summary><pre class="bg-light rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({metadata: @session.metadata_data, summary_diffs: @session.summary_diffs_data}) %></code></pre></details></div>
+        <div class="col-12"><details><summary class="fw-semibold"><%= t(".metadata_and_diffs") %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({metadata: @session.metadata_data, summary_diffs: @session.summary_diffs_data}) %></code></pre></details></div>
       <% end %>
     </div>
     </details>
@@ -57,8 +56,8 @@
     <strong><%= t(".message_timeline") %></strong>
     <span class="badge bg-primary"><%= @messages.size %> <%= t(".messages") %></span>
     <span class="badge bg-dark"><%= t(".durable_events") %> <%= @event_count %></span>
-    <span class="badge bg-light text-dark border"><%= @message_storage_label %></span>
-    <% if @event_count > @events.size %><small class="text-medium-emphasis"><%= t(".latest_events", count: @events.size) %></small><% end %>
+    <span class="badge bg-body-tertiary text-body border"><%= @message_storage_label %></span>
+    <% if @event_count > @events.size %><small class="text-body-secondary"><%= t(".latest_events", count: @events.size) %></small><% end %>
   </div>
   <div class="oc-timeline-toolbar">
     <div class="d-flex flex-wrap gap-1" role="group" aria-label="<%= t("viewer.filter_timeline") %>">
@@ -68,13 +67,13 @@
     </div>
     <div class="d-flex align-items-center gap-2 mt-2">
       <input type="search" class="form-control form-control-sm" aria-label="<%= t("viewer.search_timeline") %>" placeholder="<%= t("viewer.search_timeline") %>" data-timeline-target="search" data-action="input->timeline#apply">
-      <span class="small text-medium-emphasis text-nowrap"><span data-timeline-target="count"><%= @timeline.size %></span> <%= t("viewer.visible") %></span>
+      <span class="small text-body-secondary text-nowrap"><span data-timeline-target="count"><%= @timeline.size %></span> <%= t("viewer.visible") %></span>
     </div>
   </div>
   <div class="card-body">
-    <div class="text-center text-medium-emphasis py-4" data-timeline-target="empty" hidden><%= t("viewer.no_activity") %></div>
+    <div class="text-center text-body-secondary py-4" data-timeline-target="empty" hidden><%= t("viewer.no_activity") %></div>
     <% if @timeline.empty? %>
-      <div class="text-center text-medium-emphasis py-4"><%= t(".no_messages") %></div>
+      <div class="text-center text-body-secondary py-4"><%= t(".no_messages") %></div>
     <% else %>
       <% message_partial = @message_storage == :session_message ? "sessions/session_message" : "sessions/legacy_message" %>
       <% @timeline.each do |(_time, kind, record, collapsed_count)| %>
@@ -95,7 +94,7 @@
     <div class="card-header"><strong><%= t(".session_inbox") %></strong><span class="badge bg-warning text-dark ms-2"><%= @inbox_items.size %></span></div>
     <div class="card-body">
       <% @inbox_items.each do |item| %>
-        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= item.inbox_type %></span> <code><%= item.id %></code> · #<%= item.enqueued_seq %> · <%= item.delivery %> · <%= opencode_time(item.time_created_at) %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(item.parsed_payload) %></code></pre></details>
+        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= item.inbox_type %></span> <code><%= item.id %></code> · #<%= item.enqueued_seq %> · <%= item.delivery %> · <%= opencode_time(item.time_created_at) %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 small"><code><%= pretty_json(item.parsed_payload) %></code></pre></details>
       <% end %>
     </div>
   </div>
@@ -105,8 +104,8 @@
   <div class="card mb-4">
     <div class="card-header"><strong><%= t(".instruction_context") %></strong><span class="badge bg-info ms-2"><%= @instruction_entries.size %></span></div>
     <div class="card-body">
-      <% if @session.instruction_state %><div class="small text-medium-emphasis mb-3"><%= t(".epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t(".through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
-      <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t(".removed") %></span><% end %></summary><pre class="bg-light rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
+      <% if @session.instruction_state %><div class="small text-body-secondary mb-3"><%= t(".epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t(".through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
+      <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t(".removed") %></span><% end %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
     </div>
   </div>
 <% end %>

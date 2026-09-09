@@ -9,7 +9,7 @@
 .oc-eyebrow {
   display: block;
   margin-bottom: .4rem;
-  color: var(--cui-secondary-color, #637083);
+  color: var(--cui-secondary-color);
   font-size: .7rem;
   font-weight: 600;
   letter-spacing: .06em;
@@ -35,7 +35,7 @@
 .oc-timeline-toolbar .btn {
   --cui-btn-color: var(--cui-body-color);
   --cui-btn-border-color: var(--cui-border-color);
-  --cui-btn-hover-bg: var(--cui-light);
+  --cui-btn-hover-bg: var(--cui-tertiary-bg);
   --cui-btn-hover-color: var(--cui-body-color);
   --cui-btn-active-bg: var(--cui-body-color);
   --cui-btn-active-color: var(--cui-body-bg);
@@ -46,10 +46,10 @@
 .oc-tool { border: 1px solid var(--cui-border-color); border-left-width: 3px; border-radius: .4rem; padding: 1rem; min-width: 0; }
 .oc-tool--subagents { border-left-color: var(--cui-primary); }
 .oc-tool--browser { border-left-color: var(--cui-info); }
-.oc-tool-kind { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--cui-secondary-color, #637083); }
+.oc-tool-kind { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--cui-secondary-color); }
 .oc-tool summary, .oc-tool code { overflow-wrap: anywhere; }
 .oc-nested-call { padding: .65rem .8rem; border: 1px solid var(--cui-border-color); border-left-width: 3px; margin-top: .4rem; border-radius: .25rem; }
-.oc-pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 30rem; overflow: auto; background: var(--cui-light); padding: 1rem; border-radius: .3rem; font-size: .8rem; }
+.oc-pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 30rem; overflow: auto; background: var(--cui-tertiary-bg); padding: 1rem; border-radius: .3rem; font-size: .8rem; }
 .oc-timeline pre { max-width: 100%; }
 
 @media (max-width: 767px) {
@@ -59,3 +59,5 @@
   .oc-tool { padding: .65rem; }
   .oc-timeline > .card-body { padding: .65rem; }
 }
+
+.oc-table-heading { --cui-table-bg: var(--cui-tertiary-bg); --cui-table-color: var(--cui-body-color); }
