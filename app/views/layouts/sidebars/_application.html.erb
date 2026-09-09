@@ -1,14 +1,10 @@
 <div class="sidebar sidebar-dark sidebar-fixed bg-dark-gradient <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
   <div class="sidebar-brand d-none d-md-flex">
     <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <svg alt="CoreUI Logo" class="sidebar-brand-full" height="46" width="118">
-        <use xlink:href="<%= asset_path('coreui.svg#full') %>"></use>
-      </svg>
+      <span class="sidebar-brand-full"><strong class="d-block fs-5">OpenCode</strong><small class="oc-brand-caption">DB VIEWER</small></span>
     <% end %>
     <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-      <svg alt="CoreUI Logo" class="sidebar-brand-narrow" height="46" width="46">
-        <use xlink:href="<%= asset_path('coreui.svg#signet') %>"></use>
-      </svg>
+      <span class="sidebar-brand-narrow fw-bold" aria-label="OpenCode">OC</span>
     <% end %>
     <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable" data-action="click->sidebar#click"></button>
   </div>

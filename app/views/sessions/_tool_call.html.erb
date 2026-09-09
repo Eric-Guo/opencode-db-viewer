@@ -1,0 +1,48 @@
+<article class="oc-tool oc-tool--<%= tool.category %> mb-3">
+  <div class="d-flex align-items-center flex-wrap gap-2">
+    <span class="oc-tool-kind"><%= t("viewer.categories.#{tool.category}") %></span>
+    <strong><%= tool.name %></strong>
+    <%= tool_state_badge(tool.status) %>
+    <% if tool.duration_ms %><small class="text-medium-emphasis ms-auto"><%= number_with_precision(tool.duration_ms / 1000.0, precision: 2) %> s</small><% end %>
+  </div>
+  <% if tool.summary.present? %><div class="text-break mt-2"><%= tool.summary %></div><% end %>
+
+  <% if tool.subagent? %>
+    <div class="d-flex flex-wrap gap-2 mt-2 small">
+      <span class="badge bg-light text-dark border"><%= tool.input["agent"] %></span>
+      <span><%= t(tool.input["background"] == true ? "viewer.background" : "viewer.foreground") %></span>
+      <% if tool.metadata["status"].present? %><span>· <%= t("viewer.returned_status", status: tool.metadata["status"]) %></span><% end %>
+    </div>
+    <% if tool.session_id.present? %>
+      <div class="oc-session-link mt-2">
+        <span class="small text-medium-emphasis"><%= t("viewer.child_session") %></span>
+        <div><%= related_session_link(tool.session_id) %></div>
+        <% if (child = @related_sessions[tool.session_id]) %><div class="mt-1"><%= session_state_badge(child) %> <small class="text-medium-emphasis"><%= t("viewer.current_record") %></small></div><% end %>
+      </div>
+    <% end %>
+    <% if tool.input["prompt"].present? %>
+      <details class="mt-2"><summary class="small"><%= t("viewer.delegated_prompt") %></summary><pre class="oc-pre mt-2"><%= tool.input["prompt"] %></pre></details>
+    <% end %>
+  <% end %>
+
+  <% if tool.calls.any? %>
+    <div class="oc-tool-calls mt-3">
+      <div class="small fw-semibold text-medium-emphasis mb-2"><%= t("viewer.nested_calls", count: tool.calls.size) %></div>
+      <% tool.calls.each do |call| %>
+        <details class="oc-nested-call oc-tool--<%= call.category %>">
+          <summary>
+            <span class="oc-tool-kind"><%= t("viewer.categories.#{call.category}") %></span>
+            <code><%= call.name %></code> <%= tool_state_badge(call.status) %>
+            <% if call.summary.present? %><span class="d-block small text-break mt-1"><%= call.summary %></span><% end %>
+          </summary>
+          <pre class="oc-pre mt-2 mb-0"><%= pretty_json(call.input) %></pre>
+        </details>
+      <% end %>
+    </div>
+  <% end %>
+
+  <details class="mt-3">
+    <summary class="small text-medium-emphasis"><%= t("viewer.inspect_payload") %> <code><%= tool.data["id"] %></code></summary>
+    <%= render "sessions/tool_detail", tool: tool.data, state: tool.state, message: message, content_index: content_index %>
+  </details>
+</article>

@@ -17,7 +17,7 @@
   </div>
 <% elsif message.assistant? %>
   <div class="d-flex justify-content-start mb-3">
-    <div class="p-3 rounded border" style="max-width: 85%; min-width: 0;">
+    <div class="oc-assistant p-3 rounded border">
       <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
         <span class="badge bg-success"><%= message.message_type %></span>
         <% if message.agent.present? %><span class="badge bg-light text-dark border"><%= message.agent %></span><% end %>
@@ -43,11 +43,7 @@
             <% end %>
           <% end %>
         <% when "tool" %>
-          <% state = content["state"].is_a?(Hash) ? content["state"] : {} %>
-          <details class="mb-3">
-            <summary><span class="badge bg-dark"><%= content["name"] %></span> <span class="badge bg-<%= state["status"] == "completed" ? "success" : (state["status"] == "error" ? "danger" : "warning") %>"><%= state["status"] %></span> <code class="small"><%= content["id"] %></code></summary>
-            <%= render "sessions/tool_detail", tool: content, state: state, message: message, content_index: content_index %>
-          </details>
+          <%= render "sessions/tool_call", tool: message.tools.fetch(content_index), message: message, content_index: content_index %>
         <% else %>
           <pre class="bg-light rounded p-3 small"><code><%= pretty_json(content) %></code></pre>
         <% end %>

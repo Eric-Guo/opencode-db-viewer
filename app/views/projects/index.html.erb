@@ -1,3 +1,10 @@
+<% content_for :head do %><%= append_javascript_pack_tag "stimulus" %><% end %>
+<div class="oc-page-intro mb-4"><p class="oc-eyebrow">OpenCode</p><h1 class="fs-3"><%= t(".title") %></h1><p class="text-medium-emphasis mb-0"><%= t("viewer.projects_intro") %></p></div>
+<%= form_with url: projects_path, method: :get, class: "d-flex gap-2 mb-3", local: true do |form| %>
+  <%= form.label :q, t("viewer.search_projects"), class: "visually-hidden" %>
+  <%= form.search_field :q, value: @query, placeholder: t("viewer.search_projects"), aria: {label: t("viewer.search_projects")}, class: "form-control" %>
+  <%= form.submit t("viewer.search"), class: "btn btn-primary" %>
+<% end %>
 <div class="card mb-4">
   <div class="card-header d-flex align-items-center">
     <%= svg_icon("free.svg#cil-folder", "icon me-2") %>
@@ -18,6 +25,7 @@
           </tr>
         </thead>
         <tbody>
+          <% if @projects.empty? %><tr><td colspan="6" class="text-center text-medium-emphasis py-4"><%= t("viewer.no_projects") %></td></tr><% end %>
           <% @projects.each do |project| %>
             <% updated_time = project.time_updated_at %>
             <tr>
@@ -28,7 +36,7 @@
               <td><code class="small"><%= truncate(project.worktree, length: 60) %></code></td>
               <td><span class="badge bg-light text-dark border"><%= project.vcs.presence || "-" %></span></td>
               <td class="text-center"><%= @worktree_counts.fetch(project.id, 0) %></td>
-              <td class="text-center"><%= @session_counts.fetch(project.id, 0) %></td>
+              <td class="text-center"><strong><%= @session_counts.fetch(project.id, 0) %></strong><div class="small text-medium-emphasis"><%= t("viewer.subagent_count", count: @subagent_counts.fetch(project.id, 0)) %></div></td>
               <td>
                 <% if updated_time %>
                   <%= time_tag(updated_time, t(".time_ago", distance: time_ago_in_words(updated_time)), title: opencode_time(updated_time)) %>

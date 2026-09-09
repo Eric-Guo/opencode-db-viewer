@@ -32,21 +32,22 @@
       <section class="mb-3">
         <div class="small fw-semibold text-uppercase text-medium-emphasis mb-1"><%= t("sessions.show.tool_content") %></div>
         <% state["content"].each_with_index do |item, index| %>
+          <% filename = item.is_a?(Hash) ? (item["name"].presence || item["filename"]) : nil %>
           <% file_uri = item.is_a?(Hash) ? (item["uri"].presence || item["url"]) : nil %>
           <div class="small text-medium-emphasis mb-1"><%= item.is_a?(Hash) ? item["type"].presence || "item" : "item" %> #<%= index + 1 %></div>
           <% if item.is_a?(Hash) && item["mime"].to_s.start_with?("image/") && file_uri.present? %>
-            <img src="<%= file_uri %>" alt="<%= item["filename"] %>" class="img-fluid rounded border mb-1" />
-            <div class="small text-medium-emphasis mb-2"><% if item["filename"].present? %><code><%= item["filename"] %></code> · <% end %><%= item["mime"] %></div>
+            <img src="<%= file_uri %>" alt="<%= filename.presence || t("viewer.browser_capture") %>" loading="lazy" class="img-fluid rounded border mb-1" />
+            <div class="small text-medium-emphasis mb-2"><% if filename.present? %><code><%= filename %></code> · <% end %><%= item["mime"] %></div>
           <% elsif item.is_a?(Hash) && item["type"] == "file" %>
             <div class="mb-2">
-              <span class="badge bg-white text-dark border"><%= item["filename"].presence || t("sessions.show.file") %> · <%= item["mime"] %></span>
-              <% if file_uri.to_s.start_with?("data:") && local_assigns[:message] %>
-                <%= link_to t("sessions.show.download"), project_session_message_path(@project, @session, message, content: content_index, item: index), class: "small" %>
-              <% end %>
+              <span class="badge bg-white text-dark border"><%= filename.presence || t("sessions.show.file") %> · <%= item["mime"] %></span>
             </div>
           <% else %>
             <% value = item.is_a?(Hash) && item["type"] == "text" ? item["text"] : item %>
             <pre class="bg-white border rounded p-3 mb-2 small" style="max-height: 40rem; overflow: auto;"><code><%= formatted_debug_value(value) %></code></pre>
+          <% end %>
+          <% if item.is_a?(Hash) && item["type"] == "file" && file_uri.to_s.start_with?("data:") && local_assigns[:message] %>
+            <div class="mb-2"><%= link_to t("sessions.show.download"), project_session_message_path(@project, @session, message, content: content_index, item: index), class: "small" %></div>
           <% end %>
         <% end %>
       </section>
@@ -77,7 +78,7 @@
     <% debug_metadata = {
       metadata: state["metadata"],
       title: state["title"],
-      time: state["time"],
+      time: tool["time"] || state["time"],
       executed: tool["executed"],
       providerState: tool["providerState"],
       providerResultState: tool["providerResultState"]

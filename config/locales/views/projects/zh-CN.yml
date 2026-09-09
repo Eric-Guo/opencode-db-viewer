@@ -4,7 +4,7 @@ zh-CN:
     index:
       title: "项目"
       name: "名称"
-      worktree: "工作目录"
+      worktree: "项目规范目录"
       vcs: "版本控制"
       worktrees: "工作树数"
       sessions: "会话数"
@@ -16,7 +16,7 @@ zh-CN:
       project_info: "项目信息"
       project_id: "项目 ID"
       name: "名称"
-      worktree: "工作目录"
+      worktree: "项目规范目录"
       vcs: "版本控制"
       time_created: "创建时间"
       time_updated: "最后更新"

@@ -3,6 +3,16 @@ require "test_helper"
 class SessionMessagesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test "downloads a browser capture using its current name field" do
+    sign_in users(:user_fangzixue)
+    get project_session_message_url("project-session-v2", "session-v2-fixture", "msg-browser-fixture", content: 0, item: 1)
+
+    assert_response :success
+    assert_equal "image/png", response.media_type
+    assert_includes response.headers["Content-Disposition"], "browser-capture.png"
+    assert response.body.start_with?("\x89PNG".b)
+  end
+
   test "should redirect download to login when not signed in" do
     get project_session_message_url(projects(:project_session_v2), "session-v2-fixture", "msg-v2-assistant-fixture", content: 2, item: 3)
     assert_response :redirect

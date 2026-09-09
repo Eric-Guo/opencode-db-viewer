@@ -132,6 +132,9 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "sandboxes", null: false
     t.text "commands"
     t.text "icon_url_override"
+    t.integer "project_id"
+    t.text "project_name"
+    t.integer "work_package_id"
   end
 
   create_table "project_directory", primary_key: ["project_id", "directory"], force: :cascade do |t|

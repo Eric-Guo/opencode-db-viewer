@@ -31,6 +31,12 @@ module SessionMessageData
     value.is_a?(Array) ? value.select { |item| item.is_a?(Hash) } : []
   end
 
+  def tools
+    @tools ||= content.each_with_index.filter_map do |item, index|
+      [index, SessionTool.new(item)] if item["type"] == "tool"
+    end.to_h
+  end
+
   def agent
     parsed_data["agent"]
   end

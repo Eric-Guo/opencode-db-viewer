@@ -3,6 +3,58 @@ require "test_helper"
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test "shows subagent links and distinguishes returned state from current outcome" do
+    sign_in users(:user_fangzixue)
+    get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture))
+
+    assert_response :success
+    assert_select ".oc-tool--subagents" do
+      assert_select "a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), text: "Review browser integration"
+      assert_select "span", text: /#{Regexp.escape(I18n.t("viewer.returned_status", status: "running"))}/
+      assert_select ".badge", text: I18n.t("viewer.states.succeeded")
+    end
+    assert_select ".oc-subagents .oc-agent-card", count: 1
+  end
+
+  test "renders browser Code Mode activity and filenames from current tool content" do
+    sign_in users(:user_fangzixue)
+    get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture))
+
+    assert_response :success
+    assert_select ".oc-nested-call.oc-tool--browser", count: 3
+    assert_select "[data-categories~='browser']", count: 1
+    assert_select "img[alt='browser-capture.png'][loading='lazy']"
+    assert_select "a[href=?]", project_session_message_path("project-session-v2", "session-v2-fixture", "msg-browser-fixture", content: 0, item: 1)
+  end
+
+  test "child session links back to its parent" do
+    sign_in users(:user_fangzixue)
+    get project_session_url(projects(:project_session_v2), sessions(:session_subagent_fixture))
+
+    assert_response :success
+    assert_select "a[href=?]", project_session_path("project-session-v2", "session-v2-fixture"), text: "session-v2-fixture"
+  end
+
+  test "missing child is kept as an identifier without a broken link" do
+    sessions(:session_subagent_fixture).delete
+    sign_in users(:user_fangzixue)
+    get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture))
+
+    assert_response :success
+    assert_select ".oc-session-link code", text: "session-subagent-fixture"
+    assert_select "a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), count: 0
+  end
+
+  test "new activity labels are translated in Chinese" do
+    sign_in users(:user_fangzixue)
+    get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture), locale: "zh-CN")
+
+    assert_response :success
+    assert_includes response.body, "子代理会话"
+    assert_includes response.body, "浏览器"
+    refute_includes response.body, "translation_missing"
+  end
+
   test "should redirect show to login when not signed in" do
     get project_session_url(projects(:project_show_with_sessions), sessions(:session_show_old))
     assert_response :redirect

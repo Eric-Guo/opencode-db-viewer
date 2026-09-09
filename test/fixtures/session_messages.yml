@@ -25,3 +25,21 @@ session_message_v2_assistant:
   time_created: 1700000010200
   time_updated: 1700000010300
   data: '{"time":{"created":1700000010200,"completed":1700000010300},"agent":"build","model":{"id":"test-model","providerID":"test-provider","variant":"high"},"content":[{"type":"reasoning","text":"Current schema reasoning"},{"type":"text","text":"Current schema assistant response"},{"type":"tool","id":"call_fixture","name":"read","executed":true,"providerState":{"requestID":"request-fixture"},"providerResultState":{"responseID":"response-fixture"},"state":{"status":"completed","input":{"path":"README.md"},"content":[{"type":"text","text":"{\"items\":[{\"name\":\"Content result fixture\"}]}"},{"type":"file","mime":"image/png","uri":"data:image/png;base64,iVBORw0KGgo="},{"type":"file","mime":"application/pdf","filename":"spec.pdf","uri":"https://example.com/spec.pdf"},{"type":"file","mime":"application/pdf","filename":"inline.pdf","uri":"data:application/pdf;base64,JVBERi0xLjQgZml4dHVyZQo="}],"structured":{"items":[{"name":"Structured result fixture"}]},"result":{"items":[{"name":"Raw result fixture"}]}}}],"finish":"stop","cost":0.001,"tokens":{"input":100,"output":50,"reasoning":25,"cache":{"read":500,"write":10}}}'
+
+session_message_subagent:
+  id: "msg-subagent-fixture"
+  session_id: "session-v2-fixture"
+  type: "assistant"
+  seq: 30
+  time_created: 1700000020030
+  time_updated: 1700000021030
+  data: '{"time":{"created":1700000020030},"agent":"build","content":[{"type":"tool","id":"call-subagent","name":"subagent","time":{"created":1700000020000,"completed":1700000020150},"state":{"status":"completed","input":{"agent":"explore","description":"Review browser integration","prompt":"Check browser tools and report rendering gaps.","background":true},"metadata":{"sessionID":"session-subagent-fixture","status":"running"},"content":[{"type":"text","text":"The subagent is working in the background."}]}}]}'
+
+session_message_browser:
+  id: "msg-browser-fixture"
+  session_id: "session-v2-fixture"
+  type: "assistant"
+  seq: 40
+  time_created: 1700000020040
+  time_updated: 1700000021040
+  data: '{"time":{"created":1700000020040},"agent":"build","content":[{"type":"tool","id":"call-browser","name":"execute","time":{"created":1700000021000,"completed":1700000022000},"state":{"status":"completed","input":{"code":"const tab = await tools.browser.tabs.open({url: \"https://example.com\"}); return await tools.browser.snapshot({tabID: tab.id})"},"metadata":{"toolCalls":[{"tool":"browser.tabs.open","status":"completed","input":{"url":"https://example.com"}},{"tool":"browser.snapshot","status":"completed","input":{"tabID":"tab-browser-fixture","ref":"@e1"}},{"tool":"browser.screenshot","status":"completed","input":{"tabID":"tab-browser-fixture"}}]},"content":[{"type":"text","text":"Browser snapshot fixture: Example Domain"},{"type":"file","name":"browser-capture.png","mime":"image/png","uri":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aF9sAAAAASUVORK5CYII="}]}}]}'

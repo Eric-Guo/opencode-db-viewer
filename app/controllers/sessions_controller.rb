@@ -28,6 +28,11 @@ class SessionsController < ApplicationController
     else
       @legacy_messages
     end
+    @tools = (@message_storage == :session_message) ? @messages.flat_map { |message| message.tools.values } : []
+    @tool_counts = @tools.flat_map { |tool| [tool, *tool.calls] }.group_by(&:category).transform_values(&:size)
+    @children = policy_scope(Session).where(parent_id: @session.id).order(:time_created)
+    related_ids = [@session.parent_id, @session.fork_session_id, *@tools.map(&:session_id)].compact
+    @related_sessions = policy_scope(Session).where(id: related_ids).index_by(&:id)
     @inbox_items = @session.session_inboxes.order(:enqueued_seq)
     @instruction_entries = @session.instruction_entries.order(:key)
     events_scope = OpenCodeEvent.where(aggregate_id: @session.id)

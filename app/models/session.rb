@@ -102,4 +102,13 @@ class Session < ApplicationRecord
   def total_tokens
     tokens_input.to_i + tokens_output.to_i + tokens_reasoning.to_i + tokens_cache_read.to_i + tokens_cache_write.to_i
   end
+
+  def display_state
+    return "archived" if time_archived.present?
+    return "execution_claimed" if time_suspended.present?
+    return "compacting" if time_compacting.present?
+    return idle_outcome if %w[succeeded failed interrupted].include?(idle_outcome)
+
+    "idle"
+  end
 end

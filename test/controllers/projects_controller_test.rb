@@ -3,6 +3,49 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test "searches projects by directory" do
+    sign_in users(:user_fangzixue)
+    get projects_url(q: "/tmp/session-v2-project")
+
+    assert_response :success
+    assert_select "table tbody tr", count: 1
+    assert_select "a[href=?]", project_path(projects(:project_session_v2))
+  end
+
+  test "shows the current MyTodo project mapping" do
+    project = projects(:project_session_v2)
+    project.update!(project_id: 42, project_name: "Browser tooling", work_package_id: 84)
+    sign_in users(:user_fangzixue)
+    get project_url(project)
+
+    assert_response :success
+    assert_select ".oc-session-link", text: /Browser tooling/
+    assert_includes response.body, I18n.t("viewer.mytodo_mapping", project: 42, work_package: 84)
+  end
+
+  test "filters subagent sessions by agent and archive state" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_session_v2), kind: "subagents", q: "explore", state: "unarchived")
+
+    assert_response :success
+    assert_select "table.table-striped tbody tr", count: 1
+    assert_select "table.table-striped a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture")
+    assert_select "table.table-striped .badge", text: I18n.t("viewer.states.succeeded")
+
+    get project_url(projects(:project_session_v2), kind: "subagents", state: "archived")
+    assert_select "td", text: I18n.t("projects.show.no_sessions")
+  end
+
+  test "top-level filter excludes child rows and includes retained message counts" do
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_session_v2), kind: "primary")
+
+    assert_response :success
+    assert_select "table.table-striped tbody tr", count: 1
+    assert_select "table.table-striped a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), count: 0
+    assert_select "table.table-striped tbody td:nth-child(4)", text: /6/
+  end
+
   test "should redirect to login when not signed in" do
     get projects_url
     assert_response :redirect

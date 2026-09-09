@@ -4,7 +4,7 @@ en:
     index:
       title: "Projects"
       name: "Name"
-      worktree: "Worktree"
+      worktree: "Canonical Directory"
       vcs: "VCS"
       worktrees: "Worktrees"
       sessions: "Sessions"
@@ -16,7 +16,7 @@ en:
       project_info: "Project Information"
       project_id: "Project ID"
       name: "Name"
-      worktree: "Worktree"
+      worktree: "Canonical Directory"
       vcs: "Version Control"
       time_created: "Created"
       time_updated: "Last Updated"

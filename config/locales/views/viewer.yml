@@ -1,0 +1,127 @@
+---
+en:
+  viewer:
+    projects_intro: Browse project workspaces, session history, and delegated work.
+    search_projects: Search projects by name, directory, or ID
+    search_sessions: Search sessions by title, agent, or ID
+    search: Search
+    filter: Filter
+    no_projects: No projects match your search.
+    session_kind: Session kind
+    archive_state: Archive state
+    session_kinds:
+      all: All sessions
+      primary: Top-level sessions
+      subagents: Subagent sessions
+    archive_states:
+      all: Any archive state
+      unarchived: Unarchived
+      archived: Archived
+    states:
+      idle: Idle
+      succeeded: Succeeded
+      failed: Failed
+      interrupted: Interrupted
+      archived: Archived
+      execution_claimed: Execution claimed
+      compacting: Compacting
+    tool_states:
+      completed: Completed
+      running: Running
+      streaming: Receiving input
+      error: Error
+    categories:
+      conversation: Conversation
+      all: All activity
+      tools: Tools
+      subagents: Subagents
+      browser: Browser
+      events: Events
+    background: Background
+    foreground: Foreground
+    returned_status: 'Status at return: %{status}'
+    current_record: Current session record
+    child_session: Child session
+    delegated_prompt: Delegated prompt
+    nested_calls:
+      one: Code Mode · %{count} nested call
+      other: Code Mode · %{count} nested calls
+    inspect_payload: Inspect input, output, and metadata
+    subagents: Subagent sessions
+    subagent: Subagent
+    browser_capture: Browser capture
+    activity: Tool activity
+    tool_count:
+      one: "%{count} tool call"
+      other: "%{count} tool calls"
+    browser_count:
+      one: "%{count} browser call"
+      other: "%{count} browser calls"
+    subagent_count:
+      one: "%{count} subagent"
+      other: "%{count} subagents"
+    session_details: Session details, usage, and metadata
+    filter_timeline: Filter timeline
+    search_timeline: Search activity on this page
+    visible: visible
+    no_activity: No activity matches this filter.
+    mytodo_mapping: 'Project #%{project} · Work package #%{work_package}'
+zh-CN:
+  viewer:
+    projects_intro: 浏览项目工作区、会话历史和委派任务。
+    search_projects: 按名称、目录或 ID 搜索项目
+    search_sessions: 按标题、代理或 ID 搜索会话
+    search: 搜索
+    filter: 筛选
+    no_projects: 没有匹配的项目。
+    session_kind: 会话类型
+    archive_state: 归档状态
+    session_kinds:
+      all: 所有会话
+      primary: 顶层会话
+      subagents: 子代理会话
+    archive_states:
+      all: 所有归档状态
+      unarchived: 未归档
+      archived: 已归档
+    states:
+      idle: 空闲
+      succeeded: 已成功
+      failed: 已失败
+      interrupted: 已中断
+      archived: 已归档
+      execution_claimed: 执行已声明
+      compacting: 压缩中
+    tool_states:
+      completed: 已完成
+      running: 运行中
+      streaming: 接收输入中
+      error: 错误
+    categories:
+      conversation: 对话
+      all: 所有活动
+      tools: 工具
+      subagents: 子代理
+      browser: 浏览器
+      events: 事件
+    background: 后台
+    foreground: 前台
+    returned_status: 返回时状态：%{status}
+    current_record: 当前会话记录
+    child_session: 子会话
+    delegated_prompt: 委派提示词
+    nested_calls: Code Mode · %{count} 次嵌套调用
+    inspect_payload: 查看输入、输出与元数据
+    subagents: 子代理会话
+    subagent: 子代理
+    browser_capture: 浏览器截图
+    activity: 工具活动
+    tool_count: "%{count} 次工具调用"
+    browser_count: "%{count} 次浏览器调用"
+    subagent_count: "%{count} 个子代理"
+    session_details: 会话详情、用量与元数据
+    filter_timeline: 筛选时间线
+    search_timeline: 搜索本页活动
+    visible: 条可见
+    no_activity: 没有符合筛选条件的活动。
+    mytodo_mapping: '项目 #%{project} · 工作包 #%{work_package}'

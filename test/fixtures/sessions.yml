@@ -94,6 +94,21 @@ session_v2_fixture:
   time_created: 1700000010000
   time_updated: 1700000020000
 
+session_subagent_fixture:
+  id: "session-subagent-fixture"
+  project_id: "project-session-v2"
+  parent_id: "session-v2-fixture"
+  slug: "browser-review"
+  title: "Review browser integration"
+  directory: "/tmp/session-v2-project"
+  version: "2.0.0"
+  agent: "explore"
+  model: '{"id":"test-model","providerID":"test-provider"}'
+  time_created: 1700000020000
+  time_updated: 1700000030000
+  time_idle: 1700000030000
+  idle_outcome: "succeeded"
+
 session_show_sibling_fixture:
   id: "session-show-sibling-fixture"
   project_id: "project-show-sibling-duplicate"

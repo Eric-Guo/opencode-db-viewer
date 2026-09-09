@@ -44,6 +44,7 @@ class SessionMessagesController < ApplicationController
   def download_filename(message, item, tool_state, mime)
     input = (tool_state.is_a?(Hash) && tool_state["input"].is_a?(Hash)) ? tool_state["input"] : {}
     item["filename"].presence ||
+      item["name"].presence ||
       File.basename(input["filePath"].to_s).presence ||
       "message-#{message.id}#{Rack::Mime::MIME_TYPES.invert[mime] || ".bin"}"
   end

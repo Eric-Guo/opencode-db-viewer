@@ -69,6 +69,10 @@ module ApplicationHelper
       [short_opencode_id(data["inputID"]), input.dig("data", "text").to_s.squish.truncate(50)].reject(&:blank?).join(" · ")
     when "session.input.promoted"
       short_opencode_id(data["inputID"])
+    when "session.inbox.enqueued"
+      [short_opencode_id(data["inboxID"]), data.dig("item", "type"), data.dig("item", "delivery")].compact.join(" · ")
+    when "session.inbox.delivered", "session.inbox.cancelled", "session.inbox.delivery.changed"
+      [short_opencode_id(data["inboxID"]), data["delivery"]].compact.join(" · ")
     when "session.instructions.updated"
       delta = data["delta"].is_a?(Hash) ? data["delta"] : {}
       delta.keys.join(", ")
@@ -109,18 +113,9 @@ module ApplicationHelper
   end
 
   def footer
-    content_tag :footer, nil, class: "footer" do
-      left_part = content_tag :div, nil do
-        concat link_to "CoreUI", "https://coreui.io"
-        concat " "
-        concat link_to "Rails Starter Template", "https://git.thape.com.cn/Eric-Guo/coreui-pro-rails-starter"
-        concat "  © 2023 Eric-Guo."
-      end
-      right_part = content_tag :div, nil, class: "ms-auto" do
-        concat "Powered by "
-        concat link_to "CoreUI PRO UI Components", "https://coreui-doc.redwoodjs.cn/"
-      end
-      left_part.concat(right_part)
+    content_tag :footer, class: "footer" do
+      concat content_tag(:span, "OpenCode DB Viewer")
+      concat content_tag(:span, "Rails · CoreUI", class: "ms-auto text-medium-emphasis small")
     end
   end
 end

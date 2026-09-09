@@ -1,6 +1,16 @@
 require "test_helper"
 
 class SessionTest < ActiveSupport::TestCase
+  test "stored outcomes are idle states and recovery claims remain explicit" do
+    assert_equal "idle", sessions(:session_v2_fixture).display_state
+    child = sessions(:session_subagent_fixture)
+    assert_equal "succeeded", child.display_state
+    child.time_suspended = 1700000040000
+    assert_equal "execution_claimed", child.display_state
+    child.time_archived = 1700000050000
+    assert_equal "archived", child.display_state
+  end
+
   test "uses the current session table" do
     assert_equal "session_v2", Session.table_name
   end
