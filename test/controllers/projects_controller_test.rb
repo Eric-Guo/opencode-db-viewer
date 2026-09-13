@@ -160,7 +160,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "sibling-session-title-fixture"
   end
 
-  test "should warn about duplicate project rows and suggest the move_sessions command" do
+  test "should warn when sessions are split and suggest moving them into the current project" do
+    sessions(:session_show_old).update!(project: projects(:project_show_sibling_main))
     sign_in users(:user_fangzixue)
     get project_url(projects(:project_show_sibling_main))
 
@@ -169,7 +170,65 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       assert_includes alert.text, I18n.t("projects.show.duplicate_projects_title")
     end
     assert_includes response.body, "project-show-sibling-duplicate"
-    assert_includes response.body, "projects:move_sessions[project-show-sibling-main,project-show-sibling-duplicate]"
+    assert_includes response.body, "projects:move_sessions[project-show-sibling-duplicate,project-show-sibling-main]"
+  end
+
+  test "should not warn on either project when current and legacy sessions share one record" do
+    legacy_sessions(:session_legacy_only_fixture).update!(project: projects(:project_show_sibling_duplicate))
+    sign_in users(:user_fangzixue)
+
+    %i[project_show_sibling_main project_show_sibling_duplicate].each do |fixture|
+      get project_url(projects(fixture))
+
+      assert_response :success
+      assert_select "div.alert-warning", count: 0
+      assert_not_includes response.body, "projects:move_sessions["
+      assert_includes response.body, "sibling-session-title-fixture"
+    end
+  end
+
+  test "should not warn when duplicate projects have no sessions" do
+    sessions(:session_show_sibling_fixture).update!(project: projects(:project_show_with_sessions))
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "div.alert-warning", count: 0
+  end
+
+  test "should warn when current and legacy sessions belong to different project records" do
+    legacy_sessions(:session_legacy_only_fixture).update!(project: projects(:project_show_sibling_main))
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "div.alert-warning", count: 1
+    assert_includes response.body, "projects:move_sessions[project-show-sibling-duplicate,project-show-sibling-main]"
+  end
+
+  test "should warn when only legacy sessions are split across project records" do
+    sessions(:session_show_sibling_fixture).update!(project: projects(:project_show_with_sessions))
+    legacy_sessions(:session_legacy_only_fixture).update!(project: projects(:project_show_sibling_main))
+    legacy_sessions(:session_parent_grouping_fixture).update!(project: projects(:project_show_sibling_duplicate))
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "div.alert-warning", count: 1
+    assert_includes response.body, "projects:move_sessions[project-show-sibling-duplicate,project-show-sibling-main]"
+  end
+
+  test "should consolidate populated siblings into one target and skip empty siblings" do
+    projects(:project_show_with_sessions).update!(worktree: projects(:project_show_sibling_main).worktree)
+    projects(:project_show_empty).update!(worktree: projects(:project_show_sibling_main).worktree)
+    sign_in users(:user_fangzixue)
+    get project_url(projects(:project_show_sibling_main))
+
+    assert_response :success
+    assert_select "div.alert-warning code.d-block", count: 2
+    assert_includes response.body, "projects:move_sessions[project-show-sibling-duplicate,project-show-sibling-main]"
+    assert_includes response.body, "projects:move_sessions[project-show-with-sessions,project-show-sibling-main]"
+    assert_not_includes response.body, "projects:move_sessions[project-show-empty,"
   end
 
   test "should not warn when the project worktree is not duplicated" do

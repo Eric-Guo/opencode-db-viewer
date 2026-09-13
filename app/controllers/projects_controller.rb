@@ -31,9 +31,14 @@ class ProjectsController < ApplicationController
     authorize @project
     add_to_breadcrumbs t("projects.index.title"), projects_path
     add_to_breadcrumbs @project.name.presence || @project.id
+    worktree_projects = Project.where(id: @project.worktree_project_ids)
+    populated_projects = worktree_projects.where(id: Session.select(:project_id))
+      .or(worktree_projects.where(id: LegacySession.select(:project_id)))
+    # Moving sessions leaves the source project row, so only warn while
+    # sessions still belong to more than one record for this worktree.
     @duplicate_projects =
-      if @project.worktree.present?
-        Project.where(worktree: @project.worktree).where.not(id: @project.id).order(:id)
+      if populated_projects.count > 1
+        populated_projects.where.not(id: @project.id).order(:id)
       else
         Project.none
       end

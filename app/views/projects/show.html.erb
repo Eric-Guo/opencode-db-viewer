@@ -54,7 +54,7 @@
       <% end %>
     </ul>
     <% @duplicate_projects.each do |duplicate| %>
-      <code class="d-block text-break user-select-all">bin/rails 'projects:move_sessions[<%= @project.id %>,<%= duplicate.id %>]'</code>
+      <code class="d-block text-break user-select-all">bin/rails 'projects:move_sessions[<%= duplicate.id %>,<%= @project.id %>]'</code>
     <% end %>
   </div>
 <% end %>

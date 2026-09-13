@@ -66,4 +66,4 @@ en:
         through: "through message %{message}"
       no_sessions: "No sessions found for this project."
       duplicate_projects_title: "Duplicate project records detected"
-      duplicate_projects_body: "%{count} other project record(s) share this worktree, so sessions may be split across them. To consolidate, move the sessions into one project record:"
+      duplicate_projects_body: "%{count} other project record(s) share this worktree and contain sessions. Sessions are split across multiple records. Run these commands to consolidate them into the current project record:"
