@@ -1,0 +1,17 @@
+<%= nav_item(t("layouts.sidebars.application.dashboard"), root_path, "free.svg#cil-speedometer") %>
+<%= nav_item(t("layouts.sidebars.application.projects"), projects_path, "free.svg#cil-folder") %>
+<% if @project&.persisted? %>
+  <li class="nav-title"><%= t("viewer.current_project") %></li>
+  <li class="nav-group show">
+    <a class="nav-link nav-group-toggle" href="#" role="button" aria-expanded="true">
+      <%= svg_icon("free.svg#cil-folder-open", "nav-icon") %>
+      <span class="text-truncate" title="<%= @project.name.presence || @project.id %>"><%= @project.name.presence || @project.id %></span>
+    </a>
+    <ul class="nav-group-items">
+      <%= nav_item(t("viewer.project_sessions"), project_path(@project)) %>
+      <% if @session&.persisted? %>
+        <%= nav_item(@session.title.presence || @session.slug, project_session_path(@project, @session)) %>
+      <% end %>
+    </ul>
+  </li>
+<% end %>

@@ -23,9 +23,9 @@ importers:
       '@coreui/chartjs':
         specifier: ^4.2.0
         version: 4.2.0(@popperjs/core@2.11.8)
-      '@coreui/coreui':
-        specifier: ^5.9.0
-        version: 5.9.0(@popperjs/core@2.11.8)
+      '@coreui/coreui-pro':
+        specifier: 5.27.1
+        version: 5.27.1(@popperjs/core@2.11.8)
       '@coreui/icons':
         specifier: ^3.1.0
         version: 3.1.0
@@ -625,6 +625,11 @@ packages:
 
   '@coreui/chartjs@4.2.0':
     resolution: {integrity: sha512-lgAbknvYAnCcZdG5Sv/ZmHF9N9yytAmL1hroBCTd1+1fJNYvDcOmYyj8HNe8nvS9X/yo5bEQ/kx+HenP2gAXFA==}
+
+  '@coreui/coreui-pro@5.27.1':
+    resolution: {integrity: sha512-h8u1KWarpGjDcXkGRpPZsTinf3y8nGXmXcgZGcOuEEjBlsi08WSuSXzeLjvnAbbwK3b3mTcYvHHajv+DK+Y+oQ==}
+    peerDependencies:
+      '@popperjs/core': ^2.11.8
 
   '@coreui/coreui@5.9.0':
     resolution: {integrity: sha512-rJ3vb7KDByRJGE0kJVzGZ/gInssHTWyBN1br+aSpxSxLmF1yYbiaC+7xFPhOU3JpQ1Tf8gVH+0UZCAesiFJvAg==}
@@ -3533,6 +3538,10 @@ snapshots:
       chart.js: 4.5.1
     transitivePeerDependencies:
       - '@popperjs/core'
+
+  '@coreui/coreui-pro@5.27.1(@popperjs/core@2.11.8)':
+    dependencies:
+      '@popperjs/core': 2.11.8
 
   '@coreui/coreui@5.9.0(@popperjs/core@2.11.8)':
     dependencies:

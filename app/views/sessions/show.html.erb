@@ -60,14 +60,15 @@
     <% if @event_count > @events.size %><small class="text-body-secondary"><%= t(".latest_events", count: @events.size) %></small><% end %>
   </div>
   <div class="oc-timeline-toolbar">
-    <div class="d-flex flex-wrap gap-1" role="group" aria-label="<%= t("viewer.filter_timeline") %>">
+    <div class="chip-set" role="group" aria-label="<%= t("viewer.filter_timeline") %>" data-timeline-target="filters" data-action="select.coreui.chip-set->timeline#filter">
       <% %w[conversation tools subagents browser events all].each do |category| %>
-        <button type="button" class="btn btn-sm btn-outline-secondary" data-timeline-target="filter" data-action="timeline#filter" data-category="<%= category %>" aria-pressed="<%= category == "conversation" %>"><%= t("viewer.categories.#{category}") %></button>
+        <button type="button" class="chip chip-primary <%= "active" if category == "conversation" %>" data-timeline-target="filter" data-coreui-chip-value="<%= category %>" data-category="<%= category %>" aria-pressed="<%= category == "conversation" %>"><%= t("viewer.categories.#{category}") %></button>
       <% end %>
     </div>
     <div class="d-flex align-items-center gap-2 mt-2">
       <input type="search" class="form-control form-control-sm" aria-label="<%= t("viewer.search_timeline") %>" placeholder="<%= t("viewer.search_timeline") %>" data-timeline-target="search" data-action="input->timeline#apply">
-      <span class="small text-body-secondary text-nowrap"><span data-timeline-target="count"><%= @timeline.size %></span> <%= t("viewer.visible") %></span>
+      <span class="small text-body-secondary text-nowrap" role="status"><span data-timeline-target="count"><%= @timeline.size %></span> <%= t("viewer.visible") %></span>
+      <button type="button" class="btn btn-sm btn-link text-nowrap" data-action="timeline#reset"><%= t("viewer.reset_filters") %></button>
     </div>
   </div>
   <div class="card-body">

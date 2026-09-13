@@ -73,14 +73,25 @@
     <strong><%= t(".sessions") %></strong><span class="badge bg-secondary ms-2"><%= @pagy.count %></span>
   </div>
   <%= form_with url: project_path(@project), method: :get, class: "oc-session-filters p-3 border-bottom", local: true do |form| %>
-    <%= form.label :q, t("viewer.search_sessions"), class: "visually-hidden" %>
-    <%= form.search_field :q, value: @query, placeholder: t("viewer.search_sessions"), aria: {label: t("viewer.search_sessions")}, class: "form-control" %>
-    <%= form.label :kind, t("viewer.session_kind"), class: "visually-hidden" %>
-    <%= form.select :kind, %w[all primary subagents].map { |kind| [t("viewer.session_kinds.#{kind}"), kind] }, {selected: @session_kind}, class: "form-select", aria: {label: t("viewer.session_kind")} %>
-    <%= form.label :state, t("viewer.archive_state"), class: "visually-hidden" %>
-    <%= form.select :state, %w[all unarchived archived].map { |state| [t("viewer.archive_states.#{state}"), state] }, {selected: @session_state}, class: "form-select", aria: {label: t("viewer.archive_state")} %>
+    <div class="oc-session-query">
+      <%= form.label :q, t("viewer.search"), class: "form-label small" %>
+      <%= form.search_field :q, value: @query, placeholder: t("viewer.search_sessions"), aria: {label: t("viewer.search_sessions")}, class: "form-control" %>
+    </div>
+    <div>
+      <%= form.label :kind, t("viewer.session_kind"), class: "form-label small" %>
+      <%= form.select :kind, %w[all primary subagents].map { |kind| [t("viewer.session_kinds.#{kind}"), kind] }, {selected: @session_kind}, class: "form-select" %>
+    </div>
+    <div>
+      <%= form.label :state, t("viewer.archive_state"), class: "form-label small" %>
+      <%= form.select :state, %w[all unarchived archived].map { |state| [t("viewer.archive_states.#{state}"), state] }, {selected: @session_state}, class: "form-select" %>
+    </div>
     <%= form.submit t("viewer.filter"), class: "btn btn-primary" %>
   <% end %>
+  <%= render "active_filters", path: project_path(@project), filters: {
+    q: (@query.present? ? {value: @query, label: @query} : nil),
+    kind: (@session_kind != "all" ? {value: @session_kind, label: t("viewer.session_kinds.#{@session_kind}")} : nil),
+    state: (@session_state != "all" ? {value: @session_state, label: t("viewer.archive_states.#{@session_state}")} : nil)
+  }.compact %>
   <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle mb-0">

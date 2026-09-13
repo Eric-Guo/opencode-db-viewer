@@ -3,6 +3,40 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test "project suggestions search directories and expose only navigation data" do
+    sign_in users(:user_fangzixue)
+    get projects_url(format: :json, q: "/tmp/session-v2-project")
+
+    assert_response :success
+    assert_equal [{"value" => "project-session-v2", "label" => "session-v2-project", "url" => project_path("project-session-v2")}], response.parsed_body
+
+    get projects_url(format: :json)
+    assert_response :success
+    assert_equal 8, response.parsed_body.size
+    assert_equal "project-show-sibling-duplicate", response.parsed_body.first.fetch("value")
+
+    get projects_url(format: :json, q: "%")
+    assert_equal [], response.parsed_body
+  end
+
+  test "project suggestions require authentication" do
+    get projects_url(format: :json, q: "session")
+    assert_response :unauthorized
+  end
+
+  test "removing a session filter preserves the others and resets pagination" do
+    sign_in users(:user_fangzixue)
+    get project_url("project-session-v2", kind: "subagents", state: "unarchived", q: "explore", page: 1)
+    assert_select ".oc-active-filters .chip", count: 3
+
+    removal = css_select(".chip[data-remove-url]").find { |chip| chip.text.include?(I18n.t("viewer.session_kinds.subagents")) }
+    query = Rack::Utils.parse_query(URI.parse(removal["data-remove-url"]).query)
+    assert_equal({"q" => "explore", "state" => "unarchived"}, query)
+    get removal["data-remove-url"]
+    assert_response :success
+    assert_select ".oc-active-filters .chip", count: 2
+  end
+
   test "searches projects by directory" do
     sign_in users(:user_fangzixue)
     get projects_url(q: "/tmp/session-v2-project")

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { Modal } from "@coreui/coreui"
+import { Modal } from "@coreui/coreui-pro"
 import { get } from "@rails/request.js"
 
 export default class extends Controller {

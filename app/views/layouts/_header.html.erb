@@ -3,9 +3,7 @@
     <button class="header-toggler d-lg-none" type="button" data-action="coreui#toggleSidebar" data-coreui-target="#sidebar" aria-label="<%= t(".toggle_navigation") %>">
       <%= svg_icon('free.svg#cil-menu', %w[icon icon-lg]) %>
     </button>
-    <a class="header-brand d-lg-none text-body">
-      <span class="fw-semibold">OpenCode</span>
-    </a>
+    <%= render "layouts/project_search_button" %>
     <div id="flash-root" class="d-flex ms-auto">
       <% flash.each do |k, v| %>
         <div class="mb-0 alert alert-<%= k == "alert" ? "danger" : (k == "notice" ? "primary" : k) -%> alert-dismissible fade show" role="alert">

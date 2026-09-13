@@ -1,4 +1,4 @@
-@use "@coreui/coreui/scss/functions/color";
+@use "@coreui/coreui-pro/scss/functions/color";
 
 $primary: #39f;
 $success: #51cc8a;
@@ -6,7 +6,7 @@ $danger: #ef376e;
 $warning: #fc0;
 $info: #747af2;
 
-@use "@coreui/coreui/scss/coreui" with (
+@use "@coreui/coreui-pro/scss/coreui" with (
   $primary: $primary,
   $primary-text-emphasis: color.shade-color($primary, 60%),
   $primary-bg-subtle: color.tint-color($primary, 80%),

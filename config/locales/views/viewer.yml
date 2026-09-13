@@ -1,6 +1,17 @@
 ---
 en:
   viewer:
+    find_project: Find a project
+    close_search: Close search
+    all_projects: All projects
+    current_project: Current project
+    project_sessions: Sessions & overview
+    project_search_hint: Choose a suggestion and press Search to open it, or search all projects by name, directory, or ID.
+    suggestions_unavailable: Suggestions are unavailable. You can still search all projects.
+    active_filters: Active filters
+    remove_filter: 'Remove filter: %{filter}'
+    clear_filters: Clear all
+    reset_filters: Reset
     projects_intro: Browse project workspaces, session history, and delegated work.
     search_projects: Search projects by name, directory, or ID
     search_sessions: Search sessions by title, agent, or ID
@@ -68,6 +79,17 @@ en:
     mytodo_mapping: 'Project #%{project} · Work package #%{work_package}'
 zh-CN:
   viewer:
+    find_project: 查找项目
+    close_search: 关闭搜索
+    all_projects: 所有项目
+    current_project: 当前项目
+    project_sessions: 会话与概览
+    project_search_hint: 选择建议后点击搜索打开项目，或按名称、目录、ID 搜索所有项目。
+    suggestions_unavailable: 暂时无法加载建议，仍可搜索所有项目。
+    active_filters: 当前筛选
+    remove_filter: '移除筛选：%{filter}'
+    clear_filters: 清除全部
+    reset_filters: 重置
     projects_intro: 浏览项目工作区、会话历史和委派任务。
     search_projects: 按名称、目录或 ID 搜索项目
     search_sessions: 按标题、代理或 ID 搜索会话

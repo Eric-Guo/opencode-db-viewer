@@ -2,24 +2,17 @@
   <div class="sidebar-header border-bottom">
     <div class="sidebar-brand">
       <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-        <svg alt="CoreUI Logo" class="sidebar-brand-full" height="32" width="110">
-          <use xlink:href="<%= asset_path('coreui.svg#full') %>"></use>
-        </svg>
+        <span class="sidebar-brand-full"><strong class="d-block fs-5">OpenCode</strong><small class="oc-brand-caption">DB VIEWER</small></span>
       <% end %>
       <%= link_to root_path, class: "text-reset text-decoration-none" do %>
-        <svg alt="CoreUI Logo" class="sidebar-brand-narrow" height="32" width="32">
-          <use xlink:href="<%= asset_path('coreui.svg#signet') %>"></use>
-        </svg>
+        <span class="sidebar-brand-narrow fw-bold" aria-label="OpenCode">OC</span>
       <% end %>
     </div>
     <button class="sidebar-toggler d-none d-lg-block" type="button" data-action="sidebar#toggle" aria-label="<%= t("layouts.header.toggle_narrow_sidebar") %>"></button>
     <button class="btn-close d-lg-none" type="button" data-coreui-close="sidebar" data-coreui-theme="dark" aria-label="<%= t("layouts.header.close_navigation") %>"></button>
   </div>
-  <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
-    <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>
-      <span class="badge bg-primary ms-auto">NEW</span>
-    <% end %>
-    <%= nav_item(t('.projects'), projects_path, 'free.svg#cil-folder') %>
+  <ul class="sidebar-nav sidebar-nav-tree" data-coreui="navigation" data-simplebar>
+    <%= render "layouts/sidebars/viewer" %>
 
     <li class="nav-title"><%= t('user.account') -%></li>
     <%= nav_item(t('user.users'), admin_users_path, 'free.svg#cil-user') %>

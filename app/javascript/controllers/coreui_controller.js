@@ -4,7 +4,7 @@ import {
   Popover,
   Sidebar,
   Tooltip
-} from "@coreui/coreui"
+} from "@coreui/coreui-pro"
 
 const COMPONENTS = [
   ['[data-coreui="navigation"], [data-coreui-navigation]', Navigation],

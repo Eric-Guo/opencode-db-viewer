@@ -23,6 +23,16 @@ Run the Rails suite with `bin/rails test`, and the project/session browser check
 
 The header's color-theme menu supports Light, Dark, and Auto (system preference), saved in the browser. CoreUI 5 integration checks cover color modes, responsive navigation, admin charts, tables, and modal selects in `test/system/coreui_v5_test.rb`.
 
+The UI uses CoreUI Pro 5.27.1, adapting the Rails template changes in
+`pagila-rails-portal` commit `e09e99e9071823408eee40a8e31420f43684c405`:
+
+- The header search button opens project search with **Command + /** or **Ctrl + /**. Autocomplete suggests up to eight matching projects; selecting one and submitting opens it. Free-text searches still open the full project results.
+- Active project/session filters appear as removable chips. Removing one preserves the others and resets pagination; **Clear all** restores the unfiltered list.
+- Activity categories use a single-selection chip set with arrow-key, Home/End, Enter, and Space navigation. **Reset** returns to the conversation and clears the activity search.
+- Both sidebars use tree navigation, with the current project and session shown in context. Existing admin tables, modal selects, and charts remain in use.
+
+Suggestions use the same authenticated, policy-scoped project search as the full list. This design update does not change the OpenCode database schema. Component APIs and styles were checked against `/Users/guochunzhong/git/oss/coreui-pro`; the dependency is pinned to the published 5.27.1 package so builds do not require that local checkout.
+
 ### When you want to debug the SCSS
 
 Set `shakapacker.yml` hmr to true.

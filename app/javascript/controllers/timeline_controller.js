@@ -1,16 +1,33 @@
 import { Controller } from "@hotwired/stimulus"
+import { Chip, ChipSet } from "@coreui/coreui-pro"
 
 export default class extends Controller {
-  static targets = ["entry", "filter", "search", "empty", "count"]
+  static targets = ["entry", "filter", "filters", "search", "empty", "count"]
 
   connect() {
     this.category = "conversation"
+    this.chips = ChipSet.getOrCreateInstance(this.filtersTarget, { filter: true, selectionMode: "single" })
     this.apply()
   }
 
   filter(event) {
-    this.category = event.currentTarget.dataset.category
+    if (!event.selected.length) {
+      this.chips.selectChip(this.filterTargets.find(button => button.dataset.category === this.category))
+      return
+    }
+    this.category = event.selected[0]
     this.apply()
+  }
+
+  reset() {
+    this.searchTarget.value = ""
+    this.chips.selectChip(this.filterTargets.find(button => button.dataset.category === "conversation"))
+    this.apply()
+  }
+
+  disconnect() {
+    this.filterTargets.forEach(button => Chip.getInstance(button)?.dispose())
+    this.chips.dispose()
   }
 
   apply() {

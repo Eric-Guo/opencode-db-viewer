@@ -12,7 +12,14 @@
   </head>
   <body class="overflow-x-hidden" data-controller="coreui theme">
     <%= render "layouts/sidebars/#{@_sidebar_name}" unless @_sidebar_name.nil? -%>
-    <div class="<%= @_wrapper_class.join(" ") unless @_wrapper_class.nil? -%>">
+    <div class="<%= @_wrapper_class.join(" ") unless @_wrapper_class.nil? -%>"
+         <%= tag.attributes(data: {
+           controller: "project-search",
+           project_search_url_value: projects_path(format: :json),
+           project_search_empty_value: t("viewer.no_projects"),
+           project_search_error_value: t("viewer.suggestions_unavailable"),
+           project_search_hint_value: t("viewer.project_search_hint")
+         }) if @_sidebar_name %>>
       <% if @_sidebar_name.nil? %>
         <%= yield %>
       <% else %>
@@ -31,6 +38,7 @@
             <%= yield %>
           </div>
         </div>
+        <%= render "layouts/project_search" %>
         <div class="modal fade" id="coreuiModal" tabindex="-1" aria-hidden="true"></div>
         <%= footer %>
       <% end %>

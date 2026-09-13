@@ -1,4 +1,4 @@
-import "@coreui/coreui"
+import "@coreui/coreui-pro"
 import "simplebar"
 import { Application } from "@hotwired/stimulus"
 import { definitionsFromContext } from "@hotwired/stimulus-webpack-helpers"

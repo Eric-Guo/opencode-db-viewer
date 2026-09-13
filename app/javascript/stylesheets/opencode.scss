@@ -26,21 +26,18 @@
 }
 
 .oc-project-stats .card { height: 100%; }
-.oc-session-filters { display: grid; grid-template-columns: minmax(12rem, 1fr) auto auto auto; gap: .5rem; }
+.oc-session-filters { display: grid; grid-template-columns: minmax(12rem, 1fr) auto auto auto; align-items: end; gap: .75rem; }
+.oc-session-filters > div { min-width: 0; }
+.oc-active-filters { padding: .85rem 1rem; margin-bottom: 1rem; background: var(--cui-secondary-bg); border-radius: var(--cui-border-radius); }
+.card > .oc-active-filters { margin: 0; border-radius: 0; border-bottom: 1px solid var(--cui-border-color); }
+.oc-active-filters .chip { max-width: 100%; }
+.oc-active-filters .chip-remove { flex-shrink: 0; }
 .oc-agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .75rem; }
 .oc-agent-card, .oc-session-link { border: 1px solid var(--cui-border-color); border-radius: .5rem; padding: .85rem; }
 .oc-agent-card { border-left: 3px solid var(--cui-primary); }
 
 .oc-timeline-toolbar { padding: 1rem; border-bottom: 1px solid var(--cui-border-color); }
-.oc-timeline-toolbar .btn {
-  --cui-btn-color: var(--cui-body-color);
-  --cui-btn-border-color: var(--cui-border-color);
-  --cui-btn-hover-bg: var(--cui-tertiary-bg);
-  --cui-btn-hover-color: var(--cui-body-color);
-  --cui-btn-active-bg: var(--cui-body-color);
-  --cui-btn-active-color: var(--cui-body-bg);
-  --cui-btn-active-border-color: var(--cui-body-color);
-}
+.oc-timeline-toolbar .chip { min-height: 2.25rem; }
 .oc-timeline [hidden] { display: none !important; }
 .oc-assistant { width: 100%; min-width: 0; background: var(--cui-body-bg); }
 .oc-tool { border: 1px solid var(--cui-border-color); border-left-width: 3px; border-radius: .4rem; padding: 1rem; min-width: 0; }
@@ -55,7 +52,8 @@
 @media (max-width: 767px) {
   .oc-session-summary { grid-template-columns: 1fr 1fr; gap: 1rem; }
   .oc-session-filters { grid-template-columns: 1fr 1fr; }
-  .oc-session-filters input[type="search"] { grid-column: 1 / -1; }
+  .oc-session-query { grid-column: 1 / -1; }
+  .oc-session-filters input[type="submit"] { grid-column: 1 / -1; }
   .oc-tool { padding: .65rem; }
   .oc-timeline > .card-body { padding: .65rem; }
 }

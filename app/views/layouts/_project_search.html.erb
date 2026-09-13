@@ -1,0 +1,24 @@
+<div class="modal fade" id="project-search-modal" tabindex="-1" aria-labelledby="project-search-title" aria-hidden="true"
+     data-project-search-target="modal" data-action="show.coreui.modal->project-search#load shown.coreui.modal->project-search#shown hidden.coreui.modal->project-search#hidden">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="project-search-title"><%= t("viewer.find_project") %></h2>
+        <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="<%= t("viewer.close_search") %>"></button>
+      </div>
+      <%= form_with url: projects_path, method: :get, local: true, data: {project_search_target: "form", action: "submit->project-search#submit"} do |form| %>
+        <div class="modal-body">
+          <label class="form-label" for="project-search-input"><%= t("viewer.search_projects") %></label>
+          <div data-project-search-target="autocomplete" data-action="input->project-search#search changed.coreui.autocomplete->project-search#selected">
+            <%= form.search_field :q, id: "project-search-input", class: "form-control", placeholder: t("viewer.search_projects") %>
+          </div>
+          <p class="small text-body-secondary mt-3 mb-0" id="project-search-hint" role="status" data-project-search-target="status"><%= t("viewer.project_search_hint") %></p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to t("viewer.all_projects"), projects_path, class: "btn btn-link me-auto" %>
+          <%= form.submit t("viewer.search"), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

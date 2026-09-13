@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { Sidebar } from "@coreui/coreui"
+import { Sidebar } from "@coreui/coreui-pro"
 import { put } from "@rails/request.js"
 
 export default class extends Controller {

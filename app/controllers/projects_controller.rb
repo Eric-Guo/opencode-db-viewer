@@ -7,13 +7,18 @@ class ProjectsController < ApplicationController
 
   def index
     authorize Project
-    @skip_title = true
-    add_to_breadcrumbs t("projects.index.title")
     projects = policy_scope(Project)
     @query = params[:q].to_s.strip
     if @query.present?
       projects = projects.where("name LIKE :query OR worktree LIKE :query OR id LIKE :query", query: "%#{Project.sanitize_sql_like(@query)}%")
     end
+    if request.format.json?
+      return render json: projects.order(time_updated: :desc, id: :asc).limit(8).map { |project|
+        {value: project.id, label: project.name.presence || project.id, url: project_path(project)}
+      }
+    end
+    @skip_title = true
+    add_to_breadcrumbs t("projects.index.title")
     @pagy, @projects = pagy(projects.order(time_updated: :desc), items: current_user.preferred_page_length)
     project_ids = @projects.map(&:id)
     @session_counts = Session.where(project_id: project_ids).group(:project_id).count

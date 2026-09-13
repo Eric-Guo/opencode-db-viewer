@@ -1,0 +1,14 @@
+<% if filters.any? %>
+  <div class="oc-active-filters d-flex flex-wrap align-items-center gap-2" data-controller="filter-chips" role="group" aria-label="<%= t("viewer.active_filters") %>">
+    <span class="small text-body-secondary"><%= t("viewer.active_filters") %></span>
+    <% filters.each do |key, filter| %>
+      <span class="chip chip-primary" data-filter-chips-target="chip" data-coreui-removable="true"
+            data-coreui-aria-remove-label="<%= t("viewer.remove_filter", filter: filter[:label]) %>"
+            data-remove-url="<%= [path, filters.except(key).transform_values { |entry| entry[:value] }.to_query.presence].compact.join("?") %>"
+            data-action="remove.coreui.chip->filter-chips#remove" title="<%= filter[:label] %>">
+        <span class="text-truncate"><%= filter[:label] %></span>
+      </span>
+    <% end %>
+    <%= link_to t("viewer.clear_filters"), path, class: "small ms-1" %>
+  </div>
+<% end %>

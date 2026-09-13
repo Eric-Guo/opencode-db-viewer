@@ -11,11 +11,8 @@
     <button class="sidebar-toggler d-none d-lg-block" type="button" data-action="sidebar#toggle" aria-label="<%= t("layouts.header.toggle_narrow_sidebar") %>"></button>
     <button class="btn-close d-lg-none" type="button" data-coreui-close="sidebar" data-coreui-theme="dark" aria-label="<%= t("layouts.header.close_navigation") %>"></button>
   </div>
-  <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
-    <%= nav_item(t('.dashboard'), root_path, 'free.svg#cil-speedometer') do %>
-      <span class="badge bg-primary ms-auto">NEW</span>
-    <% end %>
-    <%= nav_item(t('.projects'), projects_path, 'free.svg#cil-folder') %>
+  <ul class="sidebar-nav sidebar-nav-tree" data-coreui="navigation" data-simplebar>
+    <%= render "layouts/sidebars/viewer" %>
 
     <li class="nav-title"><%= t('user.account') -%></li>
     <li class="nav-group <%= controller_name == 'profiles' ? 'show' : '' -%>" data-controller="expender"

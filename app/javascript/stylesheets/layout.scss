@@ -8,6 +8,32 @@ body {
   transition: padding .15s;
 }
 
+.header { min-height: calc(4rem + 1px); }
+.header > .container-fluid { gap: .75rem; }
+.oc-project-search-button { width: clamp(12rem, 28vw, 23rem); }
+.oc-project-search-button .search-button-placeholder { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#project-search-modal .autocomplete-option { overflow-wrap: anywhere; }
+// Keep suggestions in the dialog's flow so they cannot cover its actions.
+#project-search-modal .autocomplete-dropdown {
+  position: static !important;
+  width: 100% !important;
+  margin-top: .5rem !important;
+  transform: none !important;
+}
+
+.card, .dropdown-menu, .sidebar {
+  box-shadow: 0 2px 5px -1px rgb(0 0 0 / 5%);
+}
+
+.sidebar-nav-tree .nav-group-items .nav-link { overflow-wrap: anywhere; }
+
+@media (max-width: 575px) {
+  .oc-project-search-button { width: auto; }
+  .oc-project-search-button .search-button-placeholder { margin-inline: .5rem; }
+  .oc-project-search-button .search-button-keys { display: none; }
+  .header > .container-fluid { gap: .25rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wrapper { transition: none; }
 }

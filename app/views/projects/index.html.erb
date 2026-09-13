@@ -4,6 +4,7 @@
   <%= form.search_field :q, value: @query, placeholder: t("viewer.search_projects"), aria: {label: t("viewer.search_projects")}, class: "form-control" %>
   <%= form.submit t("viewer.search"), class: "btn btn-primary" %>
 <% end %>
+<%= render "active_filters", path: projects_path, filters: (@query.present? ? {q: {value: @query, label: @query}} : {}) %>
 <div class="card mb-4">
   <div class="card-header d-flex align-items-center">
     <%= svg_icon("free.svg#cil-folder", "icon me-2") %>
