@@ -9,7 +9,7 @@
 
   <% if tool.subagent? %>
     <div class="d-flex flex-wrap gap-2 mt-2 small">
-      <span class="badge bg-body-tertiary text-body border"><%= tool.input["agent"] %></span>
+      <span class="badge bg-body-tertiary text-body border"><%= tool.agent %></span>
       <span><%= t(tool.input["background"] == true ? "viewer.background" : "viewer.foreground") %></span>
       <% if tool.metadata["status"].present? %><span>· <%= t("viewer.returned_status", status: tool.metadata["status"]) %></span><% end %>
     </div>

@@ -12,7 +12,11 @@ class SessionTool
   end
 
   def subagent?
-    name == "subagent"
+    %w[subagent task].include?(name)
+  end
+
+  def agent
+    input["agent"].presence || input["subagent_type"].presence
   end
 
   def browser?
@@ -37,7 +41,7 @@ class SessionTool
   def session_id
     return unless subagent?
 
-    metadata["sessionID"].presence || input["sessionID"].presence
+    metadata["sessionID"].presence || metadata["sessionId"].presence || input["sessionID"].presence
   end
 
   def summary

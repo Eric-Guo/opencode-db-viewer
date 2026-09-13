@@ -3,6 +3,31 @@ require "test_helper"
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  [SessionMessage, SessionMessageRetained].each do |storage|
+    test "renders migrated task calls in the subagent timeline from #{storage.table_name}" do
+      message = session_messages(:session_message_subagent)
+      message.delete
+      storage.create!(message.attributes.merge(data: {
+        content: [{type: "tool", name: "task", state: {
+          status: "completed",
+          input: {subagent_type: "explore", description: "Review browser integration", prompt: "Check legacy task rendering."},
+          metadata: {sessionId: "session-subagent-fixture"}
+        }}]
+      }.to_json))
+
+      sign_in users(:user_fangzixue)
+      get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture))
+
+      assert_response :success
+      assert_select "[data-categories~='subagents'] .oc-tool--subagents", count: 1 do
+        assert_select "strong", text: "task"
+        assert_select ".badge", text: "explore"
+        assert_select "a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), text: "Review browser integration"
+        assert_select "pre", text: "Check legacy task rendering."
+      end
+    end
+  end
+
   test "shows subagent links and distinguishes returned state from current outcome" do
     sign_in users(:user_fangzixue)
     get project_session_url(projects(:project_session_v2), sessions(:session_v2_fixture))

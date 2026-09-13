@@ -1,12 +1,23 @@
 require "test_helper"
 
 class SessionToolTest < ActiveSupport::TestCase
+  test "migrated task calls identify legacy subagents and their child sessions" do
+    tool = SessionTool.new("name" => "task", "state" => {"status" => "completed", "input" => {"subagent_type" => "explore", "description" => "Find the endpoint"}, "metadata" => {"sessionId" => "legacy-child"}})
+
+    assert tool.subagent?
+    assert_equal "subagents", tool.category
+    assert_equal "legacy-child", tool.session_id
+    assert_equal "explore", tool.agent
+    assert_equal "Find the endpoint", tool.summary
+  end
+
   test "subagent progress identifies the child before the call completes" do
-    tool = SessionTool.new("name" => "subagent", "state" => {"status" => "running", "input" => {"sessionID" => "old-child"}, "metadata" => {"sessionID" => "new-child", "status" => "running"}})
+    tool = SessionTool.new("name" => "subagent", "state" => {"status" => "running", "input" => {"agent" => "explore", "sessionID" => "old-child"}, "metadata" => {"sessionID" => "new-child", "status" => "running"}})
 
     assert_equal "new-child", tool.session_id
     assert_equal "subagents", tool.category
     assert_equal "running", tool.status
+    assert_equal "explore", tool.agent
   end
 
   test "failed continuation retains its input session link" do
