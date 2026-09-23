@@ -9,6 +9,8 @@ Account and credential tables have matching models for schema completeness, but 
 
 Project pages include search, top-level/subagent and archive filters, retained-message counts, and MyTodo project/work-package mappings when present. Sessions show their recorded outcome, usage, and linked parent/child conversations. Execution claims are recovery markers; the viewer does not treat them as proof that a process is currently running.
 
+The project list and details show **Last Active** (`time_active`) separately from metadata update time. Activity timestamps use the same date formatting as other OpenCode timestamps; a zero or unavailable value appears as **Not recorded**.
+
 The activity timeline opens on the conversation and can be filtered to tools, subagents, browser activity, or durable events. Subagent cards show the delegated prompt, foreground/background mode, child session, and status at return alongside the child's current recorded outcome. Browser operations inside Code Mode `execute` calls come from `state.metadata.toolCalls`, including their inputs and recorded statuses. Stored captures can be previewed and downloaded with their original filenames through **Inspect input, output, and metadata**. The viewer reads saved activity; it does not connect to or control a browser.
 
 Set the development database path in `config/database.yml`, then run:

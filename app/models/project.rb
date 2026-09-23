@@ -46,6 +46,12 @@ class Project < ApplicationRecord
     epoch_time(time_updated)
   end
 
+  def time_active_at
+    return unless has_attribute?(:time_active) && self[:time_active].to_i.positive?
+
+    epoch_time(self[:time_active])
+  end
+
   def time_initialized_at
     epoch_time(time_initialized)
   end

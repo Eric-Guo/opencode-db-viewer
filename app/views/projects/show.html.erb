@@ -13,19 +13,27 @@
         <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".project_id") %></div>
         <code class="text-break"><%= @project.id %></code>
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-6 col-xl">
         <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".vcs") %></div>
         <%= @project.vcs.presence || "-" %>
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-6 col-xl">
         <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_created") %></div>
         <%= opencode_time(@project.time_created_at) %>
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-6 col-xl">
+        <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_active") %></div>
+        <% if (active_time = @project.time_active_at) %>
+          <%= time_tag(active_time, opencode_time(active_time)) %>
+        <% else %>
+          <span class="text-body-secondary"><%= t("projects.activity_not_recorded") %></span>
+        <% end %>
+      </div>
+      <div class="col-sm-6 col-xl">
         <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_updated") %></div>
         <%= opencode_time(@project.time_updated_at) %>
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-6 col-xl">
         <div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_initialized") %></div>
         <%= opencode_time(@project.time_initialized_at) %>
       </div>

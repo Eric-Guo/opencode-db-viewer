@@ -18,6 +18,6 @@ class SessionMessageTest < ActiveSupport::TestCase
     assert_equal "Current schema assistant response", message.content.second["text"]
     assert_equal "Raw result fixture", message.content.third.dig("state", "result", "items", 0, "name")
     assert_equal 500, message.tokens.dig("cache", "read")
-    assert_equal Time.zone.at(1_700_000_010.2), message.time_created_at
+    assert_equal Time.zone.at(1_700_000_010, 200_000), message.time_created_at
   end
 end

@@ -1,6 +1,7 @@
 ---
 en:
   projects:
+    activity_not_recorded: "Not recorded"
     index:
       title: "Projects"
       name: "Name"
@@ -10,6 +11,7 @@ en:
       sessions: "Sessions"
       time_created: "Time Created"
       time_updated: "Time Updated"
+      time_active: "Last Active"
       time_ago: "%{distance} ago"
     show:
       title: "Project Details"
@@ -20,6 +22,7 @@ en:
       vcs: "Version Control"
       time_created: "Created"
       time_updated: "Last Updated"
+      time_active: "Last Active"
       time_initialized: "Initialized"
       time_ago: "%{distance} ago"
       configuration: "Commands and sandboxes"

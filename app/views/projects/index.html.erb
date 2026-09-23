@@ -14,29 +14,39 @@
   <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle mb-0">
-        <thead class="oc-table-heading">
+        <thead class="oc-table-heading text-nowrap">
           <tr>
             <th><%= t(".name") %></th>
             <th><%= t(".worktree") %></th>
             <th><%= t(".vcs") %></th>
             <th class="text-center"><%= t(".worktrees") %></th>
             <th class="text-center"><%= t(".sessions") %></th>
+            <th><%= t(".time_active") %></th>
             <th><%= t(".time_updated") %></th>
           </tr>
         </thead>
         <tbody>
-          <% if @projects.empty? %><tr><td colspan="6" class="text-center text-body-secondary py-4"><%= t("viewer.no_projects") %></td></tr><% end %>
+          <% if @projects.empty? %><tr><td colspan="7" class="text-center text-body-secondary py-4"><%= t("viewer.no_projects") %></td></tr><% end %>
           <% @projects.each do |project| %>
+            <% active_time = project.time_active_at %>
             <% updated_time = project.time_updated_at %>
             <tr>
-              <td>
+              <td class="text-break">
                 <div class="fw-semibold"><%= link_to(project.name.presence || project.id, project_path(project), class: "text-decoration-none") %></div>
                 <code class="small text-body-secondary"><%= project.id %></code>
               </td>
-              <td><code class="small"><%= truncate(project.worktree, length: 60) %></code></td>
+              <td class="text-break"><code class="small"><%= truncate(project.worktree, length: 60) %></code></td>
               <td><span class="badge bg-body-tertiary text-body border"><%= project.vcs.presence || "-" %></span></td>
               <td class="text-center"><%= @worktree_counts.fetch(project.id, 0) %></td>
-              <td class="text-center"><strong><%= @session_counts.fetch(project.id, 0) %></strong><div class="small text-body-secondary"><%= t("viewer.subagent_count", count: @subagent_counts.fetch(project.id, 0)) %></div></td>
+              <td class="text-center text-nowrap"><strong><%= @session_counts.fetch(project.id, 0) %></strong><div class="small text-body-secondary"><%= t("viewer.subagent_count", count: @subagent_counts.fetch(project.id, 0)) %></div></td>
+              <td>
+                <% if active_time %>
+                  <%= time_tag(active_time, t(".time_ago", distance: time_ago_in_words(active_time)), title: opencode_time(active_time)) %>
+                  <div class="small text-body-secondary"><%= opencode_time(active_time) %></div>
+                <% else %>
+                  <span class="text-body-secondary"><%= t("projects.activity_not_recorded") %></span>
+                <% end %>
+              </td>
               <td>
                 <% if updated_time %>
                   <%= time_tag(updated_time, t(".time_ago", distance: time_ago_in_words(updated_time)), title: opencode_time(updated_time)) %>

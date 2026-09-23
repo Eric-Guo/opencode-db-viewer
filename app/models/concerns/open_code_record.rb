@@ -16,7 +16,7 @@ module OpenCodeRecord
     return if value.blank?
 
     timestamp = value.to_i
-    timestamp /= 1000.0 if timestamp > 99_999_999_999
+    timestamp = Rational(timestamp, 1000) if timestamp > 99_999_999_999
     Time.zone.at(timestamp)
   end
 end

@@ -57,6 +57,51 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, I18n.t("viewer.mytodo_mapping", project: 42, work_package: 84)
   end
 
+  test "shows last activity separately from updates on project lists and details in each locale" do
+    project = projects(:project_session_v2)
+    project.update!(time_active: 1_700_000_000_123, time_updated: 1_600_000_000_000)
+    sign_in users(:user_fangzixue)
+
+    %i[en zh-CN].each do |locale|
+      get projects_url(q: project.id, locale: locale)
+
+      assert_response :success
+      assert_select "th", text: I18n.t("projects.index.time_active", locale: locale)
+      assert_select "table tbody tr", count: 1
+      assert_select "table tbody td:nth-child(6) time[title=?]", "2023-11-14 22:13:20.123"
+      assert_select "table tbody td:nth-child(7)", text: /2020-09-13 12:26:40.000/
+
+      get project_url(project, locale: locale)
+
+      assert_response :success
+      assert_select "div", text: I18n.t("projects.show.time_active", locale: locale)
+      assert_select "time", text: "2023-11-14 22:13:20.123"
+    end
+  end
+
+  test "shows unrecorded project activity without a Unix epoch date in each locale" do
+    project = projects(:project_session_v2)
+    sign_in users(:user_fangzixue)
+
+    %i[en zh-CN].each do |locale|
+      [projects_url(q: project.id, locale: locale), project_url(project, locale: locale)].each do |url|
+        get url
+
+        assert_response :success
+        assert_select "span", text: I18n.t("projects.activity_not_recorded", locale: locale)
+        assert_select "time[datetime^='1970-01-01']", count: 0
+      end
+    end
+  end
+
+  test "empty project results span every column" do
+    sign_in users(:user_fangzixue)
+    get projects_url(q: "missing-project-fixture")
+
+    assert_response :success
+    assert_select "td[colspan='7']", text: I18n.t("viewer.no_projects")
+  end
+
   test "filters subagent sessions by agent and archive state" do
     sign_in users(:user_fangzixue)
     get project_url(projects(:project_session_v2), kind: "subagents", q: "explore", state: "unarchived")

@@ -1,6 +1,7 @@
 ---
 zh-CN:
   projects:
+    activity_not_recorded: "暂无记录"
     index:
       title: "项目"
       name: "名称"
@@ -10,6 +11,7 @@ zh-CN:
       sessions: "会话数"
       time_created: "创建时间"
       time_updated: "更新时间"
+      time_active: "最后活跃"
       time_ago: "%{distance}前"
     show:
       title: "项目详情"
@@ -20,6 +22,7 @@ zh-CN:
       vcs: "版本控制"
       time_created: "创建时间"
       time_updated: "最后更新"
+      time_active: "最后活跃"
       time_initialized: "初始化时间"
       time_ago: "%{distance}前"
       configuration: "命令和沙箱"
