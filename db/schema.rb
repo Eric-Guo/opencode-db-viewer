@@ -26,6 +26,24 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "active_org_id"
   end
 
+  create_table "blob", primary_key: "hash", id: :text, force: :cascade do |t|
+    t.text "mime", null: false
+    t.integer "bytes", null: false
+    t.integer "width"
+    t.integer "height"
+    t.binary "data", null: false
+    t.integer "time_created", null: false
+  end
+
+  create_table "blob_ref", primary_key: ["session_id", "message_id", "hash"], force: :cascade do |t|
+    t.text "session_id", null: false
+    t.text "message_id", null: false
+    t.text "hash", null: false
+    t.integer "seq", null: false
+    t.index ["hash"], name: "blob_ref_hash_idx"
+    t.index ["session_id", "seq"], name: "blob_ref_session_seq_idx"
+  end
+
   create_table "control_account", primary_key: ["email", "url"], force: :cascade do |t|
     t.text "email", null: false
     t.text "url", null: false
@@ -81,6 +99,23 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "through_seq", null: false
     t.text "initial_values", null: false
     t.text "current_values", null: false
+  end
+
+  create_table "job", primary_key: "notification_id", id: :text, force: :cascade do |t|
+    t.text "id", null: false
+    t.text "session_id", null: false
+    t.text "child_session_id"
+    t.text "kind", null: false
+    t.text "title"
+    t.text "status", null: false
+    t.text "output"
+    t.text "error"
+    t.text "recovery", null: false
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.index ["child_session_id"], name: "job_child_session_idx"
+    t.index ["id"], name: "job_id_idx"
+    t.index ["session_id"], name: "job_session_idx"
   end
 
   create_table "kv", primary_key: "key", id: :text, force: :cascade do |t|
@@ -151,6 +186,31 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.string "role_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "schedule", id: :text, force: :cascade do |t|
+    t.text "session_id"
+    t.text "name"
+    t.text "action", null: false
+    t.text "when", null: false
+    t.text "tz", null: false
+    t.text "status", default: "active", null: false
+    t.integer "next_due_at"
+    t.integer "ends_at"
+    t.integer "remaining_runs"
+    t.integer "run_count", default: 0, null: false
+    t.integer "last_fired_at"
+    t.text "last_message_id"
+    t.text "last_outcome"
+    t.integer "retry_at"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "check"
+    t.integer "checks", default: 0, null: false
+    t.integer "failures", default: 0, null: false
+    t.text "state"
+    t.index ["next_due_at"], name: "schedule_due_idx"
+    t.index ["session_id"], name: "schedule_session_idx"
   end
 
   create_table "session", id: :text, force: :cascade do |t|
@@ -225,16 +285,16 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["session_id", "seq"], name: "session_message_retained_session_seq_idx"
   end
 
-  create_table "session_pending", id: :text, force: :cascade do |t|
+  create_table "session_part", primary_key: ["message_id", "ordinal"], force: :cascade do |t|
+    t.text "message_id", null: false
     t.text "session_id", null: false
+    t.integer "ordinal", null: false
     t.text "type", null: false
-    t.text "data", null: false
-    t.text "delivery"
-    t.integer "admitted_seq", null: false
+    t.text "call_id"
     t.integer "time_created", null: false
-    t.index ["session_id", "admitted_seq"], name: "session_pending_session_admitted_seq_idx", unique: true
-    t.index ["session_id", "delivery", "admitted_seq"], name: "session_pending_session_delivery_seq_idx"
-    t.index ["session_id"], name: "session_pending_session_compaction_idx", unique: true
+    t.integer "time_updated", null: false
+    t.text "data", null: false
+    t.index ["session_id", "message_id", "ordinal"], name: "session_part_session_message_idx"
   end
 
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
@@ -281,6 +341,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_idle"
     t.integer "time_viewed"
     t.text "idle_outcome"
+    t.integer "time_busy"
     t.index ["parent_id"], name: "session_v2_parent_idx"
     t.index ["project_id"], name: "session_v2_project_idx"
     t.index ["time_suspended"], name: "session_v2_time_suspended_idx"
@@ -331,6 +392,8 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   end
 
   add_foreign_key "account_state", "account", column: "active_account_id", on_delete: :nullify
+  add_foreign_key "blob_ref", "blob", column: "hash", primary_key: "hash", on_delete: :cascade
+  add_foreign_key "blob_ref", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "event", "event_sequence", column: "aggregate_id", primary_key: "aggregate_id", on_delete: :cascade
   add_foreign_key "instruction_entry", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "instruction_state", "session_v2", column: "session_id", on_delete: :cascade
@@ -338,10 +401,12 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
+  add_foreign_key "schedule", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
   add_foreign_key "session_inbox", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_message", "session_v2", column: "session_id", on_delete: :cascade
-  add_foreign_key "session_pending", "session_v2", column: "session_id", on_delete: :cascade
+  add_foreign_key "session_part", "session_message", column: "message_id", on_delete: :cascade
+  add_foreign_key "session_part", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_share", "session", on_delete: :cascade
   add_foreign_key "session_v2", "project", on_delete: :cascade
   add_foreign_key "user_roles", "roles"
