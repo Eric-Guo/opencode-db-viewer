@@ -16,8 +16,12 @@ Rails.application.routes.draw do
 
   draw :admin
 
+  resources :background_jobs, only: :index
+  resources :schedules, only: :index
+
   resources :projects, only: %i[index show] do
     resources :sessions, only: %i[show destroy] do
+      resources :media, only: :show, controller: "session_media"
       resources :parts, only: %i[show]
       resources :messages, only: %i[show], controller: "session_messages"
     end

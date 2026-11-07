@@ -1,0 +1,13 @@
+<article class="oc-work-item" id="job-<%= job.notification_id %>">
+  <div class="d-flex align-items-start justify-content-between gap-2"><strong><%= job.description %></strong><span class="badge bg-body-tertiary text-body border"><%= t("workspace.statuses.#{job.status}", default: job.status) %></span></div>
+  <div class="small text-body-secondary mt-1"><%= t("workspace.kinds.#{job.kind}", default: job.kind) %> · <%= opencode_time(job.time_created_at) %></div>
+  <% unless @session&.id == job.session_id %><div class="small mt-2"><%= related_session_link(job.session_id) %></div><% end %>
+  <% if job.child_session_id.present? %><div class="small"><%= t("viewer.child_session") %>: <%= related_session_link(job.child_session_id) %></div><% end %>
+  <% if job.recovery_data.values_at("command", "agent", "model", "path").any? %><div class="small text-body-secondary"><%= job.recovery_data.values_at("command", "agent", "model", "path").compact.join(" · ") %></div><% end %>
+  <details class="mt-2"><summary class="small"><%= t("workspace.details") %> · <code><%= job.job_id %></code></summary>
+    <dl class="oc-facts"><dt><%= t("workspace.updated") %></dt><dd><%= opencode_time(job.time_updated_at) %></dd><dt><%= t("workspace.notification") %></dt><dd><code><%= job.notification_id %></code></dd></dl>
+    <% if job.output.present? %><h3 class="fs-6"><%= t("sessions.show.tool_output") %></h3><pre class="oc-pre"><%= job.output %></pre><% end %>
+    <% if job.error.present? %><h3 class="fs-6 text-danger"><%= t("sessions.show.tool_error") %></h3><pre class="oc-pre"><%= job.error %></pre><% end %>
+    <h3 class="fs-6"><%= t("workspace.recovery") %></h3><pre class="oc-pre"><%= pretty_json(job.recovery_data) %></pre>
+  </details>
+</article>

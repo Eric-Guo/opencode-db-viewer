@@ -1,0 +1,69 @@
+
+active:
+  id: "sch-active"
+  session_id: "session-current-schema"
+  name: "Schema active"
+  action: "{\"type\": \"prompt\", \"prompt\": \"Review schema changes\"}"
+  when: "{\"type\": \"every\", \"every\": \"1 hour\"}"
+  tz: "Australia/Perth"
+  status: "active"
+  next_due_at: 1700000080000
+  ends_at: 1700000090000
+  remaining_runs: 3
+  run_count: 2
+  last_fired_at: 1700000060000
+  last_message_id: "msg-split-user"
+  last_outcome: "checked"
+  retry_at: 1700000070000
+  check: "{\"mode\": \"until\", \"condition\": {\"type\": \"shell\", \"run\": \"test -f done\"}}"
+  checks: 4
+  failures: 1
+  state: "{\"previous\": \"pending\"}"
+  time_created: 1700000000000
+  time_updated: 1700000060000
+
+paused:
+  id: "sch-paused"
+  session_id: "session-current-schema"
+  name: "Schema paused"
+  action: "{\"type\": \"prompt\", \"prompt\": \"Review schema changes\"}"
+  when: "{\"type\": \"every\", \"every\": \"1 hour\"}"
+  tz: "Australia/Perth"
+  status: "paused"
+  next_due_at: null
+  ends_at: 1700000090000
+  remaining_runs: 3
+  run_count: 2
+  last_fired_at: 1700000060000
+  last_message_id: "msg-split-user"
+  last_outcome: "checked"
+  retry_at: 1700000070000
+  check: "{\"mode\": \"until\", \"condition\": {\"type\": \"shell\", \"run\": \"test -f done\"}}"
+  checks: 4
+  failures: 1
+  state: "{\"previous\": \"pending\"}"
+  time_created: 1700000000000
+  time_updated: 1700000060000
+
+done:
+  id: "sch-done"
+  session_id: null
+  name: "Schema done"
+  action: "{\"type\": \"prompt\", \"prompt\": \"Review schema changes\"}"
+  when: "{\"type\": \"every\", \"every\": \"1 hour\"}"
+  tz: "Australia/Perth"
+  status: "done"
+  next_due_at: null
+  ends_at: 1700000090000
+  remaining_runs: 3
+  run_count: 2
+  last_fired_at: 1700000060000
+  last_message_id: null
+  last_outcome: "checked"
+  retry_at: 1700000070000
+  check: "{\"mode\": \"until\", \"condition\": {\"type\": \"shell\", \"run\": \"test -f done\"}}"
+  checks: 4
+  failures: 1
+  state: "{\"previous\": \"pending\"}"
+  time_created: 1700000000000
+  time_updated: 1700000060000

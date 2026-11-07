@@ -1,0 +1,7 @@
+<% attachment = attachment_info(file, message, selector) %>
+<div class="oc-attachment">
+  <% if attachment[:preview] %><img src="<%= attachment[:preview] %>" alt="<%= attachment[:name] %>" loading="lazy" class="oc-attachment-preview" /><% end %>
+  <div class="oc-attachment-label"><strong><%= attachment[:name] %></strong><small class="text-body-secondary"><%= attachment[:mime] %><% if file.dig("source", "type").present? %> · <%= file.dig("source", "type") %><% end %><% if attachment[:bytes] %> · <%= number_to_human_size(attachment[:bytes]) %><% end %><% if attachment[:width] && attachment[:height] %> · <%= attachment[:width] %> × <%= attachment[:height] %><% end %></small></div>
+  <% if attachment[:missing] %><span class="small text-body-secondary"><%= t("workspace.media_unavailable") %></span><% end %>
+  <% if attachment[:url] %><%= link_to t("sessions.show.download"), attachment[:url], class: "small" %><% end %>
+</div>

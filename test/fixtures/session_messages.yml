@@ -43,3 +43,30 @@ session_message_browser:
   time_created: 1700000020040
   time_updated: 1700000021040
   data: '{"time":{"created":1700000020040},"agent":"build","content":[{"type":"tool","id":"call-browser","name":"execute","time":{"created":1700000021000,"completed":1700000022000},"state":{"status":"completed","input":{"code":"const tab = await tools.browser.tabs.open({url: \"https://example.com\"}); return await tools.browser.snapshot({tabID: tab.id})"},"metadata":{"toolCalls":[{"tool":"browser.tabs.open","status":"completed","input":{"url":"https://example.com"}},{"tool":"browser.snapshot","status":"completed","input":{"tabID":"tab-browser-fixture","ref":"@e1"}},{"tool":"browser.screenshot","status":"completed","input":{"tabID":"tab-browser-fixture"}}]},"content":[{"type":"text","text":"Browser snapshot fixture: Example Domain"},{"type":"file","name":"browser-capture.png","mime":"image/png","uri":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aF9sAAAAASUVORK5CYII="}]}}]}'
+
+split_user:
+  id: "msg-split-user"
+  session_id: "session-current-schema"
+  type: "user"
+  seq: 1
+  time_created: 1700000000000
+  time_updated: 1700000000000
+  data: "{\"text\": \"Review the new schema and stored screenshot.\", \"files\": [{\"name\": \"schema.png\", \"mime\": \"image/png\", \"uri\": \"media:fixture-image\"}, {\"name\": \"inline.txt\", \"mime\": \"text/plain\", \"data\": \"aW5saW5l\"}, {\"name\": \"missing.png\", \"mime\": \"image/png\", \"uri\": \"media:missing\"}]}"
+
+split_assistant:
+  id: "msg-split-assistant"
+  session_id: "session-current-schema"
+  type: "assistant"
+  seq: 2
+  time_created: 1700000010000
+  time_updated: 1700000060000
+  data: "{\"agent\": \"build\", \"model\": {\"id\": \"test-model\", \"providerID\": \"test-provider\"}, \"content\": [{\"type\": \"text\", \"text\": \"Inline tail after the split parts.\"}]}"
+
+parts_only:
+  id: "msg-parts-only"
+  session_id: "session-current-schema"
+  type: "assistant"
+  seq: 3
+  time_created: 1700000070000
+  time_updated: 1700000070000
+  data: "{\"agent\": \"build\"}"

@@ -37,6 +37,7 @@ class SessionActivityTest < ApplicationSystemTestCase
       click_link "Review browser integration"
     end
     assert_selector ".oc-overview", text: "Review browser integration"
+    click_button "Inspect session", exact: true
     assert_link "session-v2-fixture"
   end
 
@@ -46,7 +47,7 @@ class SessionActivityTest < ApplicationSystemTestCase
     select "Subagent sessions", from: "Session kind"
     fill_in "Search sessions by title, agent, or ID", with: "explore"
     click_button "Filter", exact: true
-    assert_selector "table.table-striped tbody tr", count: 1
-    assert_selector "table.table-striped", text: "Review browser integration"
+    assert_selector "table.oc-session-list tbody tr", count: 1
+    assert_selector "table.oc-session-list", text: "Review browser integration"
   end
 end

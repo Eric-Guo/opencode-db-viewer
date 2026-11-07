@@ -1,0 +1,40 @@
+
+reasoning:
+  message_id: "msg-split-assistant"
+  session_id: "session-current-schema"
+  ordinal: 0
+  type: "reasoning"
+  call_id: null
+  time_created: 1700000010000
+  time_updated: 1700000060000
+  data: "{\"type\": \"reasoning\", \"text\": \"Check schema compatibility.\"}"
+
+text:
+  message_id: "msg-split-assistant"
+  session_id: "session-current-schema"
+  ordinal: 1
+  type: "text"
+  call_id: null
+  time_created: 1700000010000
+  time_updated: 1700000060000
+  data: "{\"type\": \"text\", \"text\": \"## Schema supported\\n\\nThe **new fields** are visible.\\n\\n| Table | Status |\\n| --- | --- |\\n| session_part | Supported |\\n\\n```ruby\\nSession.first\\n```\\n\\n<script>window.markdownInjected = true</script><svg onload=\\\"window.markdownInjected=true\\\"></svg>\"}"
+
+tool:
+  message_id: "msg-split-assistant"
+  session_id: "session-current-schema"
+  ordinal: 2
+  type: "tool"
+  call_id: "call-split"
+  time_created: 1700000010000
+  time_updated: 1700000060000
+  data: "{\"type\": \"tool\", \"id\": \"call-split\", \"name\": \"bash\", \"state\": {\"status\": \"completed\", \"input\": {\"command\": \"inspect schema\"}, \"content\": [{\"type\": \"file\", \"name\": \"result.png\", \"mime\": \"image/png\", \"uri\": \"media:fixture-image\"}]}}"
+
+only:
+  message_id: "msg-parts-only"
+  session_id: "session-current-schema"
+  ordinal: 0
+  type: "text"
+  call_id: null
+  time_created: 1700000010000
+  time_updated: 1700000060000
+  data: "{\"type\": \"text\", \"text\": \"Parts-only response.\"}"

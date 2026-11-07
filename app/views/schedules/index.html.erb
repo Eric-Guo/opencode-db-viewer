@@ -1,0 +1,11 @@
+<div class="oc-page-intro"><h1 class="fs-4"><%= t("workspace.schedules") %></h1><p class="text-body-secondary"><%= t("workspace.recorded_work") %></p></div>
+<%= form_with url: schedules_path, method: :get, local: true, class: "oc-work-filters" do |form| %>
+  <%= form.search_field :q, value: @query, placeholder: t("workspace.search"), class: "form-control", aria: {label: t("workspace.search")} %>
+  <%= form.select :status, [[t("workspace.all_statuses"), ""]] + %w[active paused done].map { |status| [t("workspace.statuses.#{status}"), status] }, {selected: @status}, class: "form-select", aria: {label: t("workspace.status")} %>
+  
+  <%= form.submit t("viewer.filter"), class: "btn btn-outline-secondary" %>
+  <%= link_to t("viewer.clear_filters"), schedules_path, class: "btn btn-link" %>
+<% end %>
+<div class="oc-work-list"><%= render partial: "schedules/schedule", collection: @schedules %></div>
+<% if @schedules.empty? %><p class="text-body-secondary py-4"><%= t("workspace.no_schedules") %></p><% end %>
+<% if @pagy.pages > 1 %><%== pagy_bootstrap_nav(@pagy) %><% end %>

@@ -10,12 +10,17 @@ class SessionMessagesController < ApplicationController
     session = Session.where(project_id: project.worktree_project_ids).find(params[:session_id])
     authorize session, :show?
 
-    message = session.session_messages.where(id: params[:id]).first ||
-      session.retained_session_messages.find(params[:id])
+    message = session.session_messages.includes(:session_parts).where(id: params[:id]).first ||
+      session.retained_session_messages.find_by(id: params[:id]) ||
+      session.session_inboxes.find(params[:id])
     item, tool_state = find_file_item(message)
     raise ActiveRecord::RecordNotFound unless item
 
-    mime, payload = decode_data_url(item["uri"].presence || item["url"].to_s)
+    mime, payload = if item["data"].present?
+      [item["mime"], Base64.strict_decode64(item["data"])]
+    else
+      decode_data_url(item["uri"].presence || item["url"].to_s)
+    end
     raise ActiveRecord::RecordNotFound unless payload
 
     send_data payload,
@@ -27,6 +32,16 @@ class SessionMessagesController < ApplicationController
   private
 
   def find_file_item(message)
+    if params[:file].present?
+      files = message.is_a?(SessionInbox) ? message.parsed_payload["files"] : message.files
+      file = Array(files)[params[:file].to_i]
+      return [file, nil] if file.is_a?(Hash)
+
+      return
+    end
+
+    return if message.is_a?(SessionInbox)
+
     content_item = message.content[params[:content].to_i]
     return unless content_item.is_a?(Hash)
 

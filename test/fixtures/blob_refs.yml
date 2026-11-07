@@ -1,0 +1,18 @@
+
+user:
+  session_id: "session-current-schema"
+  message_id: "msg-split-user"
+  hash: "fixture-image"
+  seq: 1
+
+tool:
+  session_id: "session-current-schema"
+  message_id: "msg-split-assistant"
+  hash: "fixture-image"
+  seq: 1
+
+inbox:
+  session_id: "session-current-schema"
+  message_id: "inbox-schema"
+  hash: "fixture-image"
+  seq: 1

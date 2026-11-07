@@ -10,7 +10,7 @@
     <%= javascript_pack_tag "application" %>
     <%= yield :head %>
   </head>
-  <body class="overflow-x-hidden" data-controller="coreui theme">
+  <body class="overflow-x-hidden <%= "oc-viewer" if @viewer_layout %>" data-controller="coreui theme">
     <%= render "layouts/sidebars/#{@_sidebar_name}" unless @_sidebar_name.nil? -%>
     <div class="<%= @_wrapper_class.join(" ") unless @_wrapper_class.nil? -%>"
          <%= tag.attributes(data: {
@@ -34,13 +34,13 @@
             <% unless @skip_title %>
               <div class="fs-3 fw-semibold"><%= title -%></div>
             <% end %>
-            <%= render partial: "layouts/breadcrumb", locals: { breadcrumbs: @_breadcrumbs } if @_breadcrumbs.present? %>
+            <%= render partial: "layouts/breadcrumb", locals: { breadcrumbs: @_breadcrumbs } if @_breadcrumbs.present? && !@viewer_layout %>
             <%= yield %>
           </div>
         </div>
         <%= render "layouts/project_search" %>
         <div class="modal fade" id="coreuiModal" tabindex="-1" aria-hidden="true"></div>
-        <%= footer %>
+        <%= footer unless @viewer_layout %>
       <% end %>
     </div>
   </body>

@@ -1,0 +1,23 @@
+<article class="oc-work-item" id="schedule-<%= schedule.id %>">
+  <div class="d-flex align-items-start justify-content-between gap-2"><strong><%= schedule.name.presence || schedule.id %></strong><span class="badge bg-body-tertiary text-body border"><%= t("workspace.statuses.#{schedule.status}", default: schedule.status) %></span></div>
+  <div class="small text-body-secondary mt-1"><%= schedule.recurrence %> · <%= schedule.tz %></div>
+  <dl class="oc-facts">
+    <dt><%= t("workspace.next_due") %></dt><dd><%= opencode_time(schedule.next_due_at_time) %></dd>
+    <dt><%= t("workspace.last_outcome") %></dt><dd><%= t("workspace.outcomes.#{schedule.last_outcome}", default: schedule.last_outcome.presence || "—") %></dd>
+    <dt><%= t("workspace.runs") %></dt><dd><%= schedule.run_count %><% unless schedule.remaining_runs.nil? %> · <%= t("workspace.remaining", count: schedule.remaining_runs) %><% end %></dd>
+    <% if schedule.ends_at %><dt><%= t("workspace.ends") %></dt><dd><%= opencode_time(schedule.ends_at_time) %></dd><% end %>
+  </dl>
+  <div class="small"><%= schedule.session_id.present? ? related_session_link(schedule.session_id) : t("workspace.no_session") %></div>
+  <details class="mt-2"><summary class="small"><%= t("workspace.details") %> · <code><%= schedule.id %></code></summary>
+    <% if schedule.last_message_id.present? %><p class="small"><%= t("workspace.last_message") %>: <% if (owner = @related_sessions[schedule.session_id]) %><%= link_to schedule.last_message_id, project_session_path(owner.project_id, owner, anchor: "message-#{schedule.last_message_id}") %><% else %><code><%= schedule.last_message_id %></code><% end %></p><% end %>
+    <dl class="oc-facts">
+      <dt><%= t("workspace.checks") %></dt><dd><%= schedule.checks %></dd><dt><%= t("workspace.failures") %></dt><dd><%= schedule.failures %></dd>
+      <dt><%= t("workspace.last_fired") %></dt><dd><%= opencode_time(schedule.last_fired_at_time) %></dd>
+      <dt><%= t("workspace.retry") %></dt><dd><%= opencode_time(schedule.retry_at_time) %></dd>
+      <dt><%= t("workspace.created") %></dt><dd><%= opencode_time(schedule.time_created_time) %></dd>
+      <dt><%= t("workspace.updated") %></dt><dd><%= opencode_time(schedule.time_updated_time) %></dd>
+    </dl>
+    <% %w[action check state].each do |field| %><h3 class="fs-6"><%= t("workspace.#{field}") %></h3><pre class="oc-pre"><%= pretty_json(schedule.public_send("#{field}_data")) %></pre><% end %>
+    <details><summary><%= t("workspace.storage") %></summary><pre class="oc-pre"><%= pretty_json(schedule.attributes) %></pre></details>
+  </details>
+</article>

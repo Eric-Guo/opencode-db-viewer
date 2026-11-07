@@ -19,13 +19,13 @@ class CoreuiV5Test < ApplicationSystemTestCase
     visit project_session_path("project-session-v2", "session-v2-fixture")
 
     select_theme "light"
-    assert_selector ".wrapper", style: {"background-color" => "rgba(243, 244, 247, 1)"}
+    assert_selector ".wrapper", style: {"background-color" => "rgba(255, 255, 255, 1)"}
 
     select_theme "dark"
-    assert_selector ".wrapper", style: {"background-color" => "rgba(42, 48, 61, 1)"}
+    assert_selector ".wrapper", style: {"background-color" => "rgba(22, 22, 22, 1)"}
     click_button "Browser", exact: true
     find(".oc-nested-call", text: "browser.tabs.open").find("summary").click
-    assert_equal "rgba(42, 48, 61, 1)", find(".oc-pre", text: "https://example.com").style("background-color").fetch("background-color")
+    assert_equal "rgba(46, 46, 46, 1)", find(".oc-pre", text: "https://example.com").style("background-color").fetch("background-color")
     refresh
     assert_selector "html[data-coreui-theme='dark']", visible: :all
 

@@ -1,5 +1,13 @@
 <%= nav_item(t("layouts.sidebars.application.dashboard"), root_path, "free.svg#cil-speedometer") %>
 <%= nav_item(t("layouts.sidebars.application.projects"), projects_path, "free.svg#cil-folder") %>
+<%= nav_item(t("workspace.jobs"), background_jobs_path, "free.svg#cil-task") %>
+<%= nav_item(t("workspace.schedules"), schedules_path, "free.svg#cil-clock") %>
+<% if @viewer_layout %>
+  <li class="nav-title"><%= t("layouts.sidebars.application.projects") %></li>
+  <% @nav_projects.each do |project| %>
+    <%= nav_item(project.name.presence || project.id, project_path(project), "free.svg#cil-folder") %>
+  <% end %>
+<% end %>
 <% if @project&.persisted? %>
   <li class="nav-title"><%= t("viewer.current_project") %></li>
   <li class="nav-group show">
@@ -9,8 +17,8 @@
     </a>
     <ul class="nav-group-items">
       <%= nav_item(t("viewer.project_sessions"), project_path(@project)) %>
-      <% if @session&.persisted? %>
-        <%= nav_item(@session.title.presence || @session.slug, project_session_path(@project, @session)) %>
+      <% (@nav_sessions || []).each do |session| %>
+        <%= nav_item(session.title.presence || session.slug, project_session_path(@project, session)) %>
       <% end %>
     </ul>
   </li>

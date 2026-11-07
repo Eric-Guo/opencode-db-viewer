@@ -118,3 +118,17 @@ session_show_sibling_fixture:
   version: "1.0.0"
   time_created: 9700000000000
   time_updated: 9700000000000
+
+current_schema:
+  id: "session-current-schema"
+  project_id: "project-current-schema"
+  slug: "current-schema"
+  title: "Schema display review"
+  directory: "/tmp/current-schema"
+  version: "2.2.5"
+  agent: "build"
+  time_created: 1700000000000
+  time_updated: 1700000060000
+  time_busy: 1700000010000
+  time_idle: 1700000060000
+  idle_outcome: "succeeded"

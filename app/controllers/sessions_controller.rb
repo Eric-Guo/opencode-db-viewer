@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     add_to_breadcrumbs @project.name.presence || @project.id, project_path(@project)
     add_to_breadcrumbs @session.title.presence || @session.slug
 
-    @session_messages = @session.session_messages.order(:seq).to_a
+    @session_messages = @session.session_messages.includes(:session_parts).order(:seq).to_a
     @retained_session_messages = @session.retained_session_messages.order(:seq).to_a
     @legacy_messages = @session.legacy_messages.includes(:parts).order(:time_created, :id)
     @message_storage = (@session_messages.any? || @retained_session_messages.any?) ? :session_message : :legacy
@@ -31,9 +31,13 @@ class SessionsController < ApplicationController
     @tools = (@message_storage == :session_message) ? @messages.flat_map { |message| message.tools.values } : []
     @tool_counts = @tools.flat_map { |tool| [tool, *tool.calls] }.group_by(&:category).transform_values(&:size)
     @children = policy_scope(Session).where(parent_id: @session.id).order(:time_created)
-    related_ids = [@session.parent_id, @session.fork_session_id, *@tools.map(&:session_id)].compact
+    @jobs = OpenCodeJob.where(session_id: @session.id).or(OpenCodeJob.where(child_session_id: @session.id)).order(time_created: :desc, notification_id: :desc).to_a
+    @schedules = @session.schedules.order(:next_due_at, :id).to_a
+    related_ids = [@session.id, @session.parent_id, @session.fork_session_id, *@tools.map(&:session_id), *@jobs.map(&:session_id), *@jobs.map(&:child_session_id)].compact
     @related_sessions = policy_scope(Session).where(id: related_ids).index_by(&:id)
     @inbox_items = @session.session_inboxes.order(:enqueued_seq)
+    @blob_refs = @session.blob_refs.order(:seq).to_a
+    @blobs = StoredBlob.where(hash: @blob_refs.map(&:content_hash)).select(:hash, :mime, :bytes, :width, :height, :time_created).index_by(&:content_hash)
     @instruction_entries = @session.instruction_entries.order(:key)
     events_scope = OpenCodeEvent.where(aggregate_id: @session.id)
     @event_count = events_scope.count

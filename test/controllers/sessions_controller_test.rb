@@ -122,7 +122,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get project_session_url(project, session)
 
     assert_response :success
-    assert_select ".card-header strong", text: session.slug
+    assert_select ".oc-session-identity strong", text: session.slug
     assert_includes response.body, "modal-new"
     assert_includes response.body, I18n.t("sessions.show.execution_claimed")
     assert_includes response.body, I18n.t("sessions.show.resume_attempts", count: 2)
@@ -195,14 +195,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, I18n.t("sessions.show.tool_result")
     assert_includes response.body, "Content result fixture"
     assert_select "img[src=?]", "data:image/png;base64,iVBORw0KGgo="
-    assert_select "span.badge", text: /spec\.pdf · application\/pdf/
+    assert_select ".oc-attachment", text: /spec\.pdfapplication\/pdf/
     assert_includes response.body, "Structured result fixture"
     assert_includes response.body, "Raw result fixture"
     assert_includes response.body, "request-fixture"
     assert_includes response.body, "response-fixture"
     assert_includes response.body, "test-provider/test-model"
     assert_includes response.body, "test-workspace-provider"
-    assert_select ".card-header strong", text: I18n.t("sessions.show.session_inbox")
+    assert_select ".oc-queue h2", text: /#{Regexp.escape(I18n.t("sessions.show.session_inbox"))}/
     assert_includes response.body, "inbox-v2-user-fixture"
     assert_includes response.body, "Queued current schema prompt"
     assert_includes response.body, "queue"

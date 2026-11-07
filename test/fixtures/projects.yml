@@ -96,3 +96,11 @@ project_show_sibling_duplicate:
   sandboxes: "[]"
   time_created: 9700000000001
   time_updated: 9700000000001
+
+current_schema:
+  id: "project-current-schema"
+  name: "Current schema"
+  worktree: "/tmp/current-schema"
+  sandboxes: "[]"
+  time_created: 1700000000000
+  time_updated: 1700000000000

@@ -107,9 +107,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get project_url(projects(:project_session_v2), kind: "subagents", q: "explore", state: "unarchived")
 
     assert_response :success
-    assert_select "table.table-striped tbody tr", count: 1
-    assert_select "table.table-striped a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture")
-    assert_select "table.table-striped .badge", text: I18n.t("viewer.states.succeeded")
+    assert_select "table.oc-session-list tbody tr", count: 1
+    assert_select "table.oc-session-list a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture")
+    assert_select "table.oc-session-list .badge", text: I18n.t("viewer.states.succeeded")
 
     get project_url(projects(:project_session_v2), kind: "subagents", state: "archived")
     assert_select "td", text: I18n.t("projects.show.no_sessions")
@@ -120,9 +120,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get project_url(projects(:project_session_v2), kind: "primary")
 
     assert_response :success
-    assert_select "table.table-striped tbody tr", count: 1
-    assert_select "table.table-striped a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), count: 0
-    assert_select "table.table-striped tbody td:nth-child(4)", text: /6/
+    assert_select "table.oc-session-list tbody tr", count: 1
+    assert_select "table.oc-session-list a[href=?]", project_session_path("project-session-v2", "session-subagent-fixture"), count: 0
+    assert_select "table.oc-session-list tbody td:nth-child(4)", text: /6/
   end
 
   test "should redirect to login when not signed in" do
@@ -175,7 +175,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select "div", text: I18n.t("projects.show.total_sessions")
     assert_select "div", text: I18n.t("projects.show.total_tokens")
     assert_select "div", text: I18n.t("projects.show.total_cost")
-    assert_select "table.table-striped tbody tr", count: 2
+    assert_select "table.oc-session-list tbody tr", count: 2
     assert_includes response.body, old_title
     assert_includes response.body, new_title
     assert_includes response.body, I18n.t("projects.show.fork_boundaries.before", message: "msg-boundary-fixture")
@@ -201,7 +201,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get project_url(projects(:project_show_sibling_main))
 
     assert_response :success
-    assert_select "table.table-striped tbody tr", count: 1
+    assert_select "table.oc-session-list tbody tr", count: 1
     assert_includes response.body, "sibling-session-title-fixture"
   end
 

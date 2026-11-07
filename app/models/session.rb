@@ -18,11 +18,10 @@ class Session < ApplicationRecord
     class_name: "SessionMessageRetained",
     foreign_key: :session_id,
     inverse_of: :session
-  has_many :session_pendings,
-    class_name: "SessionPending",
-    foreign_key: :session_id,
-    inverse_of: :session,
-    dependent: :destroy
+  has_many :session_parts, foreign_key: :session_id, dependent: :delete_all
+  has_many :blob_refs, foreign_key: :session_id, dependent: :delete_all
+  has_many :background_jobs, class_name: "OpenCodeJob", foreign_key: :session_id, dependent: :delete_all
+  has_many :schedules, foreign_key: :session_id, dependent: :delete_all
   has_many :session_inboxes,
     class_name: "SessionInbox",
     foreign_key: :session_id,
@@ -65,6 +64,16 @@ class Session < ApplicationRecord
 
   def execution_claimed_at
     epoch_time(time_suspended)
+  end
+
+  def time_busy_at
+    epoch_time(time_busy)
+  end
+
+  def execution_duration
+    return unless time_busy.present? && time_idle.present? && time_idle >= time_busy
+
+    (time_idle - time_busy) / 1000.0
   end
 
   def time_idle_at

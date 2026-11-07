@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-dark sidebar-fixed border-end <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
+<div class="sidebar <%= "sidebar-dark" unless @viewer_layout %> sidebar-fixed border-end <%= current_user&.sidebar_narrow? ? "sidebar-narrow-unfoldable" : "" -%>" id="sidebar" data-controller="sidebar">
   <div class="sidebar-header border-bottom">
     <div class="sidebar-brand">
       <%= link_to root_path, class: "text-reset text-decoration-none" do %>

@@ -1,0 +1,9 @@
+image:
+  hash: fixture-image
+  mime: image/png
+  bytes: 68
+  width: 1
+  height: 1
+  time_created: 1700000000000
+  data: !binary |
+    iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a/l8AAAAASUVORK5CYII=

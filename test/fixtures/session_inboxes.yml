@@ -7,3 +7,12 @@ session_inbox_v2_user:
   delivery: "queue"
   enqueued_seq: 42
   time_created: 1700000040000
+
+schema:
+  id: "inbox-schema"
+  session_id: "session-current-schema"
+  type: "user"
+  payload: "{\"text\": \"Queued follow-up\", \"files\": [{\"name\": \"queued.png\", \"mime\": \"image/png\", \"uri\": \"media:fixture-image\"}]}"
+  delivery: "steer"
+  enqueued_seq: 5
+  time_created: 1700000070000

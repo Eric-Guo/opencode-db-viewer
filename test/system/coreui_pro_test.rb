@@ -60,7 +60,7 @@ class CoreuiProTest < ApplicationSystemTestCase
     click_link "Clear all"
     assert_current_path project_path("project-session-v2")
     assert_no_selector ".oc-active-filters"
-    assert_selector "table.table-striped tbody tr", count: 2
+    assert_selector "table.oc-session-list tbody tr", count: 2
   end
 
   test "timeline chip set supports keyboard selection and reset without deselecting the active category" do

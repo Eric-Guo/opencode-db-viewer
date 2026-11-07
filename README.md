@@ -9,6 +9,12 @@ Account and credential tables have matching models for schema completeness, but 
 
 Project pages include search, top-level/subagent and archive filters, retained-message counts, and MyTodo project/work-package mappings when present. Sessions show their recorded outcome, usage, and linked parent/child conversations. Execution claims are recovery markers; the viewer does not treat them as proof that a process is currently running.
 
+The viewer follows OpenCode's desktop layout with compact project/session navigation and a conversation-first session page. **Inspect session** opens Details, Background work, and Schedules; on smaller screens it becomes a keyboard-accessible drawer. Administrative pages retain their CoreUI layout.
+
+Assistant messages combine ordered `session_part` rows with any remaining inline content, matching OpenCode's reader. Markdown is sanitized before rendering, with the original text available under **View source**. Stored `media:` attachments resolve through `blob_ref` and an authenticated session-scoped media route. Images show thumbnails, sizes, and dimensions; downloads retain their saved filenames. Missing media appears as **Media unavailable**.
+
+**Background work** and **Schedules** in the sidebar browse records across sessions, including schedules without an owning session. Both support search, status filters, and pagination. Per-session panels show related records, recorded outputs/errors, schedule conditions, and recovery/storage details. The viewer does not execute schedules or control jobs. **Last execution started** (`time_busy`) is shown separately from completion, with duration only when a matching completion exists.
+
 The project list and details show **Last Active** (`time_active`) separately from metadata update time. Activity timestamps use the same date formatting as other OpenCode timestamps; a zero or unavailable value appears as **Not recorded**.
 
 The activity timeline opens on the conversation and can be filtered to tools, subagents, browser activity, or durable events. Subagent cards show the delegated prompt, foreground/background mode, child session, and status at return alongside the child's current recorded outcome. Browser operations inside Code Mode `execute` calls come from `state.metadata.toolCalls`, including their inputs and recorded statuses. Stored captures can be previewed and downloaded with their original filenames through **Inspect input, output, and metadata**. The viewer reads saved activity; it does not connect to or control a browser.
@@ -22,6 +28,8 @@ bin/rails server
 ## Development notes
 
 Run the Rails suite with `bin/rails test`, and the project/session browser checks with `HEADLESS=1 bin/rails test:system`. Tests use the separate database under `storage/`, including fixtures for background subagents and browser Code Mode calls.
+
+Capture fixture-based light/dark previews with `HEADLESS=1 VIEWER_SCREENSHOTS=1 bin/rails test test/system/viewer_workspace_test.rb`; images are written under `tmp/screenshots/`.
 
 The header's color-theme menu supports Light, Dark, and Auto (system preference), saved in the browser. CoreUI 5 integration checks cover color modes, responsive navigation, admin charts, tables, and modal selects in `test/system/coreui_v5_test.rb`.
 

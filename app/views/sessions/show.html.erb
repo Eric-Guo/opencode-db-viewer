@@ -1,55 +1,11 @@
-<div class="card mb-4 oc-overview">
-  <div class="card-header oc-heading d-flex align-items-center flex-wrap gap-2">
-    <%= svg_icon("free.svg#cil-chat-bubble", "icon me-2") %>
-    <strong class="fs-5 text-break"><%= @session.title.presence || @session.slug %></strong>
-    <%= session_state_badge(@session) %>
-    <%= button_to project_session_path(@project, @session), method: :delete, class: "btn btn-outline-danger btn-sm", form: {class: "ms-auto"}, onclick: "return confirm(this.dataset.confirm)", data: {confirm: t(".remove_confirm")} do %>
-      <%= svg_icon("free.svg#cil-trash", "icon me-1") %><%= t(".remove_session") %>
-    <% end %>
-  </div>
-  <div class="card-body">
-    <div class="oc-session-summary mb-3">
-      <div><span class="oc-eyebrow"><%= t(".agent_model") %></span><strong><%= @session.agent.presence || "—" %></strong><small class="d-block text-body-secondary"><%= [@session.model_data["providerID"], @session.model_data["id"]].compact.join("/") %></small></div>
-      <div><span class="oc-eyebrow"><%= t(".tokens") %></span><strong><%= number_with_delimiter(@session.total_tokens) %></strong></div>
-      <div><span class="oc-eyebrow"><%= t(".cost") %></span><strong><%= number_to_currency(@session.cost.to_f, precision: 4) %></strong></div>
-      <div><span class="oc-eyebrow"><%= t("viewer.activity") %></span><strong><%= t("viewer.tool_count", count: @tools.size) %></strong><small class="d-block text-body-secondary"><%= t("viewer.browser_count", count: @tool_counts.fetch("browser", 0)) %> · <%= t("viewer.subagent_count", count: @children.size) %></small></div>
-    </div>
-    <div class="small text-body-secondary mb-3"><code class="text-break"><%= @session.directory %></code></div>
-    <% if @session.parent_id.present? %><div class="mb-3"><span class="oc-eyebrow"><%= t(".parent_session") %></span><%= related_session_link(@session.parent_id) %></div><% end %>
-    <details>
-      <summary class="small fw-semibold"><%= t("viewer.session_details") %></summary>
-    <div class="row g-3 mt-1">
-      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".session_id") %></div><code class="text-break"><%= @session.id %></code></div>
-      <div class="col-lg-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".version") %></div><%= @session.version %></div>
-      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".directory") %></div><code class="text-break"><%= @session.directory %></code><% if @session.path.present? %><div class="small text-body-secondary"><%= t(".path") %>: <code><%= @session.path %></code></div><% end %></div>
-      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".agent_model") %></div><%= @session.agent.presence || "-" %><div class="small text-body-secondary"><%= [@session.model_data["providerID"], @session.model_data["id"], @session.model_data["variant"]].compact.join("/").presence || "-" %></div></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".cost") %></div><%= number_to_currency(@session.cost.to_f, precision: 8) %></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_input") %></div><%= number_with_delimiter(@session.tokens_input) %></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_output") %></div><%= number_with_delimiter(@session.tokens_output) %></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".tokens_other") %></div><%= number_with_delimiter(@session.tokens_reasoning.to_i + @session.tokens_cache_read.to_i + @session.tokens_cache_write.to_i) %></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".files_changed") %></div><%= @session.summary_files || 0 %></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".additions") %></div><span class="text-success">+<%= @session.summary_additions || 0 %></span></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".deletions") %></div><span class="text-danger">-<%= @session.summary_deletions || 0 %></span></div>
-      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".state") %></div><% if @session.time_archived_at %><span class="badge bg-secondary"><%= t(".archived") %></span><% elsif @session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t(".execution_claimed") %></span><div class="small text-body-secondary"><%= opencode_time(@session.execution_claimed_at) %></div><div class="small text-body-secondary"><%= t(".resume_attempts", count: @session.resume_attempts) %></div><% elsif @session.time_compacting_at %><span class="badge bg-info"><%= t(".compacting") %></span><% else %><%= session_state_badge(@session) %><% end %><% if @session.time_idle_at %><div class="small text-body-secondary"><%= t(".idle_outcome", outcome: @session.idle_outcome.presence || "-") %> · <%= opencode_time(@session.time_idle_at) %></div><% end %></div>
-      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_created") %></div><%= opencode_time(@session.time_created_at) %></div>
-      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_updated") %></div><%= opencode_time(@session.time_updated_at) %></div>
-      <% if @session.time_viewed_at %>
-        <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".time_viewed") %></div><%= opencode_time(@session.time_viewed_at) %></div>
-      <% end %>
-      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t(".workspace") %></div><% if @session.workspace %><%= @session.workspace.provider %><div class="small"><code><%= @session.workspace.id %></code></div><% else %><code><%= @session.workspace_id.presence || "-" %></code><% end %></div>
-      <% if @session.parent_id.present? || @session.fork_session_id.present? %>
-        <div class="col-12"><div class="alert alert-light border mb-0"><% if @session.parent_id.present? %><div><%= t(".parent_session") %>: <%= related_session_link(@session.parent_id) %></div><% end %><% if @session.fork_session_id.present? %><div><%= t(".forked_from") %>: <%= related_session_link(@session.fork_session_id, label: @session.fork_session_id) %> · <%= t(".fork_boundary") %>: <%= t(".fork_boundaries.#{@session.fork_boundary_type}", message: @session.fork_boundary_message_id, default: [@session.fork_boundary_type, @session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %></div></div>
-      <% end %>
-      <% if @session.metadata_data.present? || @session.summary_diffs_data.present? %>
-        <div class="col-12"><details><summary class="fw-semibold"><%= t(".metadata_and_diffs") %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({metadata: @session.metadata_data, summary_diffs: @session.summary_diffs_data}) %></code></pre></details></div>
-      <% end %>
-    </div>
-    </details>
-  </div>
-</div>
-
-<%= render "sessions/related_sessions" %>
-
+<div data-controller="inspector" data-action="keydown.esc@window->inspector#close keydown.tab->inspector#trap">
+  <header class="oc-session-header oc-overview">
+    <div class="oc-session-identity"><%= link_to @project.name.presence || @project.id, project_path(@project), class: "text-body-secondary" %><span>/</span><strong><%= @session.title.presence || @session.slug %></strong><%= session_state_badge(@session) %></div>
+    <button class="btn btn-sm btn-outline-secondary" data-action="inspector#toggle" data-inspector-target="toggle" aria-expanded="false" aria-controls="session-inspector"><%= t("workspace.inspect") %></button>
+    <details class="oc-session-menu"><summary aria-label="<%= t("workspace.session_actions") %>">•••</summary><div><%= button_to t("sessions.show.remove_session"), project_session_path(@project, @session), method: :delete, class: "btn btn-sm btn-outline-danger", onclick: "return confirm(this.dataset.confirm)", data: {confirm: t("sessions.show.remove_confirm")} %></div></details>
+  </header>
+  <div class="oc-session-layout" data-inspector-target="layout">
+    <main class="oc-conversation">
 <div class="card mb-4 oc-timeline" data-controller="timeline">
   <div class="card-header d-flex align-items-center flex-wrap gap-2">
     <%= svg_icon("free.svg#cil-history", "icon") %>
@@ -78,7 +34,7 @@
     <% else %>
       <% message_partial = @message_storage == :session_message ? "sessions/session_message" : "sessions/legacy_message" %>
       <% @timeline.each do |(_time, kind, record, collapsed_count)| %>
-        <div data-timeline-target="entry" data-categories="<%= timeline_categories(record, kind) %>">
+        <div id="message-<%= record.id %>" data-timeline-target="entry" data-categories="<%= timeline_categories(record, kind) %>">
         <% if kind.zero? %>
           <%= render partial: message_partial, locals: {message: record} %>
         <% else %>
@@ -91,22 +47,39 @@
 </div>
 
 <% if @inbox_items.any? %>
-  <div class="card mb-4">
-    <div class="card-header"><strong><%= t(".session_inbox") %></strong><span class="badge bg-warning text-dark ms-2"><%= @inbox_items.size %></span></div>
-    <div class="card-body">
-      <% @inbox_items.each do |item| %>
-        <details class="mb-2"><summary><span class="badge bg-warning text-dark"><%= item.inbox_type %></span> <code><%= item.id %></code> · #<%= item.enqueued_seq %> · <%= item.delivery %> · <%= opencode_time(item.time_created_at) %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 small"><code><%= pretty_json(item.parsed_payload) %></code></pre></details>
-      <% end %>
-    </div>
-  </div>
+  <section class="oc-queue">
+    <h2 class="fs-6"><%= t("sessions.show.session_inbox") %> <span class="text-body-secondary"><%= @inbox_items.size %></span></h2>
+    <% @inbox_items.each do |item| %>
+      <article class="oc-queue-item">
+        <span class="badge bg-body-tertiary text-body border"><%= item.delivery %> · <%= item.inbox_type %></span>
+        <p class="oc-plain mt-2"><%= item.parsed_payload["text"] %></p>
+        <% Array(item.parsed_payload["files"]).each_with_index do |file, index| %><%= render "sessions/attachment", file: file, message: item, selector: {file: index} %><% end %>
+        <details><summary class="small text-body-secondary"><code><%= item.id %></code> · #<%= item.enqueued_seq %> · <%= opencode_time(item.time_created_at) %></summary><pre class="oc-pre"><%= pretty_json(item.parsed_payload) %></pre></details>
+      </article>
+    <% end %>
+  </section>
 <% end %>
 
-<% if @instruction_entries.any? || @session.instruction_state.present? %>
-  <div class="card mb-4">
-    <div class="card-header"><strong><%= t(".instruction_context") %></strong><span class="badge bg-info ms-2"><%= @instruction_entries.size %></span></div>
-    <div class="card-body">
-      <% if @session.instruction_state %><div class="small text-body-secondary mb-3"><%= t(".epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t(".through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
-      <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t(".removed") %></span><% end %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
-    </div>
+    </main>
+    <button class="oc-inspector-backdrop" data-inspector-target="backdrop" data-action="inspector#close" aria-label="<%= t("workspace.close_inspector") %>" hidden></button>
+    <aside id="session-inspector" class="oc-inspector" data-inspector-target="panel" aria-label="<%= t("workspace.inspect") %>" tabindex="-1" hidden>
+      <div class="d-flex justify-content-between align-items-center mb-3"><strong><%= t("workspace.inspect") %></strong><button class="btn-close" data-action="inspector#close" aria-label="<%= t("workspace.close_inspector") %>"></button></div>
+      <nav class="oc-inspector-tabs" aria-label="<%= t("workspace.inspect") %>">
+        <% %w[details jobs schedules].each_with_index do |tab, index| %>
+          <button class="btn btn-sm <%= "active" if index.zero? %>" data-inspector-target="tab" data-action="inspector#select" data-panel="<%= tab %>" aria-pressed="<%= index.zero? %>" aria-controls="inspector-<%= tab %>"><%= t("workspace.#{tab}") %></button>
+        <% end %>
+      </nav>
+      <section id="inspector-details" data-inspector-target="section"><%= render "sessions/details" %><%= render "sessions/instructions" %>
+        <details class="mt-3"><summary><%= t("workspace.storage") %></summary>
+          <p class="small text-body-secondary mt-2"><%= @message_storage_label %></p>
+          <% @session_messages.each do |message| %>
+            <% if message.session_parts.any? %><details><summary><code><%= message.id %></code> · <%= message.session_parts.size %> <%= t("workspace.parts") %></summary><% message.session_parts.each do |part| %><pre class="oc-pre"><%= pretty_json(part.attributes.except("data").merge("data" => part.parsed_data)) %></pre><% end %></details><% end %>
+          <% end %>
+          <% @blob_refs.each do |ref| %><details><summary><code><%= ref.content_hash %></code> · #<%= ref.seq %></summary><pre class="oc-pre"><%= pretty_json(ref.attributes.merge("blob" => @blobs[ref.content_hash]&.attributes)) %></pre></details><% end %>
+        </details>
+      </section>
+      <section id="inspector-jobs" data-inspector-target="section" hidden><%= render partial: "background_jobs/job", collection: @jobs %><% if @jobs.empty? %><p class="text-body-secondary"><%= t("workspace.no_jobs") %></p><% end %></section>
+      <section id="inspector-schedules" data-inspector-target="section" hidden><%= render partial: "schedules/schedule", collection: @schedules %><% if @schedules.empty? %><p class="text-body-secondary"><%= t("workspace.no_schedules") %></p><% end %></section>
+    </aside>
   </div>
-<% end %>
+</div>

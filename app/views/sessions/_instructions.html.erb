@@ -1,0 +1,9 @@
+<% if @instruction_entries.any? || @session.instruction_state.present? %>
+  <div class="card mb-4">
+    <div class="card-header"><strong><%= t("sessions.show.instruction_context") %></strong><span class="badge bg-info ms-2"><%= @instruction_entries.size %></span></div>
+    <div class="card-body">
+      <% if @session.instruction_state %><div class="small text-body-secondary mb-3"><%= t("sessions.show.epoch") %> <%= @session.instruction_state.epoch_start %> · <%= t("sessions.show.through_sequence") %> <%= @session.instruction_state.through_seq %></div><% end %>
+      <% @instruction_entries.each do |entry| %><details class="mb-2"><summary><code><%= entry.key %></code> <% if entry.removed? %><span class="badge bg-secondary"><%= t("sessions.show.removed") %></span><% end %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 small"><code><%= pretty_json(entry.value_data) %></code></pre></details><% end %>
+    </div>
+  </div>
+<% end %>

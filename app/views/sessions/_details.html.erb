@@ -1,0 +1,35 @@
+    <details open>
+      <summary class="small fw-semibold"><%= t("viewer.session_details") %></summary>
+    <div class="row g-3 mt-1">
+      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.session_id") %></div><code class="text-break"><%= @session.id %></code></div>
+      <div class="col-lg-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.version") %></div><%= @session.version %></div>
+      <div class="col-lg-8"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.directory") %></div><code class="text-break"><%= @session.directory %></code><% if @session.path.present? %><div class="small text-body-secondary"><%= t("sessions.show.path") %>: <code><%= @session.path %></code></div><% end %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.agent_model") %></div><%= @session.agent.presence || "-" %><div class="small text-body-secondary"><%= [@session.model_data["providerID"], @session.model_data["id"], @session.model_data["variant"]].compact.join("/").presence || "-" %></div></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.cost") %></div><%= number_to_currency(@session.cost.to_f, precision: 8) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.tokens_input") %></div><%= number_with_delimiter(@session.tokens_input) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.tokens_output") %></div><%= number_with_delimiter(@session.tokens_output) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.tokens_other") %></div><%= number_with_delimiter(@session.tokens_reasoning.to_i + @session.tokens_cache_read.to_i + @session.tokens_cache_write.to_i) %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.files_changed") %></div><%= @session.summary_files || 0 %></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.additions") %></div><span class="text-success">+<%= @session.summary_additions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.deletions") %></div><span class="text-danger">-<%= @session.summary_deletions || 0 %></span></div>
+      <div class="col-md-3"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.state") %></div><% if @session.time_archived_at %><span class="badge bg-secondary"><%= t("sessions.show.archived") %></span><% elsif @session.execution_claimed_at %><span class="badge bg-warning text-dark"><%= t("sessions.show.execution_claimed") %></span><div class="small text-body-secondary"><%= opencode_time(@session.execution_claimed_at) %></div><div class="small text-body-secondary"><%= t("sessions.show.resume_attempts", count: @session.resume_attempts) %></div><% elsif @session.time_compacting_at %><span class="badge bg-info"><%= t("sessions.show.compacting") %></span><% else %><%= session_state_badge(@session) %><% end %><% if @session.time_idle_at %><div class="small text-body-secondary"><%= t("sessions.show.idle_outcome", outcome: @session.idle_outcome.presence || "-") %> · <%= opencode_time(@session.time_idle_at) %></div><% end %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.time_created") %></div><%= opencode_time(@session.time_created_at) %></div>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.time_updated") %></div><%= opencode_time(@session.time_updated_at) %></div>
+      <% if @session.time_viewed_at %>
+        <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.time_viewed") %></div><%= opencode_time(@session.time_viewed_at) %></div>
+      <% end %>
+      <div class="col-md-4"><div class="text-body-secondary small text-uppercase fw-semibold"><%= t("sessions.show.workspace") %></div><% if @session.workspace %><%= @session.workspace.provider %><div class="small"><code><%= @session.workspace.id %></code></div><% else %><code><%= @session.workspace_id.presence || "-" %></code><% end %></div>
+      <% if @session.parent_id.present? || @session.fork_session_id.present? %>
+        <div class="col-12"><div class="alert alert-light border mb-0"><% if @session.parent_id.present? %><div><%= t("sessions.show.parent_session") %>: <%= related_session_link(@session.parent_id) %></div><% end %><% if @session.fork_session_id.present? %><div><%= t("sessions.show.forked_from") %>: <%= related_session_link(@session.fork_session_id, label: @session.fork_session_id) %> · <%= t("sessions.show.fork_boundary") %>: <%= t("sessions.show.fork_boundaries.#{@session.fork_boundary_type}", message: @session.fork_boundary_message_id, default: [@session.fork_boundary_type, @session.fork_boundary_message_id].compact.join(" ").presence || "-") %></div><% end %></div></div>
+      <% end %>
+      <% if @session.metadata_data.present? || @session.summary_diffs_data.present? %>
+        <div class="col-12"><details><summary class="fw-semibold"><%= t("sessions.show.metadata_and_diffs") %></summary><pre class="bg-body-tertiary rounded p-3 mt-2 mb-0 small"><code><%= pretty_json({metadata: @session.metadata_data, summary_diffs: @session.summary_diffs_data}) %></code></pre></details></div>
+      <% end %>
+    </div>
+    </details>
+<dl class="oc-facts">
+  <dt><%= t("workspace.execution_started") %></dt><dd><%= opencode_time(@session.time_busy_at) %></dd>
+  <dt><%= t("workspace.execution_completed") %></dt><dd><%= opencode_time(@session.time_idle_at) %></dd>
+  <% if @session.execution_duration %><dt><%= t("workspace.duration") %></dt><dd><%= number_with_precision(@session.execution_duration, precision: 2) %> s</dd><% end %>
+</dl>
+<%= render "sessions/related_sessions" %>

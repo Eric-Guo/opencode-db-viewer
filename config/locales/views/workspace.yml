@@ -1,0 +1,159 @@
+{
+  "en": {
+    "workspace": {
+      "jobs": "Background work",
+      "schedules": "Schedules",
+      "details": "Details",
+      "inspect": "Inspect session",
+      "close_inspector": "Close inspector",
+      "session_actions": "Session actions",
+      "storage": "Storage records",
+      "parts": "parts",
+      "source": "View source",
+      "execution_started": "Last execution started",
+      "execution_completed": "Last execution completed",
+      "duration": "Execution duration",
+      "media_unavailable": "Media unavailable",
+      "updated": "Updated",
+      "created": "Created",
+      "notification": "Notification ID",
+      "recovery": "Recovery data",
+      "next_due": "Next due",
+      "last_outcome": "Last outcome",
+      "runs": "Runs",
+      "remaining": {
+        "one": "%{count} remaining",
+        "other": "%{count} remaining"
+      },
+      "ends": "Ends",
+      "no_session": "No session",
+      "last_message": "Last message",
+      "checks": "Checks",
+      "failures": "Failures",
+      "last_fired": "Last fired",
+      "retry": "Retry after",
+      "action": "Prompt action",
+      "check": "Condition",
+      "state": "Persisted state",
+      "no_jobs": "No background work recorded.",
+      "no_schedules": "No schedules recorded.",
+      "recorded_work": "Stored records from the OpenCode database. Status reflects the last recorded update.",
+      "search": "Search by name, ID, or session",
+      "all_statuses": "All statuses",
+      "all_kinds": "All kinds",
+      "status": "Status",
+      "kind": "Kind",
+      "statuses": {
+        "running": "Recorded running",
+        "completed": "Completed",
+        "error": "Error",
+        "cancelled": "Cancelled",
+        "active": "Active",
+        "paused": "Paused",
+        "done": "Done"
+      },
+      "kinds": {
+        "shell": "Shell",
+        "subagent": "Subagent",
+        "image": "Image"
+      },
+      "outcomes": {
+        "fired": "Fired",
+        "late": "Late",
+        "checked": "Checked",
+        "expired": "Expired",
+        "skipped": "Skipped",
+        "disabled": "Disabled",
+        "failed": "Failed"
+      }
+    },
+    "background_jobs": {
+      "index": {
+        "title": "Background work"
+      }
+    },
+    "schedules": {
+      "index": {
+        "title": "Schedules"
+      }
+    }
+  },
+  "zh-CN": {
+    "workspace": {
+      "jobs": "后台任务",
+      "schedules": "计划任务",
+      "details": "详情",
+      "inspect": "检查会话",
+      "close_inspector": "关闭检查面板",
+      "session_actions": "会话操作",
+      "storage": "存储记录",
+      "parts": "内容片段",
+      "source": "查看原文",
+      "execution_started": "最近执行开始",
+      "execution_completed": "最近执行完成",
+      "duration": "执行耗时",
+      "media_unavailable": "媒体不可用",
+      "updated": "更新时间",
+      "created": "创建时间",
+      "notification": "通知 ID",
+      "recovery": "恢复数据",
+      "next_due": "下次执行",
+      "last_outcome": "最近结果",
+      "runs": "执行次数",
+      "remaining": {
+        "other": "剩余 %{count} 次"
+      },
+      "ends": "结束时间",
+      "no_session": "无所属会话",
+      "last_message": "最近消息",
+      "checks": "检查次数",
+      "failures": "失败次数",
+      "last_fired": "最近触发",
+      "retry": "重试时间",
+      "action": "提示操作",
+      "check": "触发条件",
+      "state": "持久化状态",
+      "no_jobs": "暂无后台任务记录。",
+      "no_schedules": "暂无计划任务记录。",
+      "recorded_work": "来自 OpenCode 数据库的存储记录。状态反映最近一次记录的更新。",
+      "search": "按名称、ID 或会话搜索",
+      "all_statuses": "全部状态",
+      "all_kinds": "全部类型",
+      "status": "状态",
+      "kind": "类型",
+      "statuses": {
+        "running": "记录为运行中",
+        "completed": "已完成",
+        "error": "错误",
+        "cancelled": "已取消",
+        "active": "启用",
+        "paused": "暂停",
+        "done": "已结束"
+      },
+      "kinds": {
+        "shell": "终端",
+        "subagent": "子代理",
+        "image": "图像"
+      },
+      "outcomes": {
+        "fired": "已触发",
+        "late": "延迟",
+        "checked": "已检查",
+        "expired": "已过期",
+        "skipped": "已跳过",
+        "disabled": "已禁用",
+        "failed": "失败"
+      }
+    },
+    "background_jobs": {
+      "index": {
+        "title": "后台任务"
+      }
+    },
+    "schedules": {
+      "index": {
+        "title": "计划任务"
+      }
+    }
+  }
+}

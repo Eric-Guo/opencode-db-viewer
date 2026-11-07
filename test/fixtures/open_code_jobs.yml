@@ -1,0 +1,56 @@
+
+running:
+  notification_id: "notification-running"
+  id: "repeated-job"
+  session_id: "session-current-schema"
+  child_session_id: null
+  kind: "shell"
+  title: "Shell background work"
+  status: "running"
+  output: null
+  error: null
+  recovery: "{\"kind\": \"shell\", \"sessionID\": \"session-current-schema\", \"command\": \"bun run check\", \"shellID\": \"shell-fixture\"}"
+  time_created: 1700000010000
+  time_updated: 1700000060000
+
+completed:
+  notification_id: "notification-completed"
+  id: "job-subagent"
+  session_id: "session-current-schema"
+  child_session_id: "missing-child"
+  kind: "subagent"
+  title: "Subagent background work"
+  status: "completed"
+  output: "Stored output"
+  error: null
+  recovery: "{\"kind\": \"subagent\", \"agent\": \"explore\", \"description\": \"Review schema\", \"parentSessionID\": \"session-current-schema\", \"childSessionID\": \"missing-child\"}"
+  time_created: 1700000010001
+  time_updated: 1700000060001
+
+error:
+  notification_id: "notification-error"
+  id: "job-image"
+  session_id: "session-current-schema"
+  child_session_id: null
+  kind: "image"
+  title: "Image background work"
+  status: "error"
+  output: null
+  error: "Stored failure"
+  recovery: "{\"kind\": \"image\", \"sessionID\": \"session-current-schema\", \"path\": \"diagram.png\", \"model\": \"image-model\"}"
+  time_created: 1700000010002
+  time_updated: 1700000060002
+
+cancelled:
+  notification_id: "notification-cancelled"
+  id: "repeated-job"
+  session_id: "session-current-schema"
+  child_session_id: null
+  kind: "shell"
+  title: "Shell background work"
+  status: "cancelled"
+  output: null
+  error: null
+  recovery: "{\"kind\": \"shell\", \"sessionID\": \"session-current-schema\", \"command\": \"bun run check\", \"shellID\": \"shell-fixture\"}"
+  time_created: 1700000010003
+  time_updated: 1700000060003
