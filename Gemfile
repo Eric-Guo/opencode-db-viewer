@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby ">= 3.3.5"
 
-gem "rails", github: "rails/rails", ref: "227bca45236d677c28e969edfea828a1ebb36a7c"
+gem "rails", github: "rails/rails", branch: "main"
 # Keep JSON and Minitest major versions unchanged for the Rails upgrade.
 gem "json", "< 3"
 gem "minitest", "< 6"
