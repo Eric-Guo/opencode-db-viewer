@@ -26,6 +26,33 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "active_org_id"
   end
 
+  create_table "automation", id: :text, force: :cascade do |t|
+    t.text "project_id", null: false
+    t.text "session_id"
+    t.text "directory", null: false
+    t.text "name", null: false
+    t.text "trigger", null: false
+    t.text "tz", null: false
+    t.text "action", null: false
+    t.text "status", default: "active", null: false
+    t.integer "next_due_at"
+    t.integer "expires_at"
+    t.integer "run_count", default: 0, null: false
+    t.integer "failures", default: 0, null: false
+    t.integer "last_run_at"
+    t.text "last_message_id"
+    t.text "last_outcome"
+    t.text "last_output"
+    t.integer "retry_at"
+    t.text "state"
+    t.integer "time_created", null: false
+    t.integer "time_updated", null: false
+    t.text "event_position"
+    t.index ["next_due_at"], name: "automation_active_idx"
+    t.index ["project_id"], name: "automation_project_idx"
+    t.index ["session_id"], name: "automation_session_idx"
+  end
+
   create_table "blob", primary_key: "hash", id: :text, force: :cascade do |t|
     t.text "mime", null: false
     t.integer "bytes", null: false
@@ -124,6 +151,12 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
   end
 
+  create_table "machine", id: :text, force: :cascade do |t|
+    t.integer "time_created", null: false
+    t.text "key"
+    t.index ["key"], name: "machine_key_idx", unique: true
+  end
+
   create_table "message", id: :text, force: :cascade do |t|
     t.text "session_id", null: false
     t.integer "time_created", null: false
@@ -186,31 +219,6 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.string "role_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "schedule", id: :text, force: :cascade do |t|
-    t.text "session_id"
-    t.text "name"
-    t.text "action", null: false
-    t.text "when", null: false
-    t.text "tz", null: false
-    t.text "status", default: "active", null: false
-    t.integer "next_due_at"
-    t.integer "ends_at"
-    t.integer "remaining_runs"
-    t.integer "run_count", default: 0, null: false
-    t.integer "last_fired_at"
-    t.text "last_message_id"
-    t.text "last_outcome"
-    t.integer "retry_at"
-    t.integer "time_created", null: false
-    t.integer "time_updated", null: false
-    t.text "check"
-    t.integer "checks", default: 0, null: false
-    t.integer "failures", default: 0, null: false
-    t.text "state"
-    t.index ["next_due_at"], name: "schedule_due_idx"
-    t.index ["session_id"], name: "schedule_session_idx"
   end
 
   create_table "session", id: :text, force: :cascade do |t|
@@ -296,6 +304,32 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.text "data", null: false
     t.index ["session_id", "message_id", "ordinal"], name: "session_part_session_message_idx"
   end
+
+# Could not dump table "session_search" because of following StandardError
+#   Unknown type '' for column 'title'
+
+
+# Could not dump table "session_search_config" because of following StandardError
+#   Unknown type '' for column 'k'
+
+
+  create_table "session_search_data", force: :cascade do |t|
+    t.binary "block"
+  end
+
+  create_table "session_search_docsize", force: :cascade do |t|
+    t.binary "sz"
+    t.integer "origin"
+  end
+
+  create_table "session_search_document", force: :cascade do |t|
+    t.text "source_id", null: false
+    t.text "session_id", null: false
+  end
+
+# Could not dump table "session_search_idx" because of following StandardError
+#   Unknown type '' for column 'segid'
+
 
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
     t.text "id", null: false
@@ -401,7 +435,6 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "part", "message", on_delete: :cascade
   add_foreign_key "permission", "project", on_delete: :cascade
   add_foreign_key "project_directory", "project", on_delete: :cascade
-  add_foreign_key "schedule", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session", "project", on_delete: :cascade
   add_foreign_key "session_inbox", "session_v2", column: "session_id", on_delete: :cascade
   add_foreign_key "session_message", "session_v2", column: "session_id", on_delete: :cascade
