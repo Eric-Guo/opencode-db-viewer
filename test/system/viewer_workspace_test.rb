@@ -29,7 +29,7 @@ class ViewerWorkspaceTest < ApplicationSystemTestCase
     assert_selector "#session-inspector", text: "Last execution started"
     click_button "Background work", exact: true
     assert_selector "#inspector-jobs .oc-work-item", count: 4
-    click_button "Schedules", exact: true
+    click_button "Automations", exact: true
     assert_selector "#inspector-schedules .oc-work-item", count: 2
     find("#session-inspector button[aria-label='Close inspector']").click
     assert_selector "[data-inspector-target='toggle']:focus"

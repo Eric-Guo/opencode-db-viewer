@@ -2,7 +2,7 @@
   "en": {
     "workspace": {
       "jobs": "Background work",
-      "schedules": "Schedules",
+      "schedules": "Automations",
       "details": "Details",
       "inspect": "Inspect session",
       "close_inspector": "Close inspector",
@@ -25,18 +25,20 @@
         "one": "%{count} remaining",
         "other": "%{count} remaining"
       },
-      "ends": "Ends",
+      "expires": "Expires",
       "no_session": "No session",
       "last_message": "Last message",
       "checks": "Checks",
       "failures": "Failures",
-      "last_fired": "Last fired",
+      "last_run": "Last run",
       "retry": "Retry after",
-      "action": "Prompt action",
-      "check": "Condition",
+      "action": "Action",
+      "trigger": "Trigger",
+      "event_position": "Event position",
+      "last_output": "Last output",
       "state": "Persisted state",
       "no_jobs": "No background work recorded.",
-      "no_schedules": "No schedules recorded.",
+      "no_schedules": "No automations recorded.",
       "recorded_work": "Stored records from the OpenCode database. Status reflects the last recorded update.",
       "search": "Search by name, ID, or session",
       "all_statuses": "All statuses",
@@ -74,14 +76,14 @@
     },
     "schedules": {
       "index": {
-        "title": "Schedules"
+        "title": "Automations"
       }
     }
   },
   "zh-CN": {
     "workspace": {
       "jobs": "后台任务",
-      "schedules": "计划任务",
+      "schedules": "自动化任务",
       "details": "详情",
       "inspect": "检查会话",
       "close_inspector": "关闭检查面板",
@@ -103,18 +105,20 @@
       "remaining": {
         "other": "剩余 %{count} 次"
       },
-      "ends": "结束时间",
+      "expires": "到期时间",
       "no_session": "无所属会话",
       "last_message": "最近消息",
       "checks": "检查次数",
       "failures": "失败次数",
-      "last_fired": "最近触发",
+      "last_run": "最近执行",
       "retry": "重试时间",
-      "action": "提示操作",
-      "check": "触发条件",
+      "action": "动作",
+      "trigger": "触发器",
+      "event_position": "事件位置",
+      "last_output": "最近输出",
       "state": "持久化状态",
       "no_jobs": "暂无后台任务记录。",
-      "no_schedules": "暂无计划任务记录。",
+      "no_schedules": "暂无自动化任务记录。",
       "recorded_work": "来自 OpenCode 数据库的存储记录。状态反映最近一次记录的更新。",
       "search": "按名称、ID 或会话搜索",
       "all_statuses": "全部状态",
@@ -152,7 +156,7 @@
     },
     "schedules": {
       "index": {
-        "title": "计划任务"
+        "title": "自动化任务"
       }
     }
   }

@@ -32,10 +32,15 @@ class CurrentSchemaTest < ActiveSupport::TestCase
     assert_nil session.execution_duration
   end
 
-  test "schedule retains conditions state and recurrence" do
-    schedule = schedules(:active)
-    assert_equal "every 1 hour", schedule.recurrence
-    assert_equal "until", schedule.check_data["mode"]
-    assert_equal "pending", schedule.state_data["previous"]
+  test "automation reads triggers, actions and persisted state" do
+    automation = automations(:active)
+    assert_equal "every 1 hour", automation.trigger_summary
+    assert_equal "prompt", automation.action_data["type"]
+    assert_equal "pending", automation.state_data["previous"]
+    assert_equal Time.zone.at(1_700_000_060), automation.last_run_at_time
+    assert_equal Time.zone.at(1_700_000_090), automation.expires_at_time
+    assert_equal "event test-server: ticket.updated", automations(:paused).trigger_summary
+    assert_equal "synthetic", automations(:paused).event_position_data["cursor"]
+    assert_nil automations(:done).session_id
   end
 end

@@ -79,7 +79,7 @@
         </details>
       </section>
       <section id="inspector-jobs" data-inspector-target="section" hidden><%= render partial: "background_jobs/job", collection: @jobs %><% if @jobs.empty? %><p class="text-body-secondary"><%= t("workspace.no_jobs") %></p><% end %></section>
-      <section id="inspector-schedules" data-inspector-target="section" hidden><%= render partial: "schedules/schedule", collection: @schedules %><% if @schedules.empty? %><p class="text-body-secondary"><%= t("workspace.no_schedules") %></p><% end %></section>
+      <section id="inspector-schedules" data-inspector-target="section" hidden><%= render partial: "schedules/automation", collection: @automations %><% if @automations.empty? %><p class="text-body-secondary"><%= t("workspace.no_schedules") %></p><% end %></section>
     </aside>
   </div>
 </div>

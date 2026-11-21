@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
     @tool_counts = @tools.flat_map { |tool| [tool, *tool.calls] }.group_by(&:category).transform_values(&:size)
     @children = policy_scope(Session).where(parent_id: @session.id).order(:time_created)
     @jobs = OpenCodeJob.where(session_id: @session.id).or(OpenCodeJob.where(child_session_id: @session.id)).order(time_created: :desc, notification_id: :desc).to_a
-    @schedules = @session.schedules.order(:next_due_at, :id).to_a
+    @automations = @session.automations.order(:next_due_at, :id).to_a
     related_ids = [@session.id, @session.parent_id, @session.fork_session_id, *@tools.map(&:session_id), *@jobs.map(&:session_id), *@jobs.map(&:child_session_id)].compact
     @related_sessions = policy_scope(Session).where(id: related_ids).index_by(&:id)
     @inbox_items = @session.session_inboxes.order(:enqueued_seq)

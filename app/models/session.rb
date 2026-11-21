@@ -21,7 +21,7 @@ class Session < ApplicationRecord
   has_many :session_parts, foreign_key: :session_id, dependent: :delete_all
   has_many :blob_refs, foreign_key: :session_id, dependent: :delete_all
   has_many :background_jobs, class_name: "OpenCodeJob", foreign_key: :session_id, dependent: :delete_all
-  has_many :schedules, foreign_key: :session_id, dependent: :delete_all
+  has_many :automations, foreign_key: :session_id, dependent: :delete_all
   has_many :session_inboxes,
     class_name: "SessionInbox",
     foreign_key: :session_id,

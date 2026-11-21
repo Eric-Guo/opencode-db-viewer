@@ -6,6 +6,6 @@
   <%= form.submit t("viewer.filter"), class: "btn btn-outline-secondary" %>
   <%= link_to t("viewer.clear_filters"), schedules_path, class: "btn btn-link" %>
 <% end %>
-<div class="oc-work-list"><%= render partial: "schedules/schedule", collection: @schedules %></div>
-<% if @schedules.empty? %><p class="text-body-secondary py-4"><%= t("workspace.no_schedules") %></p><% end %>
+<div class="oc-work-list"><%= render partial: "schedules/automation", collection: @automations %></div>
+<% if @automations.empty? %><p class="text-body-secondary py-4"><%= t("workspace.no_schedules") %></p><% end %>
 <% if @pagy.pages > 1 %><%== pagy_bootstrap_nav(@pagy) %><% end %>

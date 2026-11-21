@@ -12,6 +12,7 @@ class CurrentSchemaControllerTest < ActionDispatch::IntegrationTest
     assert_select ".oc-tool strong", text: "bash"
     assert_select "#inspector-jobs .oc-work-item", count: 4
     assert_select "#inspector-schedules .oc-work-item", count: 2
+    assert_includes response.body, "Synthetic recorded output"
     assert_select "img[alt='schema.png']"
     assert_select "img[alt='queued.png']"
     assert_includes response.body, "fixture-image"
@@ -71,7 +72,7 @@ class CurrentSchemaControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.headers["Content-Disposition"], "inline.txt"
   end
 
-  test "global work lists filter recorded statuses and include sessionless schedules" do
+  test "global work lists filter recorded statuses and include sessionless automations" do
     get background_jobs_path(status: "running", kind: "shell", q: "repeated-job")
     assert_response :success
     assert_select ".oc-work-item", count: 1
@@ -80,6 +81,10 @@ class CurrentSchemaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".oc-work-item", count: 1
     assert_includes response.body, "Schema done"
+    get schedules_path(q: "aut-paused")
+    assert_response :success
+    assert_select ".oc-work-item", count: 1
+    assert_includes response.body, "event test-server: ticket.updated"
     get background_jobs_path(locale: "zh-CN")
     assert_response :success
     refute_includes response.body, "translation_missing"
@@ -93,15 +98,16 @@ class CurrentSchemaControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
-  test "deletion handles new parts refs schedules and jobs without touching shared blobs" do
+  test "deletion handles new parts refs automations and jobs without touching shared blobs" do
     assert_difference -> { SessionPart.count }, -4 do
       assert_difference -> { OpenCodeJob.count }, -4 do
-        assert_difference -> { Schedule.count }, -2 do
+        assert_difference -> { Automation.count }, -2 do
           delete project_session_path("project-current-schema", "session-current-schema")
         end
       end
     end
     assert_redirected_to project_path("project-current-schema")
+    assert Automation.exists?("aut-done")
     assert StoredBlob.exists?(hash: "fixture-image")
     assert_equal 0, BlobRef.where(session_id: "session-current-schema").count
   end

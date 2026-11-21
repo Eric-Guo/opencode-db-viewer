@@ -1,0 +1,24 @@
+<article class="oc-work-item" id="automation-<%= automation.id %>">
+  <div class="d-flex align-items-start justify-content-between gap-2"><strong><%= automation.name.presence || automation.id %></strong><span class="badge bg-body-tertiary text-body border"><%= t("workspace.statuses.#{automation.status}", default: automation.status) %></span></div>
+  <div class="small text-body-secondary mt-1"><%= automation.trigger_summary %> · <%= automation.tz %></div>
+  <dl class="oc-facts">
+    <dt><%= t("workspace.next_due") %></dt><dd><%= opencode_time(automation.next_due_at_time) %></dd>
+    <dt><%= t("workspace.last_outcome") %></dt><dd><%= t("workspace.outcomes.#{automation.last_outcome}", default: automation.last_outcome.presence || "—") %></dd>
+    <dt><%= t("workspace.runs") %></dt><dd><%= automation.run_count %></dd>
+    <% if automation.expires_at %><dt><%= t("workspace.expires") %></dt><dd><%= opencode_time(automation.expires_at_time) %></dd><% end %>
+  </dl>
+  <div class="small"><%= automation.session_id.present? ? related_session_link(automation.session_id) : t("workspace.no_session") %></div>
+  <details class="mt-2"><summary class="small"><%= t("workspace.details") %> · <code><%= automation.id %></code></summary>
+    <% if automation.last_message_id.present? %><p class="small"><%= t("workspace.last_message") %>: <% if (owner = @related_sessions[automation.session_id]) %><%= link_to automation.last_message_id, project_session_path(owner.project_id, owner, anchor: "message-#{automation.last_message_id}") %><% else %><code><%= automation.last_message_id %></code><% end %></p><% end %>
+    <dl class="oc-facts">
+      <dt><%= t("workspace.failures") %></dt><dd><%= automation.failures %></dd>
+      <dt><%= t("workspace.last_run") %></dt><dd><%= opencode_time(automation.last_run_at_time) %></dd>
+      <dt><%= t("workspace.retry") %></dt><dd><%= opencode_time(automation.retry_at_time) %></dd>
+      <dt><%= t("workspace.created") %></dt><dd><%= opencode_time(automation.time_created_time) %></dd>
+      <dt><%= t("workspace.updated") %></dt><dd><%= opencode_time(automation.time_updated_time) %></dd>
+    </dl>
+    <% %w[trigger action state event_position].each do |field| %><h3 class="fs-6"><%= t("workspace.#{field}") %></h3><pre class="oc-pre"><%= pretty_json(automation.public_send("#{field}_data")) %></pre><% end %>
+    <% if automation.last_output.present? %><h3 class="fs-6"><%= t("workspace.last_output") %></h3><pre class="oc-pre"><%= automation.last_output %></pre><% end %>
+    <details><summary><%= t("workspace.storage") %></summary><pre class="oc-pre"><%= pretty_json(automation.attributes) %></pre></details>
+  </details>
+</article>

@@ -1,0 +1,51 @@
+active:
+  id: "aut-active"
+  project_id: "project-current-schema"
+  session_id: "session-current-schema"
+  directory: "/synthetic/current-schema"
+  name: "Schema active"
+  action: '{"type":"prompt","prompt":"Review schema changes","to":{"session":"session-current-schema"}}'
+  trigger: '{"type":"every","every":"1 hour"}'
+  tz: "Australia/Perth"
+  status: "active"
+  next_due_at: 1700000080000
+  expires_at: 1700000090000
+  run_count: 2
+  last_run_at: 1700000060000
+  last_message_id: "msg-split-user"
+  last_outcome: "fired"
+  last_output: "Synthetic recorded output"
+  retry_at: 1700000070000
+  failures: 1
+  state: '{"previous":"pending"}'
+  time_created: 1700000000000
+  time_updated: 1700000060000
+
+paused:
+  id: "aut-paused"
+  project_id: "project-current-schema"
+  session_id: "session-current-schema"
+  directory: "/synthetic/current-schema"
+  name: "Schema paused"
+  action: '{"type":"code","code":"return null"}'
+  trigger: '{"type":"event","server":"test-server","event":"ticket.updated"}'
+  tz: "Australia/Perth"
+  status: "paused"
+  event_position: '{"cursor":"synthetic"}'
+  time_created: 1700000000000
+  time_updated: 1700000060000
+
+done:
+  id: "aut-done"
+  project_id: "project-current-schema"
+  directory: "/synthetic/current-schema"
+  name: "Schema done"
+  action: '{"type":"shell","command":"echo fixture"}'
+  trigger: '{"type":"at","at":"2023-11-14T22:14:40Z"}'
+  tz: "Australia/Perth"
+  status: "done"
+  run_count: 1
+  last_run_at: 1700000080000
+  last_outcome: "fired"
+  time_created: 1700000000000
+  time_updated: 1700000080000
