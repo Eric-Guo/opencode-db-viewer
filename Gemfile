@@ -1,10 +1,9 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby ">= 3.2"
+ruby ">= 3.3.5"
 
-# bundle config local.rails /Users/guochunzhong/git/oss/rails
-gem "rails", "~> 8.1.4", ">= 8.1.4.1"
+gem "rails", github: "rails/rails", ref: "227bca45236d677c28e969edfea828a1ebb36a7c"
 # Keep JSON and Minitest major versions unchanged for the Rails upgrade.
 gem "json", "< 3"
 gem "minitest", "< 6"
