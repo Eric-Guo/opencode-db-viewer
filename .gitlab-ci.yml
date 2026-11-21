@@ -1,5 +1,5 @@
 ---
-image: "ruby:3.1"
+image: "ruby:3.3.14"
 
 variables:
   RAILS_ENV: test
@@ -7,13 +7,13 @@ variables:
 
 before_script:
   # Setup Node.js
-  - curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+  - curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
   - bash nodesource_setup.sh
   - apt-get install -y nodejs
 
   # Install Pnpm
   - npm config set registry https://registry.npmmirror.com/ --global
-  - npm install --global pnpm
+  - npm install --global "$(node -p 'require("./package.json").packageManager')"
 
   # Verify installations
   - node -v

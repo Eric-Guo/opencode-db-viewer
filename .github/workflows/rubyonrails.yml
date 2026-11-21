@@ -23,18 +23,14 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.6
+          ruby-version: "3.3.14"
           bundler-cache: true
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
       - name: Set up pnpm
-        id: pnpm-setup
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3
-          run_install: false
+        uses: pnpm/action-setup@v6
       - name: Get pnpm store directory
         id: pnpm-store
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
@@ -65,7 +61,7 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.6
+          ruby-version: "3.3.14"
           bundler-cache: true
       - name: Lint Ruby files
         run: bundle exec standardrb

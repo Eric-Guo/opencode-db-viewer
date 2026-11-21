@@ -1,12 +1,13 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby ">= 3.1"
+ruby ">= 3.2"
 
 # bundle config local.rails /Users/guochunzhong/git/oss/rails
-gem "rails", "~> 7.2.4"
-gem "json", "< 3" # Rails 7.2 passes generator options removed in JSON 3.
-gem "minitest", "< 6" # rails 7.2 not support minitest 6.0.1
+gem "rails", "~> 8.1.4", ">= 8.1.4.1"
+# Keep JSON and Minitest major versions unchanged for the Rails upgrade.
+gem "json", "< 3"
+gem "minitest", "< 6"
 gem "rack-proxy", "~> 0.7.7"
 gem "propshaft"
 
