@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
+ActiveRecord::Schema[8.2].define(version: 2023_08_03_034248) do
   create_table "account", id: :text, force: :cascade do |t|
     t.text "email", null: false
     t.text "url", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.integer "time_updated", null: false
   end
 
-  create_table "account_state", force: :cascade do |t|
+  create_table "account_state", id: :integer, default: nil, force: :cascade do |t|
     t.text "active_account_id"
     t.text "active_org_id"
   end
@@ -305,31 +305,10 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
     t.index ["session_id", "message_id", "ordinal"], name: "session_part_session_message_idx"
   end
 
-# Could not dump table "session_search" because of following StandardError
-#   Unknown type '' for column 'title'
-
-
-# Could not dump table "session_search_config" because of following StandardError
-#   Unknown type '' for column 'k'
-
-
-  create_table "session_search_data", force: :cascade do |t|
-    t.binary "block"
-  end
-
-  create_table "session_search_docsize", force: :cascade do |t|
-    t.binary "sz"
-    t.integer "origin"
-  end
-
-  create_table "session_search_document", force: :cascade do |t|
+  create_table "session_search_document", id: :integer, default: nil, force: :cascade do |t|
     t.text "source_id", null: false
     t.text "session_id", null: false
   end
-
-# Could not dump table "session_search_idx" because of following StandardError
-#   Unknown type '' for column 'segid'
-
 
   create_table "session_share", primary_key: "session_id", id: :text, force: :cascade do |t|
     t.text "id", null: false
@@ -445,4 +424,8 @@ ActiveRecord::Schema[7.2].define(version: 2023_08_03_034248) do
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
   add_foreign_key "worktree", "project", on_delete: :cascade
+
+  # Virtual tables defined in this database.
+  # Note that virtual tables may not work with other database engines. Be careful if changing database.
+  create_virtual_table "session_search", "fts5", ["title", "summary", "user_text", "assistant_text", "content=''", "contentless_delete=1", "tokenize='porter unicode61 remove_diacritics 2'"]
 end
