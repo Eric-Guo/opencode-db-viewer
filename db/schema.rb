@@ -361,6 +361,16 @@ ActiveRecord::Schema[8.2].define(version: 2023_08_03_034248) do
     t.index ["workspace_id"], name: "session_v2_workspace_idx"
   end
 
+  create_table "space", primary_key: ["space", "key"], force: :cascade do |t|
+    t.text "space", null: false
+    t.text "key", null: false
+    t.text "value"
+    t.integer "revision", null: false
+    t.index ["space", "revision", "value"], name: "space_tombstone_idx"
+    t.index ["space", "revision"], name: "space_live_idx"
+    t.index ["space", "revision"], name: "space_revision_idx"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "role_id", null: false
